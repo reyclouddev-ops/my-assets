@@ -1,0 +1,753 @@
+<!DOCTYPE html><html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>ReyCloudShop Dashboard</title><style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+-webkit-tap-highlight-color:transparent
+}
+
+body{
+min-height:100vh;
+overflow:hidden;
+font-family:Arial,sans-serif;
+color:#fff;
+background:#07080d
+}
+
+.app{
+min-height:100vh;
+display:flex;
+flex-direction:column;
+padding:25px 20px;
+background:
+radial-gradient(circle at 50% 42%,rgba(0,210,255,.09),transparent 30%),
+radial-gradient(circle at 20% 90%,rgba(150,60,255,.12),transparent 35%),
+#07080d
+}
+
+.header{
+position:relative;
+z-index:20
+}
+
+.header small{
+color:#777d8d;
+font-size:10px;
+letter-spacing:2px
+}
+
+.header h1{
+margin-top:8px;
+font-size:28px
+}
+
+.header p{
+margin-top:7px;
+color:#777d8d;
+font-size:13px
+}
+
+.user-info{
+display:flex;
+align-items:center;
+gap:10px;
+margin-top:17px
+}
+
+.avatar{
+width:38px;
+height:38px;
+display:flex;
+align-items:center;
+justify-content:center;
+border-radius:13px;
+background:linear-gradient(135deg,#00d9ff,#8b5cf6);
+font-size:15px;
+font-weight:800
+}
+
+.user-data{
+display:flex;
+flex-direction:column;
+gap:3px
+}
+
+.username{
+font-size:13px;
+font-weight:700
+}
+
+.role{
+color:#777d8d;
+font-size:10px
+}
+
+.time{
+margin-left:auto;
+text-align:right
+}
+
+.time strong{
+display:block;
+font-size:12px
+}
+
+.time span{
+display:block;
+margin-top:3px;
+color:#666c7b;
+font-size:9px
+}
+
+.carousel{
+position:relative;
+flex:1;
+min-height:430px;
+display:flex;
+align-items:center;
+justify-content:center;
+perspective:1200px;
+touch-action:none
+}
+
+.orbit{
+position:absolute;
+width:350px;
+height:350px;
+border:1px solid rgba(255,255,255,.035);
+border-radius:50%;
+pointer-events:none
+}
+
+.orbit::after{
+content:"";
+position:absolute;
+inset:25px;
+border:1px dashed rgba(255,255,255,.025);
+border-radius:50%
+}
+
+.card{
+position:absolute;
+width:275px;
+height:350px;
+padding:25px;
+border-radius:30px;
+overflow:hidden;
+background:rgba(15,18,28,.92);
+border:1px solid rgba(255,255,255,.1);
+box-shadow:
+0 25px 70px rgba(0,0,0,.5),
+inset 0 1px rgba(255,255,255,.04);
+cursor:grab;
+user-select:none;
+will-change:transform,opacity;
+transition:
+transform .7s cubic-bezier(.16,1,.3,1),
+opacity .55s ease,
+filter .55s ease
+}
+
+.card.dragging{
+cursor:grabbing;
+transition:none
+}
+
+.card::before{
+content:"";
+position:absolute;
+width:190px;
+height:190px;
+top:-90px;
+right:-70px;
+border-radius:50%;
+background:var(--glow);
+filter:blur(70px);
+opacity:.35
+}
+
+.card::after{
+content:"";
+position:absolute;
+inset:0;
+border-radius:inherit;
+background:linear-gradient(
+135deg,
+rgba(255,255,255,.05),
+transparent 35%
+);
+pointer-events:none
+}
+
+.icon{
+position:relative;
+z-index:2;
+width:60px;
+height:60px;
+display:flex;
+align-items:center;
+justify-content:center;
+border-radius:19px;
+background:rgba(255,255,255,.07);
+border:1px solid rgba(255,255,255,.08);
+font-size:27px;
+margin-bottom:28px
+}
+
+.number{
+position:absolute;
+top:27px;
+right:25px;
+color:#555b69;
+font-size:11px
+}
+
+.card h2{
+position:relative;
+z-index:2;
+font-size:28px;
+margin-bottom:11px
+}
+
+.card p{
+position:relative;
+z-index:2;
+color:#8e94a4;
+font-size:13px;
+line-height:1.65
+}
+
+.open{
+position:absolute;
+z-index:3;
+left:25px;
+right:25px;
+bottom:25px;
+height:48px;
+border:1px solid rgba(255,255,255,.09);
+border-radius:14px;
+background:rgba(255,255,255,.07);
+color:#fff;
+font-weight:700;
+cursor:pointer
+}
+
+.open:active{
+transform:scale(.97)
+}
+
+.deploy{
+--glow:#00d9ff
+}
+
+.scrape{
+--glow:#a855f7
+}
+
+.report{
+--glow:#ff386f
+}
+
+.tools{
+--glow:#ff9d3d
+}
+
+.activity{
+--glow:#22c55e
+}
+
+.settings{
+--glow:#94a3b8
+}
+
+.controls{
+position:relative;
+z-index:30;
+display:flex;
+align-items:center;
+justify-content:center;
+gap:18px
+}
+
+.control{
+width:45px;
+height:45px;
+border-radius:50%;
+border:1px solid rgba(255,255,255,.1);
+background:rgba(255,255,255,.06);
+color:#fff;
+font-size:18px;
+cursor:pointer
+}
+
+.control:active{
+transform:scale(.92)
+}
+
+.dots{
+display:flex;
+gap:5px
+}
+
+.dot{
+width:5px;
+height:5px;
+border-radius:10px;
+background:#383c48;
+transition:.4s cubic-bezier(.16,1,.3,1)
+}
+
+.dot.active{
+width:18px;
+background:#fff
+}
+
+.hint{
+position:relative;
+z-index:20;
+text-align:center;
+margin-top:12px;
+color:#4f5563;
+font-size:10px
+}
+
+@media(max-width:380px){
+
+.card{
+width:255px;
+height:335px
+}
+
+.orbit{
+width:310px;
+height:310px
+}
+
+}
+
+@media(max-height:720px){
+
+.app{
+padding-top:18px
+}
+
+.carousel{
+min-height:390px
+}
+
+.card{
+height:310px
+}
+
+.icon{
+margin-bottom:18px
+}
+
+}
+</style></head><body><div class="app"><div class="header"><small>REYCLOUDSHOP DASHBOARD</small>
+
+<h1>Choose a feature</h1><p>Swipe untuk memutar menu.</p><div class="user-info"><div class="avatar" id="avatar">
+R
+</div><div class="user-data"><div class="username" id="username">
+ReyCloudShop
+</div><div class="role" id="role">
+Creator
+</div></div><div class="time"><strong id="clock">
+00:00:00
+</strong><span id="date">
+Loading...
+</span></div></div></div><div class="carousel" id="carousel"><div class="orbit"></div><div class="card deploy"><span class="number">01</span>
+
+<div class="icon">
+🚀
+</div><h2>Deploy</h2><p>
+Deploy project dengan cepat dan
+pantau status deployment kamu.
+</p><button class="open" onclick="openFeature('deploy')">
+Buka Deploy →
+</button></div><div class="card scrape"><span class="number">02</span>
+
+<div class="icon">
+🔎
+</div><h2>Scrape</h2><p>
+Tools scraping untuk kebutuhan
+project dan pengembangan API.
+</p><button class="open" onclick="openFeature('scrape')">
+Buka Scrape →
+</button></div><div class="card report"><span class="number">03</span>
+
+<div class="icon">
+🐛
+</div><h2>Report Isu</h2><p>
+Laporkan bug, masalah, atau
+saran untuk pengembangan.
+</p><button class="open" onclick="openFeature('report')">
+Report Isu →
+</button></div><div class="card tools"><span class="number">04</span>
+
+<div class="icon">
+🛠️
+</div><h2>Tools</h2><p>
+Kumpulan utility tools untuk
+membantu pekerjaan kamu.
+</p><button class="open" onclick="openFeature('tools')">
+Buka Tools →
+</button></div><div class="card activity"><span class="number">05</span>
+
+<div class="icon">
+📊
+</div><h2>Activity</h2><p>
+Lihat aktivitas dan riwayat
+penggunaan dashboard.
+</p><button class="open" onclick="openFeature('activity')">
+Lihat Activity →
+</button></div><div class="card settings"><span class="number">06</span>
+
+<div class="icon">
+⚙️
+</div><h2>Settings</h2><p>
+Atur profile, akun, dan
+pengaturan dashboard.
+</p><button class="open" onclick="openFeature('settings')">
+Buka Settings →
+</button></div></div><div class="controls"><button class="control" id="prev">
+←
+</button><div class="dots" id="dots"></div><button class="control" id="next">
+→
+</button></div><div class="hint">
+← Swipe kiri / kanan →
+</div></div><script>
+const carousel=document.getElementById("carousel");
+const cards=[...document.querySelectorAll(".card")];
+const dotsBox=document.getElementById("dots");
+
+let active=0;
+let startX=0;
+let dragX=0;
+let dragging=false;
+
+const total=cards.length;
+
+cards.forEach((_,index)=>{
+
+const dot=document.createElement("span");
+
+dot.className="dot";
+
+dot.addEventListener("click",()=>{
+
+active=index;
+
+render();
+
+});
+
+dotsBox.appendChild(dot);
+
+});
+
+const dots=[...document.querySelectorAll(".dot")];
+
+function getPosition(index){
+
+let position=index-active;
+
+if(position>total/2){
+position-=total;
+}
+
+if(position<-total/2){
+position+=total;
+}
+
+return position;
+
+}
+
+function render(){
+
+cards.forEach((card,index)=>{
+
+const position=getPosition(index);
+const distance=Math.abs(position);
+
+if(distance>2){
+
+card.style.opacity="0";
+
+card.style.pointerEvents="none";
+
+card.style.transform=
+"translate3d(0,0,-500px) scale(.55)";
+
+card.style.filter="blur(10px)";
+
+return;
+
+}
+
+const angle=position*38;
+
+const radius=115;
+
+const x=
+Math.sin(angle*Math.PI/180)*radius;
+
+const z=
+Math.cos(angle*Math.PI/180)*radius-radius;
+
+const scale=
+position===0
+?1
+:.82-distance*.035;
+
+const rotate=position*-5;
+
+const opacity=
+position===0
+?1
+:.5-distance*.08;
+
+card.style.zIndex=
+100-distance*10;
+
+card.style.opacity=opacity;
+
+card.style.pointerEvents=
+position===0
+?"auto"
+:"none";
+
+card.style.filter=
+position===0
+?"blur(0)"
+:`blur(${distance*1.3}px)`;
+
+card.style.transform=
+`translate3d(${x}px,0,${z}px)
+rotateY(${rotate}deg)
+scale(${scale})`;
+
+});
+
+dots.forEach((dot,index)=>{
+
+dot.classList.toggle(
+"active",
+index===active
+);
+
+});
+
+}
+
+function next(){
+
+active=(active+1)%total;
+
+render();
+
+}
+
+function prev(){
+
+active=(active-1+total)%total;
+
+render();
+
+}
+
+document
+.getElementById("next")
+.addEventListener("click",next);
+
+document
+.getElementById("prev")
+.addEventListener("click",prev);
+
+carousel.addEventListener(
+"pointerdown",
+event=>{
+
+if(event.target.closest(".open")){
+return;
+}
+
+dragging=true;
+
+startX=event.clientX;
+
+dragX=startX;
+
+cards[active].classList.add("dragging");
+
+carousel.setPointerCapture(
+event.pointerId
+);
+
+}
+);
+
+carousel.addEventListener(
+"pointermove",
+event=>{
+
+if(!dragging){
+return;
+}
+
+dragX=event.clientX;
+
+const distance=dragX-startX;
+
+const card=cards[active];
+
+const rotate=distance*.035;
+
+card.style.transform=
+`translate3d(${distance}px,0,0)
+rotateY(${rotate}deg)
+rotateZ(${rotate*.12}deg)
+scale(1.02)`;
+
+}
+);
+
+function finishDrag(){
+
+if(!dragging){
+return;
+}
+
+dragging=false;
+
+const card=cards[active];
+
+card.classList.remove("dragging");
+
+const distance=dragX-startX;
+
+if(Math.abs(distance)>70){
+
+if(distance<0){
+next();
+}else{
+prev();
+}
+
+}else{
+
+render();
+
+}
+
+}
+
+carousel.addEventListener(
+"pointerup",
+finishDrag
+);
+
+carousel.addEventListener(
+"pointercancel",
+finishDrag
+);
+
+document.addEventListener(
+"keydown",
+event=>{
+
+if(event.key==="ArrowRight"){
+next();
+}
+
+if(event.key==="ArrowLeft"){
+prev();
+}
+
+}
+);
+
+function openFeature(feature){
+
+const routes={
+
+deploy:"/dashboard/deploy/",
+
+scrape:"/dashboard/scrape/",
+
+report:"/dashboard/report/",
+
+tools:"/dashboard/tools/",
+
+activity:"/dashboard/activity/",
+
+settings:"/dashboard/settings/"
+
+};
+
+if(routes[feature]){
+
+window.location.href=routes[feature];
+
+}
+
+}
+
+function updateUser(){
+
+const username=
+localStorage.getItem("reycloud_username")
+||"ReyCloud";
+
+const role=
+localStorage.getItem("reycloud_role")
+||"Creator";
+
+document.getElementById("username")
+.textContent=username;
+
+document.getElementById("role")
+.textContent=role;
+
+document.getElementById("avatar")
+.textContent=
+username.charAt(0).toUpperCase();
+
+}
+
+function updateClock(){
+
+const now=new Date();
+
+document.getElementById("clock")
+.textContent=
+now.toLocaleTimeString("id-ID",{
+hour:"2-digit",
+minute:"2-digit",
+second:"2-digit"
+});
+
+document.getElementById("date")
+.textContent=
+now.toLocaleDateString("id-ID",{
+weekday:"long",
+day:"2-digit",
+month:"long",
+year:"numeric"
+});
+
+}
+
+updateUser();
+updateClock();
+
+setInterval(updateClock,1000);
+
+render();
+</script></body>
+</html>
