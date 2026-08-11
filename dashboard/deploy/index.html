@@ -2,351 +2,541 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>ReyCloudShop Deploy</title><style>
+<title>ReyCloud Deploy</title>
+<style>
 *{
 margin:0;
 padding:0;
 box-sizing:border-box;
--webkit-tap-highlight-color:transparent
-}
-
-body{
+-webkit-tap-highlight-color:transparent;
+}body{
 min-height:100vh;
 font-family:Arial,sans-serif;
 color:#fff;
-background:#07080d
+background:#07080d;
 }
 
-.page{
+.app{
 min-height:100vh;
-padding:24px 18px;
+padding:22px;
 background:
-radial-gradient(circle at 85% 15%,rgba(0,217,255,.12),transparent 30%),
-radial-gradient(circle at 15% 85%,rgba(168,85,247,.12),transparent 35%),
-#07080d
+radial-gradient(circle at 20% 10%,rgba(0,217,255,.12),transparent 28%),
+radial-gradient(circle at 90% 80%,rgba(168,85,247,.12),transparent 30%),
+#07080d;
 }
 
 .container{
 width:100%;
-max-width:650px;
-margin:auto
+max-width:680px;
+margin:auto;
 }
 
-.topbar{
+.top{
 display:flex;
 align-items:center;
-gap:13px;
-margin-bottom:25px
+justify-content:space-between;
+margin-bottom:25px;
+}
+
+.brand small{
+color:#6f7585;
+font-size:10px;
+letter-spacing:2px;
+}
+
+.brand h1{
+margin-top:7px;
+font-size:28px;
 }
 
 .back{
-width:42px;
-height:42px;
-border:1px solid rgba(255,255,255,.09);
+width:43px;
+height:43px;
+border:1px solid rgba(255,255,255,.1);
 border-radius:14px;
 background:rgba(255,255,255,.05);
 color:#fff;
 font-size:18px;
-cursor:pointer
-}
-
-.title small{
-color:#00d9ff;
-font-size:9px;
-letter-spacing:2px
-}
-
-.title h1{
-margin-top:4px;
-font-size:23px
-}
-
-.hero{
-padding:25px;
-border:1px solid rgba(255,255,255,.08);
-border-radius:27px;
-background:rgba(15,18,28,.88);
-box-shadow:0 25px 70px rgba(0,0,0,.35)
-}
-
-.deploy-icon{
-width:62px;
-height:62px;
-display:flex;
-align-items:center;
-justify-content:center;
-border-radius:20px;
-background:rgba(0,217,255,.08);
-border:1px solid rgba(0,217,255,.15);
-font-size:28px
-}
-
-.hero h2{
-margin-top:20px;
-font-size:25px
-}
-
-.hero p{
-margin-top:8px;
-color:#858b9b;
-font-size:13px;
-line-height:1.6
-}
-
-.field{
-margin-top:22px
-}
-
-.field label{
-display:block;
-margin-bottom:8px;
-color:#9ba1af;
-font-size:11px;
-font-weight:700
-}
-
-.dropzone{
-position:relative;
-display:flex;
-flex-direction:column;
-align-items:center;
-justify-content:center;
-min-height:160px;
-padding:20px;
-border:1px dashed rgba(255,255,255,.14);
-border-radius:20px;
-background:rgba(255,255,255,.025);
 cursor:pointer;
-transition:.25s
 }
 
-.dropzone:hover,
-.dropzone.dragover{
-border-color:rgba(0,217,255,.5);
-background:rgba(0,217,255,.05)
+.panel{
+padding:20px;
+border:1px solid rgba(255,255,255,.09);
+border-radius:26px;
+background:rgba(13,16,25,.82);
+box-shadow:
+0 30px 80px rgba(0,0,0,.35),
+inset 0 1px rgba(255,255,255,.04);
+backdrop-filter:blur(20px);
 }
 
-.dropzone input{
-position:absolute;
-inset:0;
-width:100%;
-height:100%;
-opacity:0;
-cursor:pointer
+.drop{
+position:relative;
+padding:35px 20px;
+border:1px dashed rgba(0,217,255,.3);
+border-radius:21px;
+text-align:center;
+background:rgba(0,217,255,.025);
+cursor:pointer;
+transition:.3s;
 }
 
-.upload-icon{
-font-size:30px
+.drop:hover,
+.drop.drag{
+border-color:#00d9ff;
+background:rgba(0,217,255,.07);
+transform:translateY(-2px);
 }
 
-.dropzone strong{
-margin-top:10px;
-font-size:13px
+.drop-icon{
+font-size:42px;
+margin-bottom:15px;
 }
 
-.dropzone span{
-margin-top:6px;
-color:#656c7b;
-font-size:10px
+.drop h2{
+font-size:19px;
+}
+
+.drop p{
+margin-top:8px;
+color:#747b8d;
+font-size:12px;
+line-height:1.6;
+}
+
+.drop input{
+display:none;
+}
+
+.file{
+display:none;
+margin-top:15px;
+padding:13px;
+border:1px solid rgba(255,255,255,.08);
+border-radius:15px;
+background:rgba(255,255,255,.035);
+}
+
+.file.show{
+display:flex;
+align-items:center;
+gap:12px;
+}
+
+.file-icon{
+width:40px;
+height:40px;
+display:flex;
+align-items:center;
+justify-content:center;
+border-radius:12px;
+background:rgba(0,217,255,.1);
+font-size:19px;
 }
 
 .file-info{
-display:none;
-margin-top:12px;
-padding:12px;
-border:1px solid rgba(255,255,255,.07);
-border-radius:14px;
-background:rgba(255,255,255,.035);
+min-width:0;
+flex:1;
+}
+
+.file-name{
+font-size:12px;
+white-space:nowrap;
+overflow:hidden;
+text-overflow:ellipsis;
+}
+
+.file-size{
+margin-top:4px;
+font-size:10px;
+color:#707788;
+}
+
+.remove{
+width:30px;
+height:30px;
+border:0;
+border-radius:9px;
+background:rgba(255,56,111,.1);
+color:#ff386f;
+cursor:pointer;
+}
+
+.label{
+display:block;
+margin:20px 0 8px;
+color:#9299aa;
 font-size:11px;
-color:#9ba1af
 }
 
-.file-info.show{
-display:block
-}
-
-input[type="text"]{
+.input{
 width:100%;
-height:50px;
+height:51px;
 padding:0 15px;
 border:1px solid rgba(255,255,255,.09);
 border-radius:14px;
 outline:none;
-background:rgba(255,255,255,.045);
+background:rgba(255,255,255,.04);
 color:#fff;
-font-size:13px
+font-size:13px;
+transition:.25s;
 }
 
-input[type="text"]:focus{
-border-color:rgba(0,217,255,.45)
+.input:focus{
+border-color:rgba(0,217,255,.5);
+box-shadow:0 0 0 3px rgba(0,217,255,.06);
 }
 
-.domain-preview{
-margin-top:9px;
-color:#596170;
-font-size:10px
+.input::placeholder{
+color:#505766;
 }
 
 .deploy-btn{
 width:100%;
-height:52px;
-margin-top:24px;
-border:1px solid rgba(0,217,255,.25);
+height:53px;
+margin-top:20px;
+border:0;
 border-radius:15px;
-background:linear-gradient(
-135deg,
-rgba(0,217,255,.14),
-rgba(168,85,247,.14)
-);
+background:linear-gradient(135deg,#00d9ff,#168cff);
 color:#fff;
-font-weight:800;
+font-weight:700;
+font-size:14px;
 cursor:pointer;
-transition:.25s
+box-shadow:0 15px 35px rgba(0,150,255,.18);
+transition:.25s;
 }
 
 .deploy-btn:hover{
 transform:translateY(-2px);
-border-color:rgba(0,217,255,.45)
+}
+
+.deploy-btn:active{
+transform:scale(.98);
 }
 
 .deploy-btn:disabled{
 opacity:.45;
 cursor:not-allowed;
-transform:none
+transform:none;
 }
 
-.status{
+.progress-box{
 display:none;
-margin-top:18px;
+margin-top:20px;
 padding:18px;
 border:1px solid rgba(255,255,255,.08);
-border-radius:18px;
-background:rgba(255,255,255,.025)
+border-radius:19px;
+background:rgba(255,255,255,.025);
 }
 
-.status.show{
-display:block
+.progress-box.show{
+display:block;
 }
 
-.status-title{
-font-size:12px;
-font-weight:800
+.progress-top{
+display:flex;
+align-items:center;
+justify-content:space-between;
+margin-bottom:12px;
 }
 
-.status-message{
-margin-top:8px;
-color:#858b9b;
+.progress-title{
+font-size:13px;
+font-weight:700;
+}
+
+.percent{
+font-size:13px;
+color:#00d9ff;
+font-weight:700;
+}
+
+.bar{
+height:8px;
+overflow:hidden;
+border-radius:20px;
+background:#181c26;
+}
+
+.bar-inner{
+width:0%;
+height:100%;
+border-radius:20px;
+background:linear-gradient(90deg,#00d9ff,#8b5cf6);
+box-shadow:0 0 18px rgba(0,217,255,.3);
+transition:width .45s cubic-bezier(.16,1,.3,1);
+}
+
+.stage{
+margin-top:13px;
+color:#8b92a3;
 font-size:11px;
-line-height:1.6;
-white-space:pre-wrap
+}
+
+.meta{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:9px;
+margin-top:15px;
+}
+
+.meta-item{
+padding:11px;
+border-radius:12px;
+background:rgba(255,255,255,.035);
+}
+
+.meta-item span{
+display:block;
+color:#555c6b;
+font-size:9px;
+text-transform:uppercase;
+letter-spacing:1px;
+}
+
+.meta-item strong{
+display:block;
+margin-top:5px;
+font-size:11px;
+word-break:break-word;
 }
 
 .result{
 display:none;
-margin-top:15px
+margin-top:20px;
+padding:20px;
+border:1px solid rgba(34,197,94,.18);
+border-radius:21px;
+background:rgba(34,197,94,.035);
 }
 
 .result.show{
-display:block
+display:block;
 }
 
-.result a{
-display:block;
-padding:13px;
-margin-top:8px;
-border:1px solid rgba(0,217,255,.15);
-border-radius:13px;
-background:rgba(0,217,255,.05);
-color:#00d9ff;
-text-decoration:none;
+.result-head{
+display:flex;
+align-items:center;
+gap:12px;
+}
+
+.result-icon{
+width:45px;
+height:45px;
+display:flex;
+align-items:center;
+justify-content:center;
+border-radius:14px;
+background:rgba(34,197,94,.1);
+font-size:22px;
+}
+
+.result h2{
+font-size:17px;
+}
+
+.result p{
+margin-top:4px;
 font-size:11px;
-word-break:break-all
+color:#687081;
+}
+
+.urls{
+margin-top:17px;
+display:grid;
+gap:9px;
+}
+
+.url{
+display:flex;
+align-items:center;
+gap:8px;
+padding:12px;
+border-radius:13px;
+background:rgba(0,0,0,.18);
+}
+
+.url a{
+flex:1;
+overflow:hidden;
+color:#8edfff;
+font-size:11px;
+text-decoration:none;
+white-space:nowrap;
+text-overflow:ellipsis;
+}
+
+.copy{
+border:0;
+border-radius:8px;
+padding:7px 9px;
+background:rgba(255,255,255,.07);
+color:#fff;
+font-size:10px;
+cursor:pointer;
+}
+
+.actions{
+display:flex;
+gap:9px;
+margin-top:15px;
+}
+
+.action{
+flex:1;
+height:43px;
+border:1px solid rgba(255,255,255,.08);
+border-radius:12px;
+background:rgba(255,255,255,.05);
+color:#fff;
+font-size:11px;
+font-weight:700;
+cursor:pointer;
 }
 
 .error{
-color:#ff6685
+display:none;
+margin-top:20px;
+padding:15px;
+border:1px solid rgba(255,56,111,.18);
+border-radius:15px;
+background:rgba(255,56,111,.04);
+color:#ff7b9c;
+font-size:11px;
+line-height:1.6;
 }
 
-.success{
-color:#22c55e
+.error.show{
+display:block;
 }
 
-@media(max-width:380px){
-
-.hero{
-padding:20px
+.footer{
+margin-top:18px;
+text-align:center;
+color:#3e4450;
+font-size:9px;
+letter-spacing:1px;
 }
 
-.title h1{
-font-size:20px
+@media(max-width:420px){
+.app{
+padding:16px;
 }
 
+.panel{
+padding:15px;
+border-radius:22px;
 }
-</style></head><body><div class="page"><div class="container"><div class="topbar"><button class="back" onclick="history.back()">
-←
-</button><div class="title">
+
+.brand h1{
+font-size:24px;
+}
+
+.meta{
+grid-template-columns:1fr;
+}
+}
+</style>
+
+</head>
+<body><div class="app">
+<div class="container"><div class="top">
+<div class="brand">
 <small>REYCLOUDSHOP</small>
-<h1>Vercel Deploy</h1>
-</div></div><div class="hero"><div class="deploy-icon">
-🚀
-</div><h2>Deploy Project</h2><p>
-Upload project kamu dan deploy langsung
-ke Vercel melalui ReyCloudShop.
-</p><div class="field"><label>PROJECT FILE</label>
+<h1>Deploy Project</h1>
+</div><button class="back" onclick="location.href='/dashboard/'">←</button>
 
-<div class="dropzone" id="dropzone"><input
-type="file"
-id="file"
-accept=".zip,.html,.htm"
-
-«»
-
-<div class="upload-icon">
-📦
-</div><strong>Pilih atau drop file di sini</strong>
-
-<span>
-ZIP, HTML, atau HTM
-</span></div><div class="file-info" id="fileInfo"></div></div><div class="field"><label>HOSTNAME PROJECT</label>
+</div><div class="panel"><div class="drop" id="drop">
+<div class="drop-icon">☁️</div>
+<h2>Upload Project</h2>
+<p>Tap untuk memilih file atau drag & drop project kamu<br>ZIP, HTML, HTM · Maksimal 20 MB</p>
+<input id="fileInput" type="file" accept=".zip,.html,.htm">
+</div><div class="file" id="fileBox">
+<div class="file-icon">📦</div>
+<div class="file-info">
+<div class="file-name" id="fileName">-</div>
+<div class="file-size" id="fileSize">-</div>
+</div>
+<button class="remove" id="remove">×</button>
+</div><label class="label">PROJECT HOSTNAME</label>
 
 <input
-type="text"
-id="hostname"
+class="input"
+id="projectName"
 placeholder="contoh: reyshop"
 autocomplete="off"
+spellcheck="false"
 
 «»
 
-<div class="domain-preview">
-https://<span id="preview">hostname</span>.vercel.app
-</div></div><button
-class="deploy-btn"
-id="deployBtn"
-disabled
-onclick="startDeploy()"
-
-«»
-
+<button class="deploy-btn" id="deploy">
 🚀 Deploy ke Vercel
-</button>
-
-<div class="status" id="status"><div class="status-title" id="statusTitle">
-Deployment
-</div><div class="status-message" id="statusMessage">
-Menunggu proses...
-</div><div class="result" id="result"></div></div></div></div></div><script>
-const fileInput=document.getElementById("file");
-const dropzone=document.getElementById("dropzone");
-const fileInfo=document.getElementById("fileInfo");
-const hostname=document.getElementById("hostname");
-const preview=document.getElementById("preview");
-const deployBtn=document.getElementById("deployBtn");
+</button><div class="progress-box" id="progressBox"><div class="progress-top">
+<div class="progress-title" id="progressTitle">Preparing...</div>
+<div class="percent" id="percent">0%</div>
+</div><div class="bar">
+<div class="bar-inner" id="bar"></div>
+</div><div class="stage" id="stage">
+Menyiapkan deployment...
+</div><div class="meta"><div class="meta-item">
+<span>Framework</span>
+<strong id="framework">-</strong>
+</div><div class="meta-item">
+<span>Files</span>
+<strong id="files">-</strong>
+</div><div class="meta-item">
+<span>Project</span>
+<strong id="projectMeta">-</strong>
+</div><div class="meta-item">
+<span>Status</span>
+<strong id="status">Preparing</strong>
+</div></div></div><div class="result" id="result"><div class="result-head">
+<div class="result-icon">✓</div>
+<div>
+<h2>Deployment Complete</h2>
+<p>Project berhasil dipublish ke Vercel.</p>
+</div>
+</div><div class="urls"><div class="url">
+<a id="vercelUrl" target="_blank">-</a>
+<button class="copy" data-copy="vercelUrl">Copy</button>
+</div><div class="url" id="customRow">
+<a id="customUrl" target="_blank">-</a>
+<button class="copy" data-copy="customUrl">Copy</button>
+</div></div><div class="actions">
+<button class="action" id="openSite">🌐 Open</button>
+<button class="action" id="again">↻ Deploy Lagi</button>
+</div></div><div class="error" id="error"></div></div><div class="footer">
+POWERED BY REYCLOUDSHOP
+</div></div>
+</div><script>
+const drop=document.getElementById("drop");
+const fileInput=document.getElementById("fileInput");
+const fileBox=document.getElementById("fileBox");
+const fileName=document.getElementById("fileName");
+const fileSize=document.getElementById("fileSize");
+const remove=document.getElementById("remove");
+const projectName=document.getElementById("projectName");
+const deploy=document.getElementById("deploy");
+const progressBox=document.getElementById("progressBox");
+const progressTitle=document.getElementById("progressTitle");
+const percent=document.getElementById("percent");
+const bar=document.getElementById("bar");
+const stage=document.getElementById("stage");
+const framework=document.getElementById("framework");
+const files=document.getElementById("files");
+const projectMeta=document.getElementById("projectMeta");
 const status=document.getElementById("status");
-const statusTitle=document.getElementById("statusTitle");
-const statusMessage=document.getElementById("statusMessage");
 const result=document.getElementById("result");
+const errorBox=document.getElementById("error");
+const vercelUrl=document.getElementById("vercelUrl");
+const customUrl=document.getElementById("customUrl");
+const customRow=document.getElementById("customRow");
+const openSite=document.getElementById("openSite");
+const again=document.getElementById("again");
 
 let selectedFile=null;
+let finalUrl=null;
 
 function formatBytes(bytes){
 
@@ -355,11 +545,13 @@ return "0 B";
 }
 
 const units=["B","KB","MB","GB"];
-
 let size=bytes;
 let index=0;
 
-while(size>=1024&&index<units.length-1){
+while(
+size>=1024&&
+index<units.length-1
+){
 size/=1024;
 index++;
 }
@@ -368,233 +560,399 @@ return `${size.toFixed(2)} ${units[index]}`;
 
 }
 
-function cleanHostname(value){
-
-return value
-.toLowerCase()
-.trim()
-.replace(/[^a-z0-9-]/g,"-")
-.replace(/-+/g,"-")
-.replace(/^-|-$/g,"");
-
-}
-
-function updateButton(){
-
-deployBtn.disabled=
-!selectedFile||
-!cleanHostname(hostname.value);
-
-}
-
-function setFile(file){
+function chooseFile(file){
 
 if(!file){
 return;
 }
 
-const allowed=[
-"zip",
-"html",
-"htm"
-];
+const ext=
+"."+
+file.name.split(".").pop().toLowerCase();
 
-const extension=
-file.name
-.split(".")
-.pop()
-.toLowerCase();
-
-if(!allowed.includes(extension)){
-
-fileInfo.className="file-info show";
-
-fileInfo.textContent=
-"❌ Format tidak didukung. Gunakan ZIP, HTML, atau HTM.";
-
-selectedFile=null;
-
-updateButton();
-
+if(
+![".zip",".html",".htm"].includes(ext)
+){
+showError("Format file harus ZIP, HTML, atau HTM.");
 return;
+}
 
+if(file.size>20*1024*1024){
+showError("Ukuran file maksimal 20 MB.");
+return;
 }
 
 selectedFile=file;
 
-fileInfo.className="file-info show";
-
-fileInfo.textContent=
-`📄 ${file.name} • ${formatBytes(file.size)}`;
-
-updateButton();
+fileName.textContent=file.name;
+fileSize.textContent=formatBytes(file.size);
+fileBox.classList.add("show");
+errorBox.classList.remove("show");
 
 }
+
+drop.addEventListener(
+"click",
+()=>{
+fileInput.click();
+}
+);
 
 fileInput.addEventListener(
 "change",
-event=>{
-setFile(event.target.files[0]);
-}
-);
-
-hostname.addEventListener(
-"input",
 ()=>{
-const value=cleanHostname(hostname.value);
-
-preview.textContent=value||"hostname";
-
-updateButton();
+chooseFile(fileInput.files[0]);
 }
 );
 
-dropzone.addEventListener(
-"dragover",
+remove.addEventListener(
+"click",
+event=>{
+event.stopPropagation();
+selectedFile=null;
+fileInput.value="";
+fileBox.classList.remove("show");
+}
+);
+
+[
+"dragenter",
+"dragover"
+].forEach(eventName=>{
+drop.addEventListener(
+eventName,
 event=>{
 event.preventDefault();
-dropzone.classList.add("dragover");
+drop.classList.add("drag");
 }
 );
+});
 
-dropzone.addEventListener(
+[
 "dragleave",
-()=>{
-dropzone.classList.remove("dragover");
+"drop"
+].forEach(eventName=>{
+drop.addEventListener(
+eventName,
+event=>{
+event.preventDefault();
+drop.classList.remove("drag");
 }
 );
+});
 
-dropzone.addEventListener(
+drop.addEventListener(
 "drop",
 event=>{
-event.preventDefault();
-
-dropzone.classList.remove("dragover");
-
-setFile(event.dataTransfer.files[0]);
+chooseFile(event.dataTransfer.files[0]);
 }
 );
 
-function showStatus(title,message){
+function showError(message){
 
-status.classList.add("show");
-
-statusTitle.textContent=title;
-
-statusMessage.textContent=message;
+errorBox.textContent="❌ "+message;
+errorBox.classList.add("show");
 
 }
 
-async function startDeploy(){
+function resetProgress(){
 
-if(!selectedFile){
-return;
+progressBox.classList.remove("show");
+result.classList.remove("show");
+errorBox.classList.remove("show");
+
+bar.style.width="0%";
+percent.textContent="0%";
+progressTitle.textContent="Preparing...";
+stage.textContent="Menyiapkan deployment...";
+framework.textContent="-";
+files.textContent="-";
+projectMeta.textContent="-";
+status.textContent="Preparing";
+
 }
 
-const projectName=
-cleanHostname(hostname.value);
+function updateProgress(data){
 
-if(!projectName){
-return;
-}
-
-deployBtn.disabled=true;
-
-result.className="result";
-
-result.innerHTML="";
-
-showStatus(
-"⏳ Deployment berjalan",
-"Menyiapkan project..."
+const value=
+Math.max(
+0,
+Math.min(
+100,
+Number(data.progress)||0
+)
 );
+
+bar.style.width=value+"%";
+percent.textContent=value+"%";
+
+progressTitle.textContent=
+data.stage
+?data.stage.toUpperCase()
+:"DEPLOYING";
+
+stage.textContent=
+data.message||
+"Processing...";
+
+if(data.framework){
+framework.textContent=data.framework;
+}
+
+if(data.files){
+files.textContent=data.files;
+}
+
+if(data.projectName){
+projectMeta.textContent=data.projectName;
+}
+
+if(data.vercelState){
+status.textContent=data.vercelState;
+}else if(data.stage){
+status.textContent=data.stage;
+}
+
+}
+
+async function readStream(response){
+
+if(!response.body){
+throw new Error(
+"Browser tidak mendukung streaming progress."
+);
+}
+
+const reader=response.body.getReader();
+const decoder=new TextDecoder();
+let buffer="";
+
+while(true){
+
+const {value,done}=await reader.read();
+
+if(done){
+break;
+}
+
+buffer+=decoder.decode(
+value,
+{
+stream:true
+}
+);
+
+const lines=buffer.split("\n");
+buffer=lines.pop();
+
+for(const line of lines){
+
+if(!line.trim()){
+continue;
+}
+
+let data;
 
 try{
+data=JSON.parse(line);
+}catch{
+continue;
+}
 
-const formData=new FormData();
+if(data.type==="progress"){
+updateProgress(data);
+}
 
-formData.append(
+if(data.type==="complete"){
+
+updateProgress(data);
+
+vercelUrl.href=data.vercelUrl;
+vercelUrl.textContent=data.vercelUrl;
+
+finalUrl=data.vercelUrl;
+
+if(data.customDomain){
+
+customRow.style.display="flex";
+customUrl.href=data.customDomain;
+customUrl.textContent=data.customDomain;
+
+}else{
+
+customRow.style.display="none";
+
+}
+
+result.classList.add("show");
+
+}
+
+if(data.type==="error"){
+throw new Error(data.message);
+}
+
+}
+
+}
+
+}
+
+deploy.addEventListener(
+"click",
+async()=>{
+
+if(!selectedFile){
+showError("Pilih file project terlebih dahulu.");
+return;
+}
+
+const name=projectName.value
+.trim()
+.toLowerCase();
+
+if(
+!/^[a-z0-9][a-z0-9-]{1,62}$/.test(name)
+){
+
+showError(
+"Hostname tidak valid. Gunakan huruf kecil, angka, dan tanda -."
+);
+
+return;
+}
+
+resetProgress();
+
+progressBox.classList.add("show");
+
+deploy.disabled=true;
+deploy.textContent="⏳ Deploying...";
+
+const form=new FormData();
+
+form.append(
+"projectName",
+name
+);
+
+form.append(
 "file",
 selectedFile
 );
 
-formData.append(
-"projectName",
-projectName
-);
+try{
 
-showStatus(
-"📤 Uploading",
-"File sedang dikirim ke server..."
-);
-
-const response=
-await fetch(
+const response=await fetch(
 "/api/deploy",
 {
 method:"POST",
-body:formData
+body:form
 }
 );
 
-const data=
-await response.json();
+if(!response.ok){
 
-if(!response.ok||!data.success){
+let message=
+"Server deployment mengalami masalah.";
 
-throw new Error(
+try{
+
+const data=await response.json();
+
+message=
 data.error||
-"Deployment gagal."
-);
+message;
+
+}catch{}
+
+throw new Error(message);
 
 }
 
-showStatus(
-"✅ Deployment berhasil",
-`Project ${projectName} berhasil dideploy ke Vercel.`
-);
-
-result.className="result show";
-
-result.innerHTML=`
-
-<a
-href="${data.vercelUrl}"
-target="_blank"
-rel="noopener"
->
-☁️ Vercel
-<br>
-${data.vercelUrl}
-</a>
-
-<a
-href="${data.projectUrl}"
-target="_blank"
-rel="noopener"
->
-🚀 Deployment
-<br>
-${data.projectUrl}
-</a>
-
-`;
+await readStream(response);
 
 }catch(error){
 
-showStatus(
-"❌ Deployment gagal",
-error.message
-);
-
-statusTitle.classList.add("error");
+showError(error.message);
 
 }finally{
 
-deployBtn.disabled=false;
+deploy.disabled=false;
+deploy.textContent="🚀 Deploy ke Vercel";
 
 }
 
 }
+);
+
+document.querySelectorAll(".copy")
+.forEach(button=>{
+
+button.addEventListener(
+"click",
+async()=>{
+
+const id=button.dataset.copy;
+const element=document.getElementById(id);
+
+if(!element||!element.textContent){
+return;
+}
+
+try{
+
+await navigator.clipboard.writeText(
+element.textContent
+);
+
+const old=button.textContent;
+
+button.textContent="Copied!";
+
+setTimeout(
+()=>{
+button.textContent=old;
+},
+1200
+);
+
+}catch{}
+
+}
+);
+
+});
+
+openSite.addEventListener(
+"click",
+()=>{
+if(finalUrl){
+window.open(
+finalUrl,
+"_blank",
+"noopener"
+);
+}
+}
+);
+
+again.addEventListener(
+"click",
+()=>{
+
+selectedFile=null;
+fileInput.value="";
+projectName.value="";
+fileBox.classList.remove("show");
+resetProgress();
+
+window.scrollTo({
+top:0,
+behavior:"smooth"
+});
+
+}
+);
 </script></body>
 </html>
