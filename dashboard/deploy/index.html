@@ -3,7 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#05070b">
 <title>ReyCloudShop - Deploy</title>
+
 <style>
 *{
 margin:0;
@@ -17,115 +19,237 @@ box-sizing:border-box;
 --card:#0c1119;
 --card2:#101722;
 --line:rgba(255,255,255,.08);
---muted:#747d8d;
---text:#f5f7fb;
+--muted:#7c8798;
+--text:#f7f9fc;
 --cyan:#00d9ff;
 --purple:#9d5cff;
 --green:#22c55e;
 --red:#ff426d
 }
 
+html{
+scroll-behavior:smooth
+}
+
 body{
 min-height:100vh;
 background:
-radial-gradient(circle at 10% 5%,rgba(0,217,255,.1),transparent 28%),
-radial-gradient(circle at 90% 90%,rgba(157,92,255,.1),transparent 30%),
+radial-gradient(circle at 8% 0%,rgba(0,217,255,.13),transparent 28%),
+radial-gradient(circle at 95% 85%,rgba(157,92,255,.12),transparent 32%),
 var(--bg);
-font-family:Arial,sans-serif;
+font-family:Arial,Helvetica,sans-serif;
 color:var(--text)
+}
+
+button,
+input{
+font:inherit
 }
 
 .app{
 width:100%;
-max-width:760px;
+max-width:780px;
 margin:auto;
-padding:30px 20px 40px
+padding:22px 16px 40px
 }
 
 .top{
 display:flex;
 align-items:center;
 justify-content:space-between;
-margin-bottom:28px
+gap:15px;
+margin-bottom:20px
 }
 
 .brand small{
-font-size:11px;
+font-size:10px;
 letter-spacing:3px;
 color:#687181
 }
 
 .brand h1{
-font-size:34px;
-margin-top:8px
+font-size:31px;
+margin-top:7px;
+letter-spacing:-1px
+}
+
+.brand p{
+font-size:12px;
+color:var(--muted);
+margin-top:6px
 }
 
 .back{
-width:54px;
-height:54px;
-border-radius:17px;
+width:50px;
+height:50px;
+border-radius:16px;
 border:1px solid var(--line);
-background:rgba(255,255,255,.04);
+background:rgba(255,255,255,.045);
 color:white;
-font-size:25px;
+font-size:23px;
 cursor:pointer
 }
 
-.panel{
-padding:28px;
+.clockCard{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:15px;
+padding:17px 18px;
+margin-bottom:18px;
 border:1px solid var(--line);
-border-radius:30px;
-background:rgba(12,17,25,.88);
-box-shadow:0 30px 90px rgba(0,0,0,.45)
+border-radius:22px;
+background:linear-gradient(
+135deg,
+rgba(0,217,255,.055),
+rgba(157,92,255,.045)
+)
+}
+
+.clockInfo{
+min-width:0
+}
+
+.clockDay{
+font-size:11px;
+color:#7d8797;
+letter-spacing:1px;
+text-transform:uppercase
+}
+
+.clockDate{
+font-size:12px;
+color:#aab2bf;
+margin-top:5px
+}
+
+.clock{
+font-size:21px;
+font-weight:800;
+letter-spacing:1px;
+white-space:nowrap
+}
+
+.panel{
+padding:22px;
+border:1px solid var(--line);
+border-radius:28px;
+background:rgba(12,17,25,.9);
+box-shadow:0 30px 90px rgba(0,0,0,.42)
+}
+
+.sectionTitle{
+display:flex;
+align-items:center;
+gap:10px;
+margin-bottom:17px
+}
+
+.sectionIcon{
+width:38px;
+height:38px;
+display:flex;
+align-items:center;
+justify-content:center;
+border-radius:12px;
+background:rgba(0,217,255,.08);
+font-size:18px
+}
+
+.sectionTitle h2{
+font-size:16px
+}
+
+.sectionTitle p{
+font-size:11px;
+color:var(--muted);
+margin-top:3px
 }
 
 .drop{
-min-height:250px;
-border:1px dashed rgba(0,217,255,.35);
-border-radius:25px;
+position:relative;
+min-height:230px;
+border:1px dashed rgba(0,217,255,.38);
+border-radius:23px;
 display:flex;
 flex-direction:column;
 align-items:center;
 justify-content:center;
 text-align:center;
-padding:25px;
+padding:25px 18px;
+background:rgba(0,217,255,.018);
+transition:.25s;
 cursor:pointer;
-transition:.25s
+user-select:none
 }
 
 .drop:hover,
 .drop.drag{
 border-color:var(--cyan);
-background:rgba(0,217,255,.035)
+background:rgba(0,217,255,.055);
+transform:translateY(-1px)
 }
 
 .cloud{
-font-size:55px;
-margin-bottom:15px
+width:70px;
+height:70px;
+display:flex;
+align-items:center;
+justify-content:center;
+border-radius:22px;
+background:linear-gradient(
+135deg,
+rgba(0,217,255,.13),
+rgba(157,92,255,.12)
+);
+font-size:35px;
+margin-bottom:16px
 }
 
 .drop h2{
-font-size:23px;
-margin-bottom:9px
+font-size:20px;
+margin-bottom:7px
 }
 
 .drop p{
+font-size:12px;
 color:var(--muted);
-font-size:13px;
 line-height:1.6
 }
 
+.dropHint{
+margin-top:10px;
+font-size:10px!important;
+color:#596373!important
+}
+
+.uploadBtn{
+margin-top:16px;
+height:44px;
+padding:0 20px;
+border:1px solid rgba(0,217,255,.25);
+border-radius:14px;
+background:rgba(0,217,255,.08);
+color:#b9f5ff;
+font-weight:700;
+cursor:pointer
+}
+
 #fileInput{
-display:none
+position:absolute;
+width:1px;
+height:1px;
+opacity:0;
+pointer-events:none
 }
 
 .file{
 display:none;
 align-items:center;
-gap:15px;
-padding:15px;
-margin-top:18px;
-border-radius:20px;
+gap:13px;
+padding:14px;
+margin-top:15px;
+border-radius:18px;
 border:1px solid var(--line);
 background:rgba(255,255,255,.035)
 }
@@ -135,14 +259,15 @@ display:flex
 }
 
 .fileIcon{
-width:50px;
-height:50px;
-border-radius:15px;
+width:48px;
+height:48px;
+flex:none;
 display:flex;
 align-items:center;
 justify-content:center;
-font-size:25px;
-background:rgba(0,217,255,.1)
+border-radius:14px;
+background:rgba(0,217,255,.09);
+font-size:22px
 }
 
 .fileInfo{
@@ -151,86 +276,102 @@ min-width:0
 }
 
 .fileName{
+font-size:13px;
 font-weight:700;
-font-size:14px;
 white-space:nowrap;
 overflow:hidden;
 text-overflow:ellipsis
 }
 
 .fileSize{
-font-size:12px;
+font-size:11px;
 color:var(--muted);
 margin-top:5px
 }
 
 .remove{
-width:40px;
-height:40px;
+width:39px;
+height:39px;
+flex:none;
 border:0;
-border-radius:13px;
-background:rgba(255,60,100,.1);
-color:#ff5478;
-font-size:18px;
+border-radius:12px;
+background:rgba(255,66,109,.08);
+color:#ff6686;
+font-size:19px;
 cursor:pointer
 }
 
 .label{
 display:block;
-font-size:12px;
-letter-spacing:1px;
-color:#858e9e;
-margin:27px 0 9px
+font-size:10px;
+font-weight:700;
+letter-spacing:1.5px;
+color:#808a9b;
+margin:24px 0 9px
+}
+
+.inputWrap{
+position:relative
 }
 
 .input{
 width:100%;
-height:56px;
+height:55px;
 border:1px solid rgba(255,255,255,.1);
-border-radius:17px;
+border-radius:16px;
 background:rgba(255,255,255,.035);
 outline:none;
-padding:0 17px;
+padding:0 16px;
 color:white;
-font-size:15px;
+font-size:14px;
 transition:.2s
 }
 
+.input::placeholder{
+color:#4f5969
+}
+
 .input:focus{
-border-color:var(--cyan);
-box-shadow:0 0 0 3px rgba(0,217,255,.08)
+border-color:rgba(0,217,255,.55);
+box-shadow:0 0 0 3px rgba(0,217,255,.07)
+}
+
+.nameHint{
+font-size:10px;
+color:#596373;
+margin-top:8px
 }
 
 .deployBtn{
 width:100%;
-height:58px;
-margin-top:18px;
+height:57px;
+margin-top:17px;
 border:0;
-border-radius:18px;
+border-radius:17px;
 background:linear-gradient(135deg,#00d9ff,#6575ff);
 color:white;
-font-size:16px;
+font-size:15px;
 font-weight:800;
 cursor:pointer;
-box-shadow:0 12px 35px rgba(0,217,255,.16);
+box-shadow:0 12px 35px rgba(0,217,255,.15);
 transition:.2s
 }
 
 .deployBtn:active{
-transform:scale(.98)
+transform:scale(.985)
 }
 
 .deployBtn:disabled{
-opacity:.45;
+opacity:.4;
 cursor:not-allowed;
 box-shadow:none
 }
 
 .progressBox{
 display:none;
-margin-top:25px;
-padding:20px;
-border-radius:22px;
+margin-top:20px;
+padding:18px;
+border-radius:20px;
 border:1px solid var(--line);
 background:rgba(255,255,255,.025)
 }
@@ -243,22 +384,23 @@ display:block
 display:flex;
 align-items:center;
 justify-content:space-between;
-margin-bottom:12px
+gap:15px;
+margin-bottom:11px
 }
 
 .progressTitle{
-font-size:14px;
+font-size:13px;
 font-weight:700
 }
 
 .progressPercent{
-font-size:13px;
+font-size:12px;
 color:var(--cyan);
 font-weight:800
 }
 
 .progress{
-height:9px;
+height:8px;
 background:#171d27;
 border-radius:20px;
 overflow:hidden
@@ -269,29 +411,29 @@ width:0%;
 height:100%;
 border-radius:20px;
 background:linear-gradient(90deg,#00d9ff,#9d5cff);
-transition:width .4s ease
+transition:width .35s ease
 }
 
 .stage{
-font-size:11px;
-color:#626b7b;
-margin-top:12px;
-text-transform:uppercase;
-letter-spacing:1px
+font-size:9px;
+color:#596373;
+margin-top:11px;
+letter-spacing:1.4px;
+font-weight:700
 }
 
 .message{
-font-size:13px;
-color:#a7afbd;
-margin-top:6px;
+font-size:12px;
+color:#9ea8b7;
+margin-top:5px;
 line-height:1.5
 }
 
 .result{
 display:none;
 margin-top:20px;
-padding:20px;
-border-radius:22px;
+padding:19px;
+border-radius:21px;
 border:1px solid rgba(34,197,94,.2);
 background:rgba(34,197,94,.035)
 }
@@ -301,14 +443,14 @@ display:block
 }
 
 .resultTitle{
-font-size:17px;
+font-size:16px;
 font-weight:800;
-margin-bottom:15px
+margin-bottom:13px
 }
 
 .resultItem{
-padding:13px 0;
-border-bottom:1px solid rgba(255,255,255,.06)
+padding:12px 0;
+border-bottom:1px solid rgba(255,255,255,.055)
 }
 
 .resultItem:last-child{
@@ -316,7 +458,7 @@ border-bottom:0
 }
 
 .resultLabel{
-font-size:10px;
+font-size:9px;
 color:#626b7b;
 text-transform:uppercase;
 letter-spacing:1px;
@@ -324,7 +466,7 @@ margin-bottom:5px
 }
 
 .resultValue{
-font-size:13px;
+font-size:12px;
 word-break:break-word
 }
 
@@ -335,13 +477,13 @@ text-decoration:none
 
 .error{
 display:none;
-margin-top:20px;
-padding:15px;
-border-radius:17px;
+margin-top:17px;
+padding:14px;
+border-radius:16px;
 border:1px solid rgba(255,66,109,.2);
 background:rgba(255,66,109,.05);
-color:#ff7b98;
-font-size:13px;
+color:#ff7895;
+font-size:12px;
 line-height:1.5
 }
 
@@ -351,33 +493,36 @@ display:block
 
 .footer{
 text-align:center;
-margin-top:25px;
-font-size:10px;
+margin-top:22px;
+font-size:9px;
 letter-spacing:2px;
 color:#343b47
 }
 
 @media(max-width:500px){
 .app{
-padding:22px 15px 35px
+padding:18px 13px 32px
 }
 
 .brand h1{
-font-size:30px
+font-size:27px
 }
 
 .panel{
-padding:18px;
-border-radius:25px
+padding:17px;
+border-radius:24px
 }
 
 .drop{
-min-height:235px
+min-height:225px
 }
 
-.back{
-width:48px;
-height:48px
+.clock{
+font-size:18px
+}
+
+.clockCard{
+padding:15px
 }
 }
 </style>
@@ -388,41 +533,132 @@ height:48px
 <div class="app">
 
 <div class="top">
+
 <div class="brand">
 <small>REYCLOUDSHOP</small>
 <h1>Deploy Project</h1>
+<p>Deploy website kamu langsung ke Vercel.</p>
 </div>
 
-<button class="back" onclick="history.back()">←</button>
+<button
+class="back"
+type="button"
+onclick="history.back()"
+>
+←
+</button>
+
+</div>
+
+<div class="clockCard">
+
+<div class="clockInfo">
+<div class="clockDay" id="clockDay">Memuat hari...</div>
+<div class="clockDate" id="clockDate">Memuat tanggal...</div>
+</div>
+
+<div class="clock" id="clock">00:00:00</div>
+
 </div>
 
 <div class="panel">
 
-<div class="drop" id="dropZone">
-<div class="cloud">☁️</div>
+<div class="sectionTitle">
+
+<div class="sectionIcon">
+☁️
+</div>
+
+<div>
 <h2>Upload Project</h2>
-<p>Tap untuk memilih file atau drag & drop project kamu</p>
-<p>ZIP, HTML, HTM · Maksimal 20 MB</p>
+<p>Pilih project yang ingin kamu deploy</p>
+</div>
+
+</div>
+
+<div
+class="drop"
+id="dropZone"
+role="button"
+tabindex="0"
+>
+
+<div class="cloud">
+☁️
+</div>
+
+<h2>Pilih File Project</h2>
+
+<p>
+Tap area ini atau tombol di bawah
+untuk memilih file.
+</p>
+
+<p class="dropHint">
+ZIP, HTML, HTM · Maksimal 20 MB
+</p>
+
+<button
+class="uploadBtn"
+id="chooseBtn"
+type="button"
+>
+📁 Pilih File
+</button>
+
 </div>
 
 <input
 type="file"
 id="fileInput"
-accept=".zip,.html,.htm"
+accept=".zip,.html,.htm,application/zip,text/html"
 >
 
-<div class="file" id="fileBox">
-<div class="fileIcon">📦</div>
+<div
+class="file"
+id="fileBox"
+>
+
+<div class="fileIcon">
+📦
+</div>
 
 <div class="fileInfo">
-<div class="fileName" id="fileName">-</div>
-<div class="fileSize" id="fileSize">-</div>
+
+<div
+class="fileName"
+id="fileName"
+>
+-
 </div>
 
-<button class="remove" id="removeFile">×</button>
+<div
+class="fileSize"
+id="fileSize"
+>
+-
 </div>
 
-<label class="label">PROJECT HOSTNAME</label>
+</div>
+
+<button
+class="remove"
+id="removeFile"
+type="button"
+>
+×
+</button>
+
+</div>
+
+<label
+class="label"
+for="projectName"
+>
+PROJECT HOSTNAME
+</label>
+
+<div class="inputWrap">
 
 <input
 class="input"
@@ -430,80 +666,176 @@ id="projectName"
 type="text"
 placeholder="contoh: reyshop"
 autocomplete="off"
+autocapitalize="none"
+spellcheck="false"
 >
+
+</div>
+
+<div class="nameHint">
+Gunakan huruf kecil, angka, dan tanda -
+</div>
 
 <button
 class="deployBtn"
 id="deployBtn"
+type="button"
 disabled
 >
 🚀 Deploy ke Vercel
 </button>
 
-<div class="progressBox" id="progressBox">
+<div
+class="progressBox"
+id="progressBox"
+>
 
 <div class="progressTop">
-<div class="progressTitle" id="progressTitle">
+
+<div
+class="progressTitle"
+id="progressTitle"
+>
 Menyiapkan deployment...
 </div>
 
-<div class="progressPercent" id="progressPercent">
+<div
+class="progressPercent"
+id="progressPercent"
+>
 0%
 </div>
+
 </div>
 
 <div class="progress">
-<div class="progressBar" id="progressBar"></div>
+<div
+class="progressBar"
+id="progressBar"
+></div>
 </div>
 
-<div class="stage" id="stage">
+<div
+class="stage"
+id="stage"
+>
 PREPARE
 </div>
 
-<div class="message" id="progressMessage">
+<div
+class="message"
+id="progressMessage"
+>
 Menunggu...
 </div>
 
 </div>
 
-<div class="result" id="result">
+<div
+class="result"
+id="result"
+>
 
 <div class="resultTitle">
 🎉 Deployment Berhasil
 </div>
 
 <div class="resultItem">
-<div class="resultLabel">Project</div>
-<div class="resultValue" id="resultProject">-</div>
+
+<div class="resultLabel">
+Project
+</div>
+
+<div
+class="resultValue"
+id="resultProject"
+>
+-
+</div>
+
 </div>
 
 <div class="resultItem">
-<div class="resultLabel">Framework</div>
-<div class="resultValue" id="resultFramework">-</div>
+
+<div class="resultLabel">
+Framework
+</div>
+
+<div
+class="resultValue"
+id="resultFramework"
+>
+-
+</div>
+
 </div>
 
 <div class="resultItem">
-<div class="resultLabel">Files</div>
-<div class="resultValue" id="resultFiles">-</div>
+
+<div class="resultLabel">
+Files
+</div>
+
+<div
+class="resultValue"
+id="resultFiles"
+>
+-
+</div>
+
 </div>
 
 <div class="resultItem">
-<div class="resultLabel">Vercel</div>
+
+<div class="resultLabel">
+Vercel
+</div>
+
 <div class="resultValue">
-<a id="resultVercel" href="#" target="_blank">-</a>
-</div>
+
+<a
+id="resultVercel"
+href="#"
+target="_blank"
+rel="noopener"
+>
+-
+</a>
+
 </div>
 
-<div class="resultItem" id="customDomainRow">
-<div class="resultLabel">Custom Domain</div>
+</div>
+
+<div
+class="resultItem"
+id="customDomainRow"
+>
+
+<div class="resultLabel">
+Custom Domain
+</div>
+
 <div class="resultValue">
-<a id="resultDomain" href="#" target="_blank">-</a>
+
+<a
+id="resultDomain"
+href="#"
+target="_blank"
+rel="noopener"
+>
+-
+</a>
+
 </div>
+
 </div>
 
 </div>
 
-<div class="error" id="errorBox"></div>
+<div
+class="error"
+id="errorBox"
+></div>
 
 </div>
 
@@ -515,6 +847,7 @@ POWERED BY REYCLOUDSHOP
 
 <script>
 const dropZone=document.getElementById("dropZone");
+const chooseBtn=document.getElementById("chooseBtn");
 const fileInput=document.getElementById("fileInput");
 const fileBox=document.getElementById("fileBox");
 const fileName=document.getElementById("fileName");
@@ -531,25 +864,84 @@ const stage=document.getElementById("stage");
 const result=document.getElementById("result");
 const errorBox=document.getElementById("errorBox");
 
+const clockDay=document.getElementById("clockDay");
+const clockDate=document.getElementById("clockDate");
+const clock=document.getElementById("clock");
+
 let selectedFile=null;
+
 const MAX_SIZE=20*1024*1024;
 
-function formatBytes(bytes){
-if(!bytes)return"0 B";
+function updateClock(){
 
-const units=["B","KB","MB","GB"];
-let size=bytes;
+const now=new Date();
+
+const day=now.toLocaleDateString(
+"id-ID",
+{
+weekday:"long"
+}
+);
+
+const date=now.toLocaleDateString(
+"id-ID",
+{
+day:"2-digit",
+month:"long",
+year:"numeric"
+}
+);
+
+const time=now.toLocaleTimeString(
+"id-ID",
+{
+hour:"2-digit",
+minute:"2-digit",
+second:"2-digit",
+hour12:false
+});
+
+clockDay.textContent=day;
+clockDate.textContent=date;
+clock.textContent=time;
+
+}
+
+updateClock();
+setInterval(updateClock,1000);
+
+function formatBytes(bytes){
+
+if(!bytes){
+return"0 B";
+}
+
+const units=[
+"B",
+"KB",
+"MB",
+"GB"
+];
+
+let size=Number(bytes);
 let index=0;
 
-while(size>=1024&&index<units.length-1){
+while(
+size>=1024&&
+index<units.length-1
+){
+
 size/=1024;
 index++;
+
 }
 
 return`${size.toFixed(2)} ${units[index]}`;
+
 }
 
 function cleanProjectName(value){
+
 return String(value||"")
 .trim()
 .toLowerCase()
@@ -557,72 +949,106 @@ return String(value||"")
 .replace(/[^a-z0-9-]/g,"-")
 .replace(/-+/g,"-")
 .replace(/^-|-$/g,"");
+
 }
 
 function validProjectName(value){
-return/^[a-z0-9][a-z0-9-]{1,62}$/.test(value);
+
+return/^[a-z0-9][a-z0-9-]{1,62}$/.test(
+value
+);
+
 }
 
 function validate(){
-const name=cleanProjectName(projectName.value);
+
+const name=cleanProjectName(
+projectName.value
+);
 
 deployBtn.disabled=!(
 selectedFile&&
 validProjectName(name)
 );
+
+}
+
+function showError(message){
+
+errorBox.textContent="❌ "+message;
+errorBox.classList.add("show");
+
+}
+
+function hideError(){
+
+errorBox.classList.remove("show");
+
 }
 
 function showFile(file){
-if(!file)return;
 
-const name=file.name.toLowerCase();
-const allowed=[
-".zip",
-".html",
-".htm"
-];
-
-const valid=allowed.some(ext=>name.endsWith(ext));
-
-if(!valid){
-showError("Format file harus ZIP, HTML, atau HTM.");
+if(!file){
 return;
 }
 
-if(file.size>MAX_SIZE){
-showError("Ukuran file maksimal 20 MB.");
+const lower=file.name.toLowerCase();
+
+const valid=[
+".zip",
+".html",
+".htm"
+].some(
+ext=>lower.endsWith(ext)
+);
+
+if(!valid){
+
+showError(
+"Format file harus ZIP, HTML, atau HTM."
+);
+
 return;
+
+}
+
+if(file.size>MAX_SIZE){
+
+showError(
+"Ukuran file maksimal 20 MB."
+);
+
+return;
+
 }
 
 selectedFile=file;
 
 fileName.textContent=file.name;
-fileSize.textContent=formatBytes(file.size);
+fileSize.textContent=formatBytes(
+file.size
+);
 
 fileBox.classList.add("show");
 
-errorBox.classList.remove("show");
+hideError();
 
 validate();
+
 }
 
 function clearFile(){
+
 selectedFile=null;
 fileInput.value="";
 fileBox.classList.remove("show");
+
 validate();
-}
 
-function showError(message){
-errorBox.textContent="❌ "+message;
-errorBox.classList.add("show");
-}
-
-function hideError(){
-errorBox.classList.remove("show");
 }
 
 function updateProgress(data){
+
 const percent=Math.max(
 0,
 Math.min(
@@ -633,8 +1059,11 @@ Number(data.progress||0)
 
 progressBox.classList.add("show");
 
-progressBar.style.width=`${percent}%`;
-progressPercent.textContent=`${percent}%`;
+progressBar.style.width=
+`${percent}%`;
+
+progressPercent.textContent=
+`${percent}%`;
 
 progressTitle.textContent=
 data.message||
@@ -645,50 +1074,89 @@ data.message||
 "Harap tunggu...";
 
 stage.textContent=
-String(data.stage||"processing").toUpperCase();
+String(
+data.stage||
+"processing"
+).toUpperCase();
+
 }
 
 function showResult(data){
+
 result.classList.add("show");
 
-document.getElementById("resultProject").textContent=
+document.getElementById(
+"resultProject"
+).textContent=
 data.projectName||"-";
 
-document.getElementById("resultFramework").textContent=
+document.getElementById(
+"resultFramework"
+).textContent=
 data.framework||"-";
 
-document.getElementById("resultFiles").textContent=
+document.getElementById(
+"resultFiles"
+).textContent=
 data.files||"-";
 
-const vercel=document.getElementById("resultVercel");
+const vercel=
+document.getElementById(
+"resultVercel"
+);
 
 if(data.vercelUrl){
+
 vercel.href=data.vercelUrl;
 vercel.textContent=data.vercelUrl;
+
 }else{
+
 vercel.removeAttribute("href");
 vercel.textContent="-";
+
 }
 
-const domainRow=document.getElementById("customDomainRow");
-const domain=document.getElementById("resultDomain");
+const domainRow=
+document.getElementById(
+"customDomainRow"
+);
+
+const domain=
+document.getElementById(
+"resultDomain"
+);
 
 if(data.customDomain){
+
 domainRow.style.display="block";
 domain.href=data.customDomain;
 domain.textContent=data.customDomain;
+
 }else{
+
 domainRow.style.display="none";
+
 }
+
 }
 
 async function readStream(response){
+
 if(!response.body){
-throw new Error("Browser tidak mendukung response streaming.");
+
+throw new Error(
+"Browser tidak mendukung response streaming."
+);
+
 }
 
-const reader=response.body.getReader();
-const decoder=new TextDecoder();
+const reader=
+response.body.getReader();
+
+const decoder=
+new TextDecoder();
+
 let buffer="";
 
 while(true){
@@ -696,9 +1164,12 @@ while(true){
 const{
 value,
 done
-}=await reader.read();
+}=
+await reader.read();
 
-if(done)break;
+if(done){
+break;
+}
 
 buffer+=decoder.decode(
 value,
@@ -707,104 +1178,158 @@ stream:true
 }
 );
 
-const lines=buffer.split("\n");
+const lines=
+buffer.split("\n");
 
-buffer=lines.pop()||"";
+buffer=
+lines.pop()||"";
 
-for(const line of lines){
+for(
+const line of lines
+){
 
 const text=line.trim();
 
-if(!text)continue;
+if(!text){
+continue;
+}
+
+let data;
 
 try{
 
-const data=JSON.parse(text);
+data=JSON.parse(text);
 
-if(data.type==="progress"){
-updateProgress(data);
+}catch{
+
+continue;
+
 }
 
-if(data.type==="complete"){
+if(
+data.type==="progress"
+){
+
+updateProgress(data);
+
+}
+
+if(
+data.type==="complete"
+){
+
 updateProgress(data);
 showResult(data);
+
 }
 
-if(data.type==="error"){
+if(
+data.type==="error"
+){
+
 throw new Error(
 data.message||
 "Deployment gagal."
 );
-}
 
-}catch(error){
-if(error instanceof SyntaxError){
-continue;
-}
-throw error;
 }
 
 }
+
 }
 
 if(buffer.trim()){
 
 try{
 
-const data=JSON.parse(buffer);
+const data=
+JSON.parse(buffer);
 
-if(data.type==="complete"){
+if(
+data.type==="complete"
+){
+
 updateProgress(data);
 showResult(data);
+
 }
 
-if(data.type==="error"){
+if(
+data.type==="error"
+){
+
 throw new Error(
 data.message||
 "Deployment gagal."
 );
+
 }
 
 }catch(error){
 
-if(!(error instanceof SyntaxError)){
+if(
+error instanceof SyntaxError
+){
+
+return;
+
+}
+
 throw error;
-}
 
 }
 
 }
+
 }
 
 async function deploy(){
+
 hideError();
 result.classList.remove("show");
 
-const name=cleanProjectName(projectName.value);
+const name=
+cleanProjectName(
+projectName.value
+);
 
 if(!selectedFile){
-showError("Pilih file project terlebih dahulu.");
+
+showError(
+"Pilih file project terlebih dahulu."
+);
+
 return;
+
 }
 
-if(!validProjectName(name)){
+if(
+!validProjectName(name)
+){
+
 showError(
 "Hostname tidak valid. Gunakan huruf kecil, angka, dan tanda -."
 );
+
 return;
+
 }
 
 projectName.value=name;
 
 deployBtn.disabled=true;
-deployBtn.textContent="⏳ Deploying...";
+deployBtn.textContent=
+"⏳ Deploying...";
 
 progressBox.classList.add("show");
+
 progressBar.style.width="0%";
 progressPercent.textContent="0%";
-progressTitle.textContent="Menyiapkan deployment...";
+progressTitle.textContent=
+"Menyiapkan deployment...";
 stage.textContent="PREPARE";
-progressMessage.textContent="Mengirim project ke server...";
+progressMessage.textContent=
+"Mengirim project ke server...";
 
 const formData=new FormData();
 
@@ -821,13 +1346,15 @@ selectedFile.name
 
 try{
 
-const response=await fetch(
+const response=
+await fetch(
 "/api/deploy",
 {
 method:"POST",
 body:formData,
 headers:{
-Accept:"application/x-ndjson"
+Accept:
+"application/x-ndjson"
 }
 }
 );
@@ -838,106 +1365,185 @@ let message=
 `Server error ${response.status}`;
 
 try{
-const data=await response.json();
-message=data.error||message;
+
+const data=
+await response.json();
+
+message=
+data.error||
+data.message||
+message;
+
 }catch{}
 
 throw new Error(message);
+
 }
 
 await readStream(response);
 
 }catch(error){
 
-console.error(error);
+console.error(
+"[DEPLOY]",
+error
+);
 
 showError(
 error.message||
 "Deployment gagal."
 );
 
-progressTitle.textContent="Deployment gagal";
+progressTitle.textContent=
+"Deployment gagal";
+
 stage.textContent="ERROR";
-
-}catch(error){
-
-showError(
-error.message||
-"Terjadi kesalahan."
-);
 
 }finally{
 
 deployBtn.disabled=false;
-deployBtn.textContent="🚀 Deploy ke Vercel";
+
+deployBtn.textContent=
+"🚀 Deploy ke Vercel";
 
 validate();
 
 }
+
 }
+
+chooseBtn.addEventListener(
+"click",
+event=>{
+event.stopPropagation();
+fileInput.click();
+}
+);
 
 dropZone.addEventListener(
 "click",
-()=>{
+event=>{
+
+if(
+event.target===chooseBtn
+){
+return;
+}
+
 fileInput.click();
+
+}
+);
+
+dropZone.addEventListener(
+"keydown",
+event=>{
+
+if(
+event.key==="Enter"||
+event.key===" "
+){
+
+event.preventDefault();
+fileInput.click();
+
+}
+
 }
 );
 
 fileInput.addEventListener(
 "change",
 event=>{
-showFile(event.target.files[0]);
+
+const file=
+event.target.files &&
+event.target.files[0];
+
+if(file){
+showFile(file);
+}
+
 }
 );
 
 removeFile.addEventListener(
 "click",
 event=>{
+
 event.stopPropagation();
+
 clearFile();
+
 }
 );
 
 dropZone.addEventListener(
 "dragover",
 event=>{
+
 event.preventDefault();
-dropZone.classList.add("drag");
+
+dropZone.classList.add(
+"drag"
+);
+
 }
 );
 
 dropZone.addEventListener(
 "dragleave",
-()=>{
-dropZone.classList.remove("drag");
+event=>{
+
+event.preventDefault();
+
+dropZone.classList.remove(
+"drag"
+);
+
 }
 );
 
 dropZone.addEventListener(
 "drop",
 event=>{
+
 event.preventDefault();
-dropZone.classList.remove("drag");
+
+dropZone.classList.remove(
+"drag"
+);
 
 const file=
+event.dataTransfer.files &&
 event.dataTransfer.files[0];
 
+if(file){
 showFile(file);
+}
+
 }
 );
 
 projectName.addEventListener(
 "input",
 ()=>{
-const cleaned=cleanProjectName(
+
+const cleaned=
+cleanProjectName(
 projectName.value
 );
 
-if(projectName.value!==cleaned){
+if(
+projectName.value!==cleaned
+){
+
 projectName.value=cleaned;
+
 }
 
 validate();
+
 }
 );
 
@@ -949,11 +1555,20 @@ deploy
 projectName.addEventListener(
 "keydown",
 event=>{
-if(event.key==="Enter"&&!deployBtn.disabled){
+
+if(
+event.key==="Enter"&&
+!deployBtn.disabled
+){
+
 deploy();
+
 }
+
 }
 );
+
+validate();
 </script>
 
 </body>
