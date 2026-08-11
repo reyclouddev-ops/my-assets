@@ -1,0 +1,189 @@
+<!DOCTYPE html><html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>ReyCloudShop</title><style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+-webkit-tap-highlight-color:transparent
+}
+
+body{
+min-height:100vh;
+font-family:Arial,sans-serif;
+color:#fff;
+background:#07080d;
+overflow:hidden
+}
+
+.page{
+position:relative;
+min-height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+padding:25px;
+overflow:hidden;
+background:
+radial-gradient(circle at 50% 35%,rgba(0,217,255,.12),transparent 30%),
+radial-gradient(circle at 15% 85%,rgba(168,85,247,.13),transparent 35%),
+#07080d
+}
+
+.glow{
+position:absolute;
+width:280px;
+height:280px;
+border-radius:50%;
+filter:blur(140px);
+opacity:.12;
+pointer-events:none
+}
+
+.glow.one{
+top:-120px;
+right:-100px;
+background:#00d9ff
+}
+
+.glow.two{
+bottom:-130px;
+left:-100px;
+background:#a855f7
+}
+
+.content{
+position:relative;
+z-index:2;
+width:100%;
+max-width:430px;
+text-align:center
+}
+
+.logo{
+width:78px;
+height:78px;
+margin:0 auto 24px;
+display:flex;
+align-items:center;
+justify-content:center;
+border-radius:24px;
+background:rgba(255,255,255,.06);
+border:1px solid rgba(255,255,255,.1);
+box-shadow:
+0 20px 60px rgba(0,0,0,.4),
+inset 0 1px rgba(255,255,255,.05);
+font-size:32px
+}
+
+.label{
+display:inline-block;
+padding:7px 13px;
+border-radius:50px;
+border:1px solid rgba(0,217,255,.2);
+background:rgba(0,217,255,.06);
+color:#00d9ff;
+font-size:10px;
+font-weight:700;
+letter-spacing:2px
+}
+
+h1{
+margin-top:18px;
+font-size:38px;
+line-height:1.1;
+letter-spacing:-1px
+}
+
+h1 span{
+display:block;
+margin-top:4px;
+background:linear-gradient(90deg,#fff,#00d9ff);
+-webkit-background-clip:text;
+background-clip:text;
+color:transparent
+}
+
+.description{
+max-width:350px;
+margin:17px auto 0;
+color:#858b9b;
+font-size:14px;
+line-height:1.7
+}
+
+.continue{
+width:100%;
+height:54px;
+margin-top:30px;
+border:1px solid rgba(0,217,255,.2);
+border-radius:16px;
+background:rgba(255,255,255,.055);
+color:#fff;
+font-size:14px;
+font-weight:800;
+cursor:pointer;
+transition:.25s
+}
+
+.continue:hover{
+transform:translateY(-2px);
+background:rgba(0,217,255,.1);
+border-color:rgba(0,217,255,.4)
+}
+
+.continue:active{
+transform:scale(.97)
+}
+
+.footer{
+margin-top:25px;
+color:#4f5563;
+font-size:10px
+}
+
+@media(max-width:380px){
+
+.logo{
+width:68px;
+height:68px;
+font-size:28px
+}
+
+h1{
+font-size:32px
+}
+
+.description{
+font-size:13px
+}
+
+.continue{
+margin-top:24px
+}
+
+}
+</style></head><body><div class="page"><div class="glow one"></div>
+<div class="glow two"></div><div class="content"><div class="logo">
+☁️
+</div><div class="label">
+REYCLOUDSHOP
+</div><h1>
+Hallo,
+<span>Selamat Datang!</span>
+</h1><p class="description">
+Selamat datang di assets ReyCloudShop.
+Di sini ada beberapa fitur yang tersedia
+untuk membantu kebutuhan project kamu.
+</p><button class="continue" onclick="continueToDashboard()">
+Lanjut ke Dashboard →
+</button><div class="footer">
+Powered by ReyCloudShop
+</div></div></div><script>
+function continueToDashboard(){
+window.location.href="/dashboard/";
+}
+</script></body>
+</html>
