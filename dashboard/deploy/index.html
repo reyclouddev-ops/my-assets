@@ -1,0 +1,600 @@
+<!DOCTYPE html><html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>ReyCloudShop Deploy</title><style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+-webkit-tap-highlight-color:transparent
+}
+
+body{
+min-height:100vh;
+font-family:Arial,sans-serif;
+color:#fff;
+background:#07080d
+}
+
+.page{
+min-height:100vh;
+padding:24px 18px;
+background:
+radial-gradient(circle at 85% 15%,rgba(0,217,255,.12),transparent 30%),
+radial-gradient(circle at 15% 85%,rgba(168,85,247,.12),transparent 35%),
+#07080d
+}
+
+.container{
+width:100%;
+max-width:650px;
+margin:auto
+}
+
+.topbar{
+display:flex;
+align-items:center;
+gap:13px;
+margin-bottom:25px
+}
+
+.back{
+width:42px;
+height:42px;
+border:1px solid rgba(255,255,255,.09);
+border-radius:14px;
+background:rgba(255,255,255,.05);
+color:#fff;
+font-size:18px;
+cursor:pointer
+}
+
+.title small{
+color:#00d9ff;
+font-size:9px;
+letter-spacing:2px
+}
+
+.title h1{
+margin-top:4px;
+font-size:23px
+}
+
+.hero{
+padding:25px;
+border:1px solid rgba(255,255,255,.08);
+border-radius:27px;
+background:rgba(15,18,28,.88);
+box-shadow:0 25px 70px rgba(0,0,0,.35)
+}
+
+.deploy-icon{
+width:62px;
+height:62px;
+display:flex;
+align-items:center;
+justify-content:center;
+border-radius:20px;
+background:rgba(0,217,255,.08);
+border:1px solid rgba(0,217,255,.15);
+font-size:28px
+}
+
+.hero h2{
+margin-top:20px;
+font-size:25px
+}
+
+.hero p{
+margin-top:8px;
+color:#858b9b;
+font-size:13px;
+line-height:1.6
+}
+
+.field{
+margin-top:22px
+}
+
+.field label{
+display:block;
+margin-bottom:8px;
+color:#9ba1af;
+font-size:11px;
+font-weight:700
+}
+
+.dropzone{
+position:relative;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+min-height:160px;
+padding:20px;
+border:1px dashed rgba(255,255,255,.14);
+border-radius:20px;
+background:rgba(255,255,255,.025);
+cursor:pointer;
+transition:.25s
+}
+
+.dropzone:hover,
+.dropzone.dragover{
+border-color:rgba(0,217,255,.5);
+background:rgba(0,217,255,.05)
+}
+
+.dropzone input{
+position:absolute;
+inset:0;
+width:100%;
+height:100%;
+opacity:0;
+cursor:pointer
+}
+
+.upload-icon{
+font-size:30px
+}
+
+.dropzone strong{
+margin-top:10px;
+font-size:13px
+}
+
+.dropzone span{
+margin-top:6px;
+color:#656c7b;
+font-size:10px
+}
+
+.file-info{
+display:none;
+margin-top:12px;
+padding:12px;
+border:1px solid rgba(255,255,255,.07);
+border-radius:14px;
+background:rgba(255,255,255,.035);
+font-size:11px;
+color:#9ba1af
+}
+
+.file-info.show{
+display:block
+}
+
+input[type="text"]{
+width:100%;
+height:50px;
+padding:0 15px;
+border:1px solid rgba(255,255,255,.09);
+border-radius:14px;
+outline:none;
+background:rgba(255,255,255,.045);
+color:#fff;
+font-size:13px
+}
+
+input[type="text"]:focus{
+border-color:rgba(0,217,255,.45)
+}
+
+.domain-preview{
+margin-top:9px;
+color:#596170;
+font-size:10px
+}
+
+.deploy-btn{
+width:100%;
+height:52px;
+margin-top:24px;
+border:1px solid rgba(0,217,255,.25);
+border-radius:15px;
+background:linear-gradient(
+135deg,
+rgba(0,217,255,.14),
+rgba(168,85,247,.14)
+);
+color:#fff;
+font-weight:800;
+cursor:pointer;
+transition:.25s
+}
+
+.deploy-btn:hover{
+transform:translateY(-2px);
+border-color:rgba(0,217,255,.45)
+}
+
+.deploy-btn:disabled{
+opacity:.45;
+cursor:not-allowed;
+transform:none
+}
+
+.status{
+display:none;
+margin-top:18px;
+padding:18px;
+border:1px solid rgba(255,255,255,.08);
+border-radius:18px;
+background:rgba(255,255,255,.025)
+}
+
+.status.show{
+display:block
+}
+
+.status-title{
+font-size:12px;
+font-weight:800
+}
+
+.status-message{
+margin-top:8px;
+color:#858b9b;
+font-size:11px;
+line-height:1.6;
+white-space:pre-wrap
+}
+
+.result{
+display:none;
+margin-top:15px
+}
+
+.result.show{
+display:block
+}
+
+.result a{
+display:block;
+padding:13px;
+margin-top:8px;
+border:1px solid rgba(0,217,255,.15);
+border-radius:13px;
+background:rgba(0,217,255,.05);
+color:#00d9ff;
+text-decoration:none;
+font-size:11px;
+word-break:break-all
+}
+
+.error{
+color:#ff6685
+}
+
+.success{
+color:#22c55e
+}
+
+@media(max-width:380px){
+
+.hero{
+padding:20px
+}
+
+.title h1{
+font-size:20px
+}
+
+}
+</style></head><body><div class="page"><div class="container"><div class="topbar"><button class="back" onclick="history.back()">
+←
+</button><div class="title">
+<small>REYCLOUDSHOP</small>
+<h1>Vercel Deploy</h1>
+</div></div><div class="hero"><div class="deploy-icon">
+🚀
+</div><h2>Deploy Project</h2><p>
+Upload project kamu dan deploy langsung
+ke Vercel melalui ReyCloudShop.
+</p><div class="field"><label>PROJECT FILE</label>
+
+<div class="dropzone" id="dropzone"><input
+type="file"
+id="file"
+accept=".zip,.html,.htm"
+
+«»
+
+<div class="upload-icon">
+📦
+</div><strong>Pilih atau drop file di sini</strong>
+
+<span>
+ZIP, HTML, atau HTM
+</span></div><div class="file-info" id="fileInfo"></div></div><div class="field"><label>HOSTNAME PROJECT</label>
+
+<input
+type="text"
+id="hostname"
+placeholder="contoh: reyshop"
+autocomplete="off"
+
+«»
+
+<div class="domain-preview">
+https://<span id="preview">hostname</span>.vercel.app
+</div></div><button
+class="deploy-btn"
+id="deployBtn"
+disabled
+onclick="startDeploy()"
+
+«»
+
+🚀 Deploy ke Vercel
+</button>
+
+<div class="status" id="status"><div class="status-title" id="statusTitle">
+Deployment
+</div><div class="status-message" id="statusMessage">
+Menunggu proses...
+</div><div class="result" id="result"></div></div></div></div></div><script>
+const fileInput=document.getElementById("file");
+const dropzone=document.getElementById("dropzone");
+const fileInfo=document.getElementById("fileInfo");
+const hostname=document.getElementById("hostname");
+const preview=document.getElementById("preview");
+const deployBtn=document.getElementById("deployBtn");
+const status=document.getElementById("status");
+const statusTitle=document.getElementById("statusTitle");
+const statusMessage=document.getElementById("statusMessage");
+const result=document.getElementById("result");
+
+let selectedFile=null;
+
+function formatBytes(bytes){
+
+if(!bytes){
+return "0 B";
+}
+
+const units=["B","KB","MB","GB"];
+
+let size=bytes;
+let index=0;
+
+while(size>=1024&&index<units.length-1){
+size/=1024;
+index++;
+}
+
+return `${size.toFixed(2)} ${units[index]}`;
+
+}
+
+function cleanHostname(value){
+
+return value
+.toLowerCase()
+.trim()
+.replace(/[^a-z0-9-]/g,"-")
+.replace(/-+/g,"-")
+.replace(/^-|-$/g,"");
+
+}
+
+function updateButton(){
+
+deployBtn.disabled=
+!selectedFile||
+!cleanHostname(hostname.value);
+
+}
+
+function setFile(file){
+
+if(!file){
+return;
+}
+
+const allowed=[
+"zip",
+"html",
+"htm"
+];
+
+const extension=
+file.name
+.split(".")
+.pop()
+.toLowerCase();
+
+if(!allowed.includes(extension)){
+
+fileInfo.className="file-info show";
+
+fileInfo.textContent=
+"❌ Format tidak didukung. Gunakan ZIP, HTML, atau HTM.";
+
+selectedFile=null;
+
+updateButton();
+
+return;
+
+}
+
+selectedFile=file;
+
+fileInfo.className="file-info show";
+
+fileInfo.textContent=
+`📄 ${file.name} • ${formatBytes(file.size)}`;
+
+updateButton();
+
+}
+
+fileInput.addEventListener(
+"change",
+event=>{
+setFile(event.target.files[0]);
+}
+);
+
+hostname.addEventListener(
+"input",
+()=>{
+const value=cleanHostname(hostname.value);
+
+preview.textContent=value||"hostname";
+
+updateButton();
+}
+);
+
+dropzone.addEventListener(
+"dragover",
+event=>{
+event.preventDefault();
+dropzone.classList.add("dragover");
+}
+);
+
+dropzone.addEventListener(
+"dragleave",
+()=>{
+dropzone.classList.remove("dragover");
+}
+);
+
+dropzone.addEventListener(
+"drop",
+event=>{
+event.preventDefault();
+
+dropzone.classList.remove("dragover");
+
+setFile(event.dataTransfer.files[0]);
+}
+);
+
+function showStatus(title,message){
+
+status.classList.add("show");
+
+statusTitle.textContent=title;
+
+statusMessage.textContent=message;
+
+}
+
+async function startDeploy(){
+
+if(!selectedFile){
+return;
+}
+
+const projectName=
+cleanHostname(hostname.value);
+
+if(!projectName){
+return;
+}
+
+deployBtn.disabled=true;
+
+result.className="result";
+
+result.innerHTML="";
+
+showStatus(
+"⏳ Deployment berjalan",
+"Menyiapkan project..."
+);
+
+try{
+
+const formData=new FormData();
+
+formData.append(
+"file",
+selectedFile
+);
+
+formData.append(
+"projectName",
+projectName
+);
+
+showStatus(
+"📤 Uploading",
+"File sedang dikirim ke server..."
+);
+
+const response=
+await fetch(
+"/api/deploy",
+{
+method:"POST",
+body:formData
+}
+);
+
+const data=
+await response.json();
+
+if(!response.ok||!data.success){
+
+throw new Error(
+data.error||
+"Deployment gagal."
+);
+
+}
+
+showStatus(
+"✅ Deployment berhasil",
+`Project ${projectName} berhasil dideploy ke Vercel.`
+);
+
+result.className="result show";
+
+result.innerHTML=`
+
+<a
+href="${data.vercelUrl}"
+target="_blank"
+rel="noopener"
+>
+☁️ Vercel
+<br>
+${data.vercelUrl}
+</a>
+
+<a
+href="${data.projectUrl}"
+target="_blank"
+rel="noopener"
+>
+🚀 Deployment
+<br>
+${data.projectUrl}
+</a>
+
+`;
+
+}catch(error){
+
+showStatus(
+"❌ Deployment gagal",
+error.message
+);
+
+statusTitle.classList.add("error");
+
+}finally{
+
+deployBtn.disabled=false;
+
+}
+
+}
+</script></body>
+</html>
