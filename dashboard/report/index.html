@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#07080d">
+<title>Report Issue — ReyCloudShop</title>
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+}
+
+body{
+  min-height:100vh;
+  color:#fff;
+  font-family:Arial,sans-serif;
+  background:
+    radial-gradient(circle at 85% 5%,rgba(255,56,111,.13),transparent 27%),
+    radial-gradient(circle at 5% 90%,rgba(168,85,247,.12),transparent 30%),
+    #07080d;
+}
+
+button,
+input,
+textarea{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+.app{
+  width:100%;
+  max-width:900px;
+  min-height:100vh;
+  margin:auto;
+  padding:20px 16px 45px;
+}
+
+.topbar{
+  display:flex;
+  align-items:center;
+  gap:13px;
+  margin-bottom:22px;
+}
+
+.back{
+  width:44px;
+  height:44px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:14px;
+  background:rgba(255,255,255,.045);
+  color:#fff;
+  text-decoration:none;
+  font-size:18px;
+}
+
+.brand{
+  flex:1;
+}
+
+.brand small{
+  color:#656b7a;
+  font-size:9px;
+  letter-spacing:2px;
+}
+
+.brand h1{
+  margin-top:4px;
+  font-size:18px;
+}
+
+.status{
+  padding:7px 10px;
+  border:1px solid rgba(34,197,94,.18);
+  border-radius:20px;
+  background:rgba(34,197,94,.06);
+  color:#65df8c;
+  font-size:9px;
+}
+
+.hero{
+  position:relative;
+  overflow:hidden;
+  padding:27px;
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:28px;
+  background:
+    linear-gradient(145deg,rgba(255,56,111,.095),rgba(15,18,28,.88) 48%);
+  box-shadow:0 25px 80px rgba(0,0,0,.32);
+}
+
+.hero:before{
+  content:"";
+  position:absolute;
+  width:210px;
+  height:210px;
+  right:-100px;
+  top:-110px;
+  border-radius:50%;
+  background:#ff386f;
+  filter:blur(75px);
+  opacity:.2;
+}
+
+.hero-icon{
+  position:relative;
+  z-index:2;
+  width:61px;
+  height:61px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid rgba(255,255,255,.09);
+  border-radius:19px;
+  background:rgba(255,255,255,.055);
+  font-size:27px;
+  margin-bottom:20px;
+}
+
+.hero h2,
+.hero p{
+  position:relative;
+  z-index:2;
+}
+
+.hero h2{
+  font-size:28px;
+}
+
+.hero p{
+  margin-top:10px;
+  color:#858b9b;
+  font-size:13px;
+  line-height:1.7;
+}
+
+.form-card{
+  margin-top:16px;
+  padding:20px;
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:25px;
+  background:rgba(15,18,28,.82);
+  box-shadow:0 20px 60px rgba(0,0,0,.2);
+  backdrop-filter:blur(18px);
+}
+
+.field{
+  margin-bottom:19px;
+}
+
+.field-label{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:9px;
+}
+
+.field-label label{
+  color:#c1c5cf;
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.4px;
+}
+
+.counter{
+  color:#505665;
+  font-size:9px;
+}
+
+input[type="text"],
+textarea{
+  width:100%;
+  outline:none;
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:15px;
+  background:rgba(255,255,255,.035);
+  color:#fff;
+  padding:14px;
+  font-size:13px;
+}
+
+input[type="text"]:focus,
+textarea:focus{
+  border-color:rgba(255,56,111,.48);
+  box-shadow:0 0 0 3px rgba(255,56,111,.06);
+}
+
+input::placeholder,
+textarea::placeholder{
+  color:#555b69;
+}
+
+textarea{
+  min-height:145px;
+  resize:vertical;
+  line-height:1.6;
+}
+
+.category-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:9px;
+}
+
+.category-card{
+  position:relative;
+  display:flex;
+  align-items:center;
+  gap:11px;
+  min-height:73px;
+  padding:12px;
+  border:1px solid rgba(255,255,255,.065);
+  border-radius:17px;
+  background:rgba(255,255,255,.027);
+  color:#fff;
+  text-align:left;
+  transition:.25s;
+}
+
+.category-card:active{
+  transform:scale(.985);
+}
+
+.category-card.selected{
+  border-color:rgba(255,56,111,.55);
+  background:
+    linear-gradient(135deg,rgba(255,56,111,.12),rgba(168,85,247,.065));
+  box-shadow:0 12px 35px rgba(255,56,111,.08);
+}
+
+.category-icon{
+  width:42px;
+  height:42px;
+  flex:none;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid rgba(255,255,255,.065);
+  border-radius:13px;
+  background:rgba(255,255,255,.05);
+  font-size:19px;
+}
+
+.category-info{
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+
+.category-info strong{
+  font-size:11px;
+}
+
+.category-info small{
+  overflow:hidden;
+  color:#6f7585;
+  font-size:9px;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.category-check{
+  position:absolute;
+  top:9px;
+  right:9px;
+  width:17px;
+  height:17px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:50%;
+  color:transparent;
+  font-size:9px;
+}
+
+.category-card.selected .category-check{
+  border-color:#ff386f;
+  background:#ff386f;
+  color:#fff;
+}
+
+.priority-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+}
+
+.priority-card{
+  padding:13px 10px;
+  border:1px solid rgba(255,255,255,.065);
+  border-radius:14px;
+  background:rgba(255,255,255,.027);
+  color:#747a89;
+  text-align:center;
+}
+
+.priority-card input{
+  display:none;
+}
+
+.priority-card strong{
+  display:block;
+  font-size:10px;
+}
+
+.priority-card small{
+  display:block;
+  margin-top:4px;
+  color:#555b69;
+  font-size:8px;
+}
+
+.priority-card.low.selected{
+  border-color:rgba(34,197,94,.4);
+  background:rgba(34,197,94,.07);
+  color:#65df8c;
+}
+
+.priority-card.medium.selected{
+  border-color:rgba(250,204,21,.4);
+  background:rgba(250,204,21,.06);
+  color:#f5d65b;
+}
+
+.priority-card.high.selected{
+  border-color:rgba(255,56,111,.45);
+  background:rgba(255,56,111,.08);
+  color:#ff7194;
+}
+
+.submit{
+  width:100%;
+  height:52px;
+  margin-top:20px;
+  border:0;
+  border-radius:15px;
+  background:linear-gradient(135deg,#ff386f,#a855f7);
+  color:#fff;
+  font-size:12px;
+  font-weight:800;
+  box-shadow:0 14px 38px rgba(255,56,111,.17);
+}
+
+.submit.loading{
+  opacity:.6;
+  pointer-events:none;
+}
+
+.message{
+  display:none;
+  margin-top:15px;
+  padding:17px;
+  border-radius:17px;
+}
+
+.message.show{
+  display:block;
+}
+
+.message.success{
+  border:1px solid rgba(34,197,94,.18);
+  background:rgba(34,197,94,.055);
+}
+
+.message.error{
+  border:1px solid rgba(255,56,111,.2);
+  background:rgba(255,56,111,.055);
+}
+
+.message-title{
+  font-size:12px;
+  font-weight:800;
+}
+
+.success .message-title{
+  color:#65df8c;
+}
+
+.error .message-title{
+  color:#ff7194;
+}
+
+.message-text{
+  margin-top:6px;
+  color:#777d8d;
+  font-size:10px;
+  line-height:1.6;
+}
+
+.channel-button{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  height:45px;
+  margin-top:13px;
+  border-radius:13px;
+  background:#25d366;
+  color:#fff;
+  text-decoration:none;
+  font-size:11px;
+  font-weight:800;
+}
+
+.dashboard-button{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  height:43px;
+  margin-top:8px;
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:13px;
+  background:rgba(255,255,255,.04);
+  color:#fff;
+  text-decoration:none;
+  font-size:10px;
+}
+
+.note{
+  margin-top:11px;
+  color:#4f5563;
+  text-align:center;
+  font-size:9px;
+  line-height:1.5;
+}
+
+@media(max-width:600px){
+
+  .app{
+    padding:17px 13px 35px;
+  }
+
+  .hero{
+    padding:22px;
+  }
+
+  .hero h2{
+    font-size:24px;
+  }
+
+  .form-card{
+    padding:16px;
+  }
+
+  .category-grid{
+    grid-template-columns:1fr;
+  }
+
+}
+
+@media(max-width:360px){
+
+  .status{
+    display:none;
+  }
+
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <div class="topbar">
+
+    <a
+      href="/dashboard/"
+      class="back"
+    >
+      ←
+    </a>
+
+    <div class="brand">
+      <small>REYCLOUDSHOP</small>
+      <h1>Issue Center</h1>
+    </div>
+
+    <div class="status">
+      ● ONLINE
+    </div>
+
+  </div>
+
+  <section class="hero">
+
+    <div class="hero-icon">
+      🐛
+    </div>
+
+    <h2>Report an Issue</h2>
+
+    <p>
+      Temukan bug, mengalami masalah, atau punya
+      ide fitur baru? Kirim laporan kamu ke
+      ReyCloudShop agar bisa segera ditinjau.
+    </p>
+
+  </section>
+
+  <form
+    class="form-card"
+    id="reportForm"
+  >
+
+    <div class="field">
+
+      <div class="field-label">
+        <label>
+          JUDUL LAPORAN
+        </label>
+
+        <span
+          class="counter"
+          id="titleCounter"
+        >
+          0/100
+        </span>
+      </div>
+
+      <input
+        id="title"
+        type="text"
+        maxlength="100"
+        placeholder="Contoh: Deploy mengalami error"
+        required
+      >
+
+    </div>
+
+    <div class="field">
+
+      <div class="field-label">
+        <label>
+          KATEGORI LAPORAN
+        </label>
+      </div>
+
+      <div class="category-grid">
+
+        <button
+          type="button"
+          class="category-card"
+          data-value="Bug"
+        >
+          <span class="category-icon">🐛</span>
+          <span class="category-info">
+            <strong>Bug</strong>
+            <small>Fitur mengalami masalah</small>
+          </span>
+          <span class="category-check">✓</span>
+        </button>
+
+        <button
+          type="button"
+          class="category-card"
+          data-value="Deployment"
+        >
+          <span class="category-icon">🚀</span>
+          <span class="category-info">
+            <strong>Deployment</strong>
+            <small>Masalah saat deploy project</small>
+          </span>
+          <span class="category-check">✓</span>
+        </button>
+
+        <button
+          type="button"
+          class="category-card"
+          data-value="Tools"
+        >
+          <span class="category-icon">🛠️</span>
+          <span class="category-info">
+            <strong>Tools</strong>
+            <small>Utility tidak berjalan normal</small>
+          </span>
+          <span class="category-check">✓</span>
+        </button>
+
+        <button
+          type="button"
+          class="category-card"
+          data-value="Dashboard"
+        >
+          <span class="category-icon">📊</span>
+          <span class="category-info">
+            <strong>Dashboard</strong>
+            <small>Masalah pada dashboard</small>
+          </span>
+          <span class="category-check">✓</span>
+        </button>
+
+        <button
+          type="button"
+          class="category-card"
+          data-value="Suggestion"
+        >
+          <span class="category-icon">💡</span>
+          <span class="category-info">
+            <strong>Suggestion</strong>
+            <small>Ide atau request fitur</small>
+          </span>
+          <span class="category-check">✓</span>
+        </button>
+
+        <button
+          type="button"
+          class="category-card"
+          data-value="Other"
+        >
+          <span class="category-icon">📌</span>
+          <span class="category-info">
+            <strong>Other</strong>
+            <small>Masalah lainnya</small>
+          </span>
+          <span class="category-check">✓</span>
+        </button>
+
+      </div>
+
+      <input
+        id="category"
+        type="hidden"
+        value=""
+      >
+
+    </div>
+
+    <div class="field">
+
+      <div class="field-label">
+        <label>
+          PRIORITY
+        </label>
+      </div>
+
+      <div class="priority-grid">
+
+        <label class="priority-card low selected">
+          <input
+            type="radio"
+            name="priority"
+            value="Low"
+            checked
+          >
+          <strong>LOW</strong>
+          <small>Minor issue</small>
+        </label>
+
+        <label class="priority-card medium">
+          <input
+            type="radio"
+            name="priority"
+            value="Medium"
+          >
+          <strong>MEDIUM</strong>
+          <small>Needs attention</small>
+        </label>
+
+        <label class="priority-card high">
+          <input
+            type="radio"
+            name="priority"
+            value="High"
+          >
+          <strong>HIGH</strong>
+          <small>Important issue</small>
+        </label>
+
+      </div>
+
+    </div>
+
+    <div class="field">
+
+      <div class="field-label">
+        <label>
+          DESKRIPSI MASALAH
+        </label>
+
+        <span
+          class="counter"
+          id="descriptionCounter"
+        >
+          0/3000
+        </span>
+      </div>
+
+      <textarea
+        id="description"
+        maxlength="3000"
+        placeholder="Jelaskan masalah yang kamu alami secara detail..."
+        required
+      ></textarea>
+
+    </div>
+
+    <button
+      class="submit"
+      id="submitButton"
+      type="submit"
+    >
+      Kirim Report →
+    </button>
+
+    <div
+      class="message success"
+      id="successBox"
+    >
+
+      <div class="message-title">
+        ✓ REPORT BERHASIL DIKIRIM
+      </div>
+
+      <div class="message-text">
+        Report kamu telah berhasil dikirim
+        ke ReyCloudShop.
+        <br><br>
+        Untuk mendapatkan informasi lebih lanjut
+        mengenai report dan hasil peninjauannya,
+        silakan bergabung ke channel WhatsApp.
+      </div>
+
+      <a
+        class="channel-button"
+        href="https://whatsapp.com/channel/0029Vb8AU5sEQIakiPGkOA2k"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        📱 Join WhatsApp Channel
+      </a>
+
+      <a
+        class="dashboard-button"
+        href="/dashboard/"
+      >
+        ← Kembali ke Dashboard
+      </a>
+
+    </div>
+
+    <div
+      class="message error"
+      id="errorBox"
+    >
+
+      <div class="message-title">
+        × REPORT GAGAL DIKIRIM
+      </div>
+
+      <div
+        class="message-text"
+        id="errorText"
+      ></div>
+
+    </div>
+
+    <div class="note">
+      Jangan masukkan password, token, API key,
+      atau data rahasia ke dalam laporan.
+    </div>
+
+  </form>
+
+</div>
+
+<script>
+const form =
+  document.getElementById("reportForm")
+
+const title =
+  document.getElementById("title")
+
+const category =
+  document.getElementById("category")
+
+const description =
+  document.getElementById("description")
+
+const submitButton =
+  document.getElementById("submitButton")
+
+const successBox =
+  document.getElementById("successBox")
+
+const errorBox =
+  document.getElementById("errorBox")
+
+const errorText =
+  document.getElementById("errorText")
+
+const titleCounter =
+  document.getElementById("titleCounter")
+
+const descriptionCounter =
+  document.getElementById("descriptionCounter")
+
+const categoryCards =
+  document.querySelectorAll(
+    ".category-card"
+  )
+
+const priorityCards =
+  document.querySelectorAll(
+    ".priority-card"
+  )
+
+categoryCards.forEach(card => {
+
+  card.addEventListener(
+    "click",
+    () => {
+
+      categoryCards.forEach(item => {
+        item.classList.remove(
+          "selected"
+        )
+      })
+
+      card.classList.add(
+        "selected"
+      )
+
+      category.value =
+        card.dataset.value
+
+      hideMessages()
+
+    }
+  )
+
+})
+
+priorityCards.forEach(card => {
+
+  card.addEventListener(
+    "click",
+    () => {
+
+      priorityCards.forEach(item => {
+        item.classList.remove(
+          "selected"
+        )
+      })
+
+      card.classList.add(
+        "selected"
+      )
+
+    }
+  )
+
+})
+
+title.addEventListener(
+  "input",
+  () => {
+
+    titleCounter.textContent =
+      `${title.value.length}/100`
+
+  }
+)
+
+description.addEventListener(
+  "input",
+  () => {
+
+    descriptionCounter.textContent =
+      `${description.value.length}/3000`
+
+  }
+)
+
+function hideMessages(){
+
+  successBox.classList.remove(
+    "show"
+  )
+
+  errorBox.classList.remove(
+    "show"
+  )
+
+}
+
+function showError(message){
+
+  successBox.classList.remove(
+    "show"
+  )
+
+  errorText.textContent =
+    message
+
+  errorBox.classList.add(
+    "show"
+  )
+
+}
+
+function getPriority(){
+
+  return document.querySelector(
+    'input[name="priority"]:checked'
+  )?.value || "Low"
+
+}
+
+form.addEventListener(
+  "submit",
+  async event => {
+
+    event.preventDefault()
+
+    hideMessages()
+
+    const titleValue =
+      title.value.trim()
+
+    const categoryValue =
+      category.value
+
+    const descriptionValue =
+      description.value.trim()
+
+    const priorityValue =
+      getPriority()
+
+    if(!titleValue){
+
+      showError(
+        "Judul laporan belum diisi."
+      )
+
+      title.focus()
+
+      return
+
+    }
+
+    if(!categoryValue){
+
+      showError(
+        "Silakan pilih kategori laporan."
+      )
+
+      return
+
+    }
+
+    if(!descriptionValue){
+
+      showError(
+        "Deskripsi masalah belum diisi."
+      )
+
+      description.focus()
+
+      return
+
+    }
+
+    if(
+      descriptionValue.length < 10
+    ){
+
+      showError(
+        "Deskripsi terlalu singkat. Jelaskan masalah dengan lebih detail."
+      )
+
+      description.focus()
+
+      return
+
+    }
+
+    submitButton.classList.add(
+      "loading"
+    )
+
+    submitButton.textContent =
+      "Mengirim report..."
+
+    try{
+
+      const response =
+        await fetch(
+          "/api/report",
+          {
+            method:"POST",
+            headers:{
+              "Content-Type":
+                "application/json"
+            },
+            body:JSON.stringify({
+              title:titleValue,
+              category:categoryValue,
+              priority:priorityValue,
+              description:descriptionValue
+            })
+          }
+        )
+
+      let result = {}
+
+      try{
+        result =
+          await response.json()
+      }catch{}
+
+      if(!response.ok){
+
+        throw new Error(
+          result.message ||
+          "Report gagal dikirim."
+        )
+
+      }
+
+      form.reset()
+
+      category.value = ""
+
+      categoryCards.forEach(card => {
+        card.classList.remove(
+          "selected"
+        )
+      })
+
+      priorityCards.forEach(card => {
+        card.classList.remove(
+          "selected"
+        )
+      })
+
+      document
+        .querySelector(
+          '.priority-card.low'
+        )
+        .classList.add(
+          "selected"
+        )
+
+      titleCounter.textContent =
+        "0/100"
+
+      descriptionCounter.textContent =
+        "0/3000"
+
+      successBox.classList.add(
+        "show"
+      )
+
+      successBox.scrollIntoView({
+        behavior:"smooth",
+        block:"center"
+      })
+
+    }catch(error){
+
+      showError(
+        error.message ||
+        "Tidak dapat terhubung ke server."
+      )
+
+    }finally{
+
+      submitButton.classList.remove(
+        "loading"
+      )
+
+      submitButton.textContent =
+        "Kirim Report →"
+
+    }
+
+  }
+)
+</script>
+
+</body>
+</html>
