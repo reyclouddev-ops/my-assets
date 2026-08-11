@@ -1,958 +1,1779 @@
-<!DOCTYPE html><html lang="id">
+<!DOCTYPE html>
+<html lang="id">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>ReyCloud Deploy</title>
+<meta name="theme-color" content="#07080d">
+<title>Deploy Project — ReyCloudShop</title>
+
 <style>
 *{
-margin:0;
-padding:0;
-box-sizing:border-box;
--webkit-tap-highlight-color:transparent;
-}body{
-min-height:100vh;
-font-family:Arial,sans-serif;
-color:#fff;
-background:#07080d;
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+}
+
+html{
+  min-height:100%;
+}
+
+body{
+  min-height:100vh;
+  overflow-x:hidden;
+  color:#fff;
+  font-family:Arial,sans-serif;
+  background:
+    radial-gradient(circle at 10% 8%,rgba(0,217,255,.12),transparent 27%),
+    radial-gradient(circle at 90% 85%,rgba(168,85,247,.13),transparent 30%),
+    #07080d;
+}
+
+button,
+input{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
 }
 
 .app{
-min-height:100vh;
-padding:22px;
-background:
-radial-gradient(circle at 20% 10%,rgba(0,217,255,.12),transparent 28%),
-radial-gradient(circle at 90% 80%,rgba(168,85,247,.12),transparent 30%),
-#07080d;
+  width:100%;
+  max-width:900px;
+  min-height:100vh;
+  margin:auto;
+  padding:28px 20px 45px;
 }
 
-.container{
-width:100%;
-max-width:680px;
-margin:auto;
+.topbar{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  margin-bottom:24px;
 }
 
-.top{
-display:flex;
-align-items:center;
-justify-content:space-between;
-margin-bottom:25px;
+.brand{
+  flex:1;
 }
 
 .brand small{
-color:#6f7585;
-font-size:10px;
-letter-spacing:2px;
+  color:#606675;
+  font-size:10px;
+  letter-spacing:2px;
 }
 
 .brand h1{
-margin-top:7px;
-font-size:28px;
+  margin-top:7px;
+  font-size:32px;
+  line-height:1.1;
 }
 
 .back{
-width:43px;
-height:43px;
-border:1px solid rgba(255,255,255,.1);
-border-radius:14px;
-background:rgba(255,255,255,.05);
-color:#fff;
-font-size:18px;
-cursor:pointer;
+  width:58px;
+  height:58px;
+  flex:none;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid rgba(255,255,255,.09);
+  border-radius:18px;
+  background:rgba(255,255,255,.045);
+  color:#fff;
+  text-decoration:none;
+  font-size:25px;
+  transition:.2s;
+}
+
+.back:active{
+  transform:scale(.94);
 }
 
 .panel{
-padding:20px;
-border:1px solid rgba(255,255,255,.09);
-border-radius:26px;
-background:rgba(13,16,25,.82);
-box-shadow:
-0 30px 80px rgba(0,0,0,.35),
-inset 0 1px rgba(255,255,255,.04);
-backdrop-filter:blur(20px);
+  padding:28px;
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:30px;
+  background:
+    linear-gradient(
+      145deg,
+      rgba(8,27,37,.9),
+      rgba(11,14,22,.92)
+    );
+  box-shadow:
+    0 30px 90px rgba(0,0,0,.38),
+    inset 0 1px rgba(255,255,255,.035);
 }
 
-.drop{
-position:relative;
-padding:35px 20px;
-border:1px dashed rgba(0,217,255,.3);
-border-radius:21px;
-text-align:center;
-background:rgba(0,217,255,.025);
-cursor:pointer;
-transition:.3s;
+.upload{
+  position:relative;
+  min-height:280px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:30px 20px;
+  border:1px dashed rgba(0,217,255,.35);
+  border-radius:25px;
+  background:
+    radial-gradient(
+      circle at 50% 35%,
+      rgba(0,217,255,.08),
+      transparent 42%
+    ),
+    rgba(255,255,255,.018);
+  text-align:center;
+  transition:.25s;
 }
 
-.drop:hover,
-.drop.drag{
-border-color:#00d9ff;
-background:rgba(0,217,255,.07);
-transform:translateY(-2px);
+.upload.dragover{
+  border-color:#00d9ff;
+  background:rgba(0,217,255,.08);
+  transform:scale(1.01);
 }
 
-.drop-icon{
-font-size:42px;
-margin-bottom:15px;
+.upload-icon{
+  width:72px;
+  height:72px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:23px;
+  background:rgba(0,217,255,.09);
+  border:1px solid rgba(0,217,255,.13);
+  font-size:36px;
+  margin-bottom:20px;
 }
 
-.drop h2{
-font-size:19px;
+.upload h2{
+  font-size:22px;
 }
 
-.drop p{
-margin-top:8px;
-color:#747b8d;
-font-size:12px;
-line-height:1.6;
+.upload p{
+  max-width:430px;
+  margin-top:10px;
+  color:#707787;
+  font-size:13px;
+  line-height:1.7;
 }
 
-.drop input{
-display:none;
+.upload input{
+  display:none;
 }
 
-.file{
-display:none;
-margin-top:15px;
-padding:13px;
-border:1px solid rgba(255,255,255,.08);
-border-radius:15px;
-background:rgba(255,255,255,.035);
+.choose{
+  margin-top:19px;
+  padding:12px 18px;
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:13px;
+  background:rgba(255,255,255,.055);
+  color:#fff;
+  font-size:11px;
+  font-weight:800;
 }
 
-.file.show{
-display:flex;
-align-items:center;
-gap:12px;
+.file-box{
+  display:none;
+  align-items:center;
+  gap:13px;
+  margin-top:19px;
+  padding:15px;
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:19px;
+  background:rgba(255,255,255,.035);
+}
+
+.file-box.show{
+  display:flex;
 }
 
 .file-icon{
-width:40px;
-height:40px;
-display:flex;
-align-items:center;
-justify-content:center;
-border-radius:12px;
-background:rgba(0,217,255,.1);
-font-size:19px;
+  width:50px;
+  height:50px;
+  flex:none;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:15px;
+  background:rgba(0,217,255,.1);
+  font-size:23px;
 }
 
 .file-info{
-min-width:0;
-flex:1;
+  min-width:0;
+  flex:1;
 }
 
 .file-name{
-font-size:12px;
-white-space:nowrap;
-overflow:hidden;
-text-overflow:ellipsis;
+  overflow:hidden;
+  font-size:12px;
+  font-weight:700;
+  text-overflow:ellipsis;
+  white-space:nowrap;
 }
 
 .file-size{
-margin-top:4px;
-font-size:10px;
-color:#707788;
+  margin-top:5px;
+  color:#666d7c;
+  font-size:10px;
 }
 
 .remove{
-width:30px;
-height:30px;
-border:0;
-border-radius:9px;
-background:rgba(255,56,111,.1);
-color:#ff386f;
-cursor:pointer;
+  width:38px;
+  height:38px;
+  flex:none;
+  border:0;
+  border-radius:12px;
+  background:rgba(255,56,111,.09);
+  color:#ff547d;
+  font-size:18px;
+}
+
+.field{
+  margin-top:22px;
 }
 
 .label{
-display:block;
-margin:20px 0 8px;
-color:#9299aa;
-font-size:11px;
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:9px;
+  color:#8b91a0;
+  font-size:10px;
+  letter-spacing:.4px;
 }
 
-.input{
-width:100%;
-height:51px;
-padding:0 15px;
-border:1px solid rgba(255,255,255,.09);
-border-radius:14px;
-outline:none;
-background:rgba(255,255,255,.04);
-color:#fff;
-font-size:13px;
-transition:.25s;
+.hostname{
+  width:100%;
+  height:56px;
+  outline:none;
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:17px;
+  padding:0 17px;
+  background:rgba(255,255,255,.035);
+  color:#fff;
+  font-size:14px;
+  transition:.2s;
 }
 
-.input:focus{
-border-color:rgba(0,217,255,.5);
-box-shadow:0 0 0 3px rgba(0,217,255,.06);
+.hostname:focus{
+  border-color:rgba(0,217,255,.55);
+  box-shadow:0 0 0 4px rgba(0,217,255,.055);
 }
 
-.input::placeholder{
-color:#505766;
+.hostname::placeholder{
+  color:#555b69;
 }
 
-.deploy-btn{
-width:100%;
-height:53px;
-margin-top:20px;
-border:0;
-border-radius:15px;
-background:linear-gradient(135deg,#00d9ff,#168cff);
-color:#fff;
-font-weight:700;
-font-size:14px;
-cursor:pointer;
-box-shadow:0 15px 35px rgba(0,150,255,.18);
-transition:.25s;
+.domain-preview{
+  display:none;
+  margin-top:9px;
+  color:#555d6c;
+  font-size:10px;
 }
 
-.deploy-btn:hover{
-transform:translateY(-2px);
+.domain-preview.show{
+  display:block;
 }
 
-.deploy-btn:active{
-transform:scale(.98);
+.domain-preview span{
+  color:#00cbea;
 }
 
-.deploy-btn:disabled{
-opacity:.45;
-cursor:not-allowed;
-transform:none;
+.deploy-button{
+  width:100%;
+  height:58px;
+  margin-top:22px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:9px;
+  border:0;
+  border-radius:17px;
+  background:
+    linear-gradient(
+      135deg,
+      #00d9ff,
+      #1683ff
+    );
+  color:#fff;
+  font-size:13px;
+  font-weight:800;
+  box-shadow:
+    0 15px 40px rgba(0,217,255,.16);
+  transition:
+    transform .2s,
+    opacity .2s,
+    filter .2s;
 }
 
-.progress-box{
-display:none;
-margin-top:20px;
-padding:18px;
-border:1px solid rgba(255,255,255,.08);
-border-radius:19px;
-background:rgba(255,255,255,.025);
+.deploy-button:active{
+  transform:scale(.975);
 }
 
-.progress-box.show{
-display:block;
+.deploy-button:disabled{
+  cursor:not-allowed;
+  opacity:.55;
 }
 
-.progress-top{
-display:flex;
-align-items:center;
-justify-content:space-between;
-margin-bottom:12px;
+.deploy-button.loading{
+  pointer-events:none;
+  filter:saturate(.75);
+}
+
+.deploy-button .arrow{
+  margin-left:4px;
+  font-size:19px;
+}
+
+.progress-card{
+  display:none;
+  margin-top:20px;
+  padding:20px;
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:21px;
+  background:rgba(255,255,255,.025);
+}
+
+.progress-card.show{
+  display:block;
+}
+
+.progress-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
 }
 
 .progress-title{
-font-size:13px;
-font-weight:700;
+  font-size:12px;
+  font-weight:800;
 }
 
-.percent{
-font-size:13px;
-color:#00d9ff;
-font-weight:700;
+.progress-percent{
+  color:#00d9ff;
+  font-size:11px;
+  font-weight:800;
 }
 
-.bar{
-height:8px;
-overflow:hidden;
-border-radius:20px;
-background:#181c26;
+.progress-track{
+  height:7px;
+  margin-top:13px;
+  overflow:hidden;
+  border-radius:20px;
+  background:rgba(255,255,255,.06);
 }
 
-.bar-inner{
-width:0%;
-height:100%;
-border-radius:20px;
-background:linear-gradient(90deg,#00d9ff,#8b5cf6);
-box-shadow:0 0 18px rgba(0,217,255,.3);
-transition:width .45s cubic-bezier(.16,1,.3,1);
+.progress-bar{
+  width:0;
+  height:100%;
+  border-radius:20px;
+  background:linear-gradient(
+    90deg,
+    #00d9ff,
+    #1683ff
+  );
+  transition:width .25s ease;
 }
 
-.stage{
-margin-top:13px;
-color:#8b92a3;
-font-size:11px;
-}
-
-.meta{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:9px;
-margin-top:15px;
-}
-
-.meta-item{
-padding:11px;
-border-radius:12px;
-background:rgba(255,255,255,.035);
-}
-
-.meta-item span{
-display:block;
-color:#555c6b;
-font-size:9px;
-text-transform:uppercase;
-letter-spacing:1px;
-}
-
-.meta-item strong{
-display:block;
-margin-top:5px;
-font-size:11px;
-word-break:break-word;
+.progress-status{
+  margin-top:10px;
+  color:#697181;
+  font-size:10px;
 }
 
 .result{
-display:none;
-margin-top:20px;
-padding:20px;
-border:1px solid rgba(34,197,94,.18);
-border-radius:21px;
-background:rgba(34,197,94,.035);
+  display:none;
+  margin-top:20px;
+  padding:21px;
+  border:1px solid rgba(34,197,94,.16);
+  border-radius:22px;
+  background:rgba(34,197,94,.045);
 }
 
 .result.show{
-display:block;
+  display:block;
+}
+
+.result.failed{
+  border-color:rgba(255,56,111,.18);
+  background:rgba(255,56,111,.045);
 }
 
 .result-head{
-display:flex;
-align-items:center;
-gap:12px;
+  display:flex;
+  align-items:center;
+  gap:11px;
 }
 
 .result-icon{
-width:45px;
-height:45px;
-display:flex;
-align-items:center;
-justify-content:center;
-border-radius:14px;
-background:rgba(34,197,94,.1);
-font-size:22px;
+  width:43px;
+  height:43px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:14px;
+  background:rgba(34,197,94,.09);
+  font-size:19px;
 }
 
-.result h2{
-font-size:17px;
+.result.failed .result-icon{
+  background:rgba(255,56,111,.09);
 }
 
-.result p{
-margin-top:4px;
-font-size:11px;
-color:#687081;
+.result-title{
+  font-size:13px;
+  font-weight:800;
 }
 
-.urls{
-margin-top:17px;
-display:grid;
-gap:9px;
+.result-subtitle{
+  margin-top:4px;
+  color:#666e7d;
+  font-size:9px;
 }
 
-.url{
-display:flex;
-align-items:center;
-gap:8px;
-padding:12px;
-border-radius:13px;
-background:rgba(0,0,0,.18);
+.result-info{
+  margin-top:18px;
+  display:grid;
+  gap:8px;
 }
 
-.url a{
-flex:1;
-overflow:hidden;
-color:#8edfff;
-font-size:11px;
-text-decoration:none;
-white-space:nowrap;
-text-overflow:ellipsis;
+.result-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  padding:11px 12px;
+  border-radius:12px;
+  background:rgba(255,255,255,.025);
 }
 
-.copy{
-border:0;
-border-radius:8px;
-padding:7px 9px;
-background:rgba(255,255,255,.07);
-color:#fff;
-font-size:10px;
-cursor:pointer;
+.result-row span:first-child{
+  color:#606877;
+  font-size:9px;
 }
 
-.actions{
-display:flex;
-gap:9px;
-margin-top:15px;
+.result-row span:last-child{
+  max-width:65%;
+  overflow:hidden;
+  color:#cdd1d9;
+  font-size:10px;
+  text-align:right;
+  text-overflow:ellipsis;
+  white-space:nowrap;
 }
 
-.action{
-flex:1;
-height:43px;
-border:1px solid rgba(255,255,255,.08);
-border-radius:12px;
-background:rgba(255,255,255,.05);
-color:#fff;
-font-size:11px;
-font-weight:700;
-cursor:pointer;
+.result-link{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  height:47px;
+  margin-top:14px;
+  border-radius:14px;
+  background:rgba(0,217,255,.09);
+  color:#00d9ff;
+  text-decoration:none;
+  font-size:11px;
+  font-weight:800;
 }
 
-.error{
-display:none;
-margin-top:20px;
-padding:15px;
-border:1px solid rgba(255,56,111,.18);
-border-radius:15px;
-background:rgba(255,56,111,.04);
-color:#ff7b9c;
-font-size:11px;
-line-height:1.6;
-}
-
-.error.show{
-display:block;
+.dashboard-link{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  height:45px;
+  margin-top:9px;
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:14px;
+  background:rgba(255,255,255,.035);
+  color:#fff;
+  text-decoration:none;
+  font-size:10px;
 }
 
 .footer{
-margin-top:18px;
-text-align:center;
-color:#3e4450;
-font-size:9px;
-letter-spacing:1px;
+  margin-top:17px;
+  color:#3e4451;
+  font-size:9px;
+  letter-spacing:1.7px;
+  text-align:center;
 }
 
-@media(max-width:420px){
-.app{
-padding:16px;
+.toast{
+  position:fixed;
+  left:50%;
+  bottom:25px;
+  z-index:100;
+  width:max-content;
+  max-width:calc(100% - 30px);
+  padding:12px 16px;
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:14px;
+  background:rgba(15,18,28,.95);
+  color:#fff;
+  font-size:10px;
+  opacity:0;
+  pointer-events:none;
+  transform:translate(-50%,20px);
+  transition:.25s;
 }
 
-.panel{
-padding:15px;
-border-radius:22px;
+.toast.show{
+  opacity:1;
+  transform:translate(-50%,0);
 }
 
-.brand h1{
-font-size:24px;
+@media(max-width:600px){
+
+  .app{
+    padding:22px 14px 35px;
+  }
+
+  .brand h1{
+    font-size:27px;
+  }
+
+  .back{
+    width:52px;
+    height:52px;
+  }
+
+  .panel{
+    padding:18px;
+    border-radius:25px;
+  }
+
+  .upload{
+    min-height:260px;
+  }
+
 }
 
-.meta{
-grid-template-columns:1fr;
-}
+@media(max-width:370px){
+
+  .app{
+    padding-left:11px;
+    padding-right:11px;
+  }
+
+  .panel{
+    padding:14px;
+  }
+
+  .brand h1{
+    font-size:24px;
+  }
+
 }
 </style>
-
 </head>
-<body><div class="app">
-<div class="container"><div class="top">
-<div class="brand">
-<small>REYCLOUDSHOP</small>
-<h1>Deploy Project</h1>
-</div><button class="back" onclick="location.href='/dashboard/'">←</button>
 
-</div><div class="panel"><div class="drop" id="drop">
-<div class="drop-icon">☁️</div>
-<h2>Upload Project</h2>
-<p>Tap untuk memilih file atau drag & drop project kamu<br>ZIP, HTML, HTM · Maksimal 20 MB</p>
-<input id="fileInput" type="file" accept=".zip,.html,.htm">
-</div><div class="file" id="fileBox">
-<div class="file-icon">📦</div>
-<div class="file-info">
-<div class="file-name" id="fileName">-</div>
-<div class="file-size" id="fileSize">-</div>
+<body>
+
+<div class="app">
+
+  <div class="topbar">
+
+    <div class="brand">
+      <small>REYCLOUDSHOP</small>
+      <h1>Deploy Project</h1>
+    </div>
+
+    <a
+      class="back"
+      href="/dashboard/"
+      aria-label="Kembali"
+    >
+      ←
+    </a>
+
+  </div>
+
+  <main class="panel">
+
+    <div
+      class="upload"
+      id="uploadArea"
+    >
+
+      <div class="upload-icon">
+        ☁️
+      </div>
+
+      <h2>
+        Upload Project
+      </h2>
+
+      <p>
+        Tap untuk memilih file atau
+        drag & drop project kamu
+        <br>
+        ZIP, HTML, HTM · Maksimal 20 MB
+      </p>
+
+      <button
+        class="choose"
+        id="chooseButton"
+        type="button"
+      >
+        Pilih File
+      </button>
+
+      <input
+        id="fileInput"
+        type="file"
+        accept=".zip,.html,.htm"
+      >
+
+    </div>
+
+    <div
+      class="file-box"
+      id="fileBox"
+    >
+
+      <div class="file-icon">
+        📦
+      </div>
+
+      <div class="file-info">
+
+        <div
+          class="file-name"
+          id="fileName"
+        >
+          -
+        </div>
+
+        <div
+          class="file-size"
+          id="fileSize"
+        >
+          -
+        </div>
+
+      </div>
+
+      <button
+        class="remove"
+        id="removeButton"
+        type="button"
+      >
+        ×
+      </button>
+
+    </div>
+
+    <div class="field">
+
+      <div class="label">
+        <span>
+          PROJECT HOSTNAME
+        </span>
+
+        <span>
+          Vercel
+        </span>
+      </div>
+
+      <input
+        class="hostname"
+        id="hostname"
+        type="text"
+        maxlength="63"
+        autocomplete="off"
+        spellcheck="false"
+        placeholder="contoh: reyshop"
+      >
+
+      <div
+        class="domain-preview"
+        id="domainPreview"
+      >
+        Custom domain:
+        <span id="domainText">
+          -
+        </span>
+      </div>
+
+    </div>
+
+    <button
+      class="deploy-button"
+      id="deployButton"
+      type="button"
+      disabled
+    >
+      <span>🚀</span>
+      <span>Deploy ke Vercel</span>
+      <span class="arrow">→</span>
+    </button>
+
+    <div
+      class="progress-card"
+      id="progressCard"
+    >
+
+      <div class="progress-head">
+
+        <span
+          class="progress-title"
+          id="progressTitle"
+        >
+          Preparing deployment...
+        </span>
+
+        <span
+          class="progress-percent"
+          id="progressPercent"
+        >
+          0%
+        </span>
+
+      </div>
+
+      <div class="progress-track">
+
+        <div
+          class="progress-bar"
+          id="progressBar"
+        ></div>
+
+      </div>
+
+      <div
+        class="progress-status"
+        id="progressStatus"
+      >
+        Menyiapkan project...
+      </div>
+
+    </div>
+
+    <div
+      class="result"
+      id="result"
+    >
+
+      <div class="result-head">
+
+        <div
+          class="result-icon"
+          id="resultIcon"
+        >
+          ✓
+        </div>
+
+        <div>
+
+          <div
+            class="result-title"
+            id="resultTitle"
+          >
+            Deployment berhasil
+          </div>
+
+          <div
+            class="result-subtitle"
+            id="resultSubtitle"
+          >
+            Project berhasil diproses oleh Vercel
+          </div>
+
+        </div>
+
+      </div>
+
+      <div
+        class="result-info"
+        id="resultInfo"
+      ></div>
+
+      <a
+        class="result-link"
+        id="resultLink"
+        href="#"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        🌐 Buka Website
+      </a>
+
+      <a
+        class="dashboard-link"
+        href="/dashboard/"
+      >
+        ← Kembali ke Dashboard
+      </a>
+
+    </div>
+
+  </main>
+
+  <div class="footer">
+    POWERED BY REYCLOUDSHOP
+  </div>
+
 </div>
-<button class="remove" id="remove">×</button>
-</div><label class="label">PROJECT HOSTNAME</label>
 
-<input
-class="input"
-id="projectName"
-placeholder="contoh: reyshop"
-autocomplete="off"
-spellcheck="false"
+<div
+  class="toast"
+  id="toast"
+></div>
 
-«»
+<script>
+const API_ENDPOINT = "/api/deploy"
+const MAX_FILE_SIZE = 20 * 1024 * 1024
+const ALLOWED_EXTENSIONS = [
+  ".zip",
+  ".html",
+  ".htm"
+]
 
-<button class="deploy-btn" id="deploy">
-🚀 Deploy ke Vercel
-</button><div class="progress-box" id="progressBox"><div class="progress-top">
-<div class="progress-title" id="progressTitle">Preparing...</div>
-<div class="percent" id="percent">0%</div>
-</div><div class="bar">
-<div class="bar-inner" id="bar"></div>
-</div><div class="stage" id="stage">
-Menyiapkan deployment...
-</div><div class="meta"><div class="meta-item">
-<span>Framework</span>
-<strong id="framework">-</strong>
-</div><div class="meta-item">
-<span>Files</span>
-<strong id="files">-</strong>
-</div><div class="meta-item">
-<span>Project</span>
-<strong id="projectMeta">-</strong>
-</div><div class="meta-item">
-<span>Status</span>
-<strong id="status">Preparing</strong>
-</div></div></div><div class="result" id="result"><div class="result-head">
-<div class="result-icon">✓</div>
-<div>
-<h2>Deployment Complete</h2>
-<p>Project berhasil dipublish ke Vercel.</p>
-</div>
-</div><div class="urls"><div class="url">
-<a id="vercelUrl" target="_blank">-</a>
-<button class="copy" data-copy="vercelUrl">Copy</button>
-</div><div class="url" id="customRow">
-<a id="customUrl" target="_blank">-</a>
-<button class="copy" data-copy="customUrl">Copy</button>
-</div></div><div class="actions">
-<button class="action" id="openSite">🌐 Open</button>
-<button class="action" id="again">↻ Deploy Lagi</button>
-</div></div><div class="error" id="error"></div></div><div class="footer">
-POWERED BY REYCLOUDSHOP
-</div></div>
-</div><script>
-const drop=document.getElementById("drop");
-const fileInput=document.getElementById("fileInput");
-const fileBox=document.getElementById("fileBox");
-const fileName=document.getElementById("fileName");
-const fileSize=document.getElementById("fileSize");
-const remove=document.getElementById("remove");
-const projectName=document.getElementById("projectName");
-const deploy=document.getElementById("deploy");
-const progressBox=document.getElementById("progressBox");
-const progressTitle=document.getElementById("progressTitle");
-const percent=document.getElementById("percent");
-const bar=document.getElementById("bar");
-const stage=document.getElementById("stage");
-const framework=document.getElementById("framework");
-const files=document.getElementById("files");
-const projectMeta=document.getElementById("projectMeta");
-const status=document.getElementById("status");
-const result=document.getElementById("result");
-const errorBox=document.getElementById("error");
-const vercelUrl=document.getElementById("vercelUrl");
-const customUrl=document.getElementById("customUrl");
-const customRow=document.getElementById("customRow");
-const openSite=document.getElementById("openSite");
-const again=document.getElementById("again");
+const uploadArea =
+  document.getElementById(
+    "uploadArea"
+  )
 
-let selectedFile=null;
-let finalUrl=null;
+const chooseButton =
+  document.getElementById(
+    "chooseButton"
+  )
+
+const fileInput =
+  document.getElementById(
+    "fileInput"
+  )
+
+const fileBox =
+  document.getElementById(
+    "fileBox"
+  )
+
+const fileName =
+  document.getElementById(
+    "fileName"
+  )
+
+const fileSize =
+  document.getElementById(
+    "fileSize"
+  )
+
+const removeButton =
+  document.getElementById(
+    "removeButton"
+  )
+
+const hostname =
+  document.getElementById(
+    "hostname"
+  )
+
+const domainPreview =
+  document.getElementById(
+    "domainPreview"
+  )
+
+const domainText =
+  document.getElementById(
+    "domainText"
+  )
+
+const deployButton =
+  document.getElementById(
+    "deployButton"
+  )
+
+const progressCard =
+  document.getElementById(
+    "progressCard"
+  )
+
+const progressBar =
+  document.getElementById(
+    "progressBar"
+  )
+
+const progressPercent =
+  document.getElementById(
+    "progressPercent"
+  )
+
+const progressTitle =
+  document.getElementById(
+    "progressTitle"
+  )
+
+const progressStatus =
+  document.getElementById(
+    "progressStatus"
+  )
+
+const result =
+  document.getElementById(
+    "result"
+  )
+
+const resultIcon =
+  document.getElementById(
+    "resultIcon"
+  )
+
+const resultTitle =
+  document.getElementById(
+    "resultTitle"
+  )
+
+const resultSubtitle =
+  document.getElementById(
+    "resultSubtitle"
+  )
+
+const resultInfo =
+  document.getElementById(
+    "resultInfo"
+  )
+
+const resultLink =
+  document.getElementById(
+    "resultLink"
+  )
+
+const toast =
+  document.getElementById(
+    "toast"
+  )
+
+let selectedFile = null
+let toastTimer = null
+
+function showToast(message){
+
+  toast.textContent =
+    message
+
+  toast.classList.add(
+    "show"
+  )
+
+  clearTimeout(
+    toastTimer
+  )
+
+  toastTimer =
+    setTimeout(
+      () => {
+        toast.classList.remove(
+          "show"
+        )
+      },
+      2600
+    )
+
+}
 
 function formatBytes(bytes){
 
-if(!bytes){
-return "0 B";
+  if(!bytes){
+    return "0 B"
+  }
+
+  const units = [
+    "B",
+    "KB",
+    "MB",
+    "GB"
+  ]
+
+  let size = bytes
+  let index = 0
+
+  while(
+    size >= 1024 &&
+    index < units.length - 1
+  ){
+
+    size /= 1024
+    index++
+
+  }
+
+  return `${size.toFixed(2)} ${units[index]}`
+
 }
 
-const units=["B","KB","MB","GB"];
-let size=bytes;
-let index=0;
+function getExtension(name){
 
-while(
-size>=1024&&
-index<units.length-1
+  const dot =
+    name.lastIndexOf(".")
+
+  if(dot === -1){
+    return ""
+  }
+
+  return name
+    .slice(dot)
+    .toLowerCase()
+
+}
+
+function cleanHostname(value){
+
+  return String(value || "")
+    .trim()
+    .toLowerCase()
+    .replace(/\.vercel\.app$/i,"")
+    .replace(/[^a-z0-9-]/g,"-")
+    .replace(/-+/g,"-")
+    .replace(/^-|-$/g,"")
+
+}
+
+function validHostname(value){
+
+  return /^[a-z0-9][a-z0-9-]{1,62}$/.test(
+    value
+  )
+
+}
+
+function updateButton(){
+
+  deployButton.disabled =
+    !selectedFile ||
+    !validHostname(
+      cleanHostname(
+        hostname.value
+      )
+    )
+
+}
+
+function updateDomainPreview(){
+
+  const value =
+    cleanHostname(
+      hostname.value
+    )
+
+  if(!value){
+
+    domainPreview.classList.remove(
+      "show"
+    )
+
+    return
+
+  }
+
+  domainText.textContent =
+    `${value}.vercel.app`
+
+  domainPreview.classList.add(
+    "show"
+  )
+
+}
+
+function validateFile(file){
+
+  if(!file){
+    return false
+  }
+
+  const extension =
+    getExtension(
+      file.name
+    )
+
+  if(
+    !ALLOWED_EXTENSIONS.includes(
+      extension
+    )
+  ){
+
+    showToast(
+      "Format harus ZIP, HTML, atau HTM."
+    )
+
+    return false
+
+  }
+
+  if(
+    file.size > MAX_FILE_SIZE
+  ){
+
+    showToast(
+      "Ukuran file maksimal 20 MB."
+    )
+
+    return false
+
+  }
+
+  return true
+
+}
+
+function setFile(file){
+
+  if(!validateFile(file)){
+    return
+  }
+
+  selectedFile =
+    file
+
+  fileName.textContent =
+    file.name
+
+  fileSize.textContent =
+    formatBytes(
+      file.size
+    )
+
+  fileBox.classList.add(
+    "show"
+  )
+
+  updateButton()
+
+}
+
+function removeFile(){
+
+  selectedFile = null
+
+  fileInput.value = ""
+
+  fileBox.classList.remove(
+    "show"
+  )
+
+  updateButton()
+
+}
+
+function setProgress(
+  percent,
+  title,
+  status
 ){
-size/=1024;
-index++;
+
+  progressCard.classList.add(
+    "show"
+  )
+
+  const safePercent =
+    Math.max(
+      0,
+      Math.min(
+        100,
+        percent
+      )
+    )
+
+  progressBar.style.width =
+    `${safePercent}%`
+
+  progressPercent.textContent =
+    `${Math.round(safePercent)}%`
+
+  progressTitle.textContent =
+    title
+
+  progressStatus.textContent =
+    status
+
 }
 
-return `${size.toFixed(2)} ${units[index]}`;
+function hideResult(){
+
+  result.classList.remove(
+    "show",
+    "failed"
+  )
 
 }
 
-function chooseFile(file){
+function escapeHtml(value){
 
-if(!file){
-return;
+  return String(value || "")
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+    .replace(
+      /</g,
+      "&lt;"
+    )
+    .replace(
+      />/g,
+      "&gt;"
+    )
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+
 }
 
-const ext=
-"."+
-file.name.split(".").pop().toLowerCase();
-
-if(
-![".zip",".html",".htm"].includes(ext)
+function addResultRow(
+  label,
+  value
 ){
-showError("Format file harus ZIP, HTML, atau HTM.");
-return;
-}
 
-if(file.size>20*1024*1024){
-showError("Ukuran file maksimal 20 MB.");
-return;
-}
-
-selectedFile=file;
-
-fileName.textContent=file.name;
-fileSize.textContent=formatBytes(file.size);
-fileBox.classList.add("show");
-errorBox.classList.remove("show");
+  return `
+    <div class="result-row">
+      <span>${escapeHtml(label)}</span>
+      <span>${escapeHtml(value)}</span>
+    </div>
+  `
 
 }
 
-drop.addEventListener(
-"click",
-()=>{
-fileInput.click();
+function getResultUrl(data){
+
+  return (
+    data?.url ||
+    data?.deployment?.url ||
+    data?.deployment?.readyUrl ||
+    data?.vercelUrl ||
+    data?.vercel_url ||
+    ""
+  )
+
 }
-);
+
+function getCustomDomain(data){
+
+  return (
+    data?.customDomain ||
+    data?.custom_domain ||
+    data?.domain ||
+    ""
+  )
+
+}
+
+function showSuccess(data){
+
+  const url =
+    getResultUrl(data)
+
+  const customDomain =
+    getCustomDomain(data)
+
+  result.classList.remove(
+    "failed"
+  )
+
+  result.classList.add(
+    "show"
+  )
+
+  resultIcon.textContent =
+    "✓"
+
+  resultTitle.textContent =
+    "Deployment berhasil"
+
+  resultSubtitle.textContent =
+    "Project berhasil diproses oleh Vercel"
+
+  resultInfo.innerHTML =
+    addResultRow(
+      "Hostname",
+      cleanHostname(
+        hostname.value
+      )
+    ) +
+    addResultRow(
+      "File",
+      selectedFile?.name || "-"
+    ) +
+    (
+      customDomain
+        ? addResultRow(
+            "Custom Domain",
+            customDomain
+          )
+        : ""
+    ) +
+    (
+      url
+        ? addResultRow(
+            "Vercel URL",
+            url
+          )
+        : ""
+    )
+
+  if(url){
+
+    resultLink.href =
+      url
+
+    resultLink.style.display =
+      "flex"
+
+  }else{
+
+    resultLink.style.display =
+      "none"
+
+  }
+
+  setProgress(
+    100,
+    "Deployment selesai",
+    "Project berhasil dideploy."
+  )
+
+  result.scrollIntoView({
+    behavior:"smooth",
+    block:"center"
+  })
+
+}
+
+function showFailure(
+  message
+){
+
+  result.classList.add(
+    "show",
+    "failed"
+  )
+
+  resultIcon.textContent =
+    "×"
+
+  resultTitle.textContent =
+    "Deployment gagal"
+
+  resultSubtitle.textContent =
+    message ||
+    "Terjadi kesalahan saat deployment."
+
+  resultInfo.innerHTML =
+    addResultRow(
+      "Hostname",
+      cleanHostname(
+        hostname.value
+      )
+    )
+
+  resultLink.style.display =
+    "none"
+
+}
+
+function parseResponseText(
+  text
+){
+
+  if(!text){
+    return {}
+  }
+
+  try{
+    return JSON.parse(
+      text
+    )
+  }catch{
+    return {
+      message:text
+    }
+  }
+
+}
+
+function deployWithXHR(
+  file,
+  projectName
+){
+
+  return new Promise(
+    (resolve,reject) => {
+
+      const xhr =
+        new XMLHttpRequest()
+
+      const formData =
+        new FormData()
+
+      formData.append(
+        "file",
+        file
+      )
+
+      formData.append(
+        "hostname",
+        projectName
+      )
+
+      xhr.open(
+        "POST",
+        API_ENDPOINT,
+        true
+      )
+
+      xhr.setRequestHeader(
+        "Accept",
+        "application/json"
+      )
+
+      xhr.upload.onprogress =
+        event => {
+
+          if(!event.lengthComputable){
+            return
+          }
+
+          const percent =
+            Math.round(
+              (
+                event.loaded /
+                event.total
+              ) * 55
+            )
+
+          setProgress(
+            percent,
+            "Uploading project...",
+            `Mengupload ${formatBytes(event.loaded)} / ${formatBytes(event.total)}`
+          )
+
+        }
+
+      xhr.upload.onload =
+        () => {
+
+          setProgress(
+            60,
+            "Project diterima",
+            "Server sedang memproses project..."
+          )
+
+        }
+
+      xhr.onreadystatechange =
+        () => {
+
+          if(
+            xhr.readyState !== 4
+          ){
+            return
+          }
+
+          const data =
+            parseResponseText(
+              xhr.responseText
+            )
+
+          if(
+            xhr.status >= 200 &&
+            xhr.status < 300
+          ){
+
+            resolve(
+              data
+            )
+
+          }else{
+
+            reject(
+              new Error(
+                data?.message ||
+                data?.error ||
+                `Server error (${xhr.status})`
+              )
+            )
+
+          }
+
+        }
+
+      xhr.onerror =
+        () => {
+
+          reject(
+            new Error(
+              "Tidak dapat terhubung ke API deployment."
+            )
+          )
+
+        }
+
+      xhr.ontimeout =
+        () => {
+
+          reject(
+            new Error(
+              "Request deployment timeout."
+            )
+          )
+
+        }
+
+      xhr.timeout =
+        180000
+
+      setProgress(
+        5,
+        "Preparing deployment...",
+        "Menyiapkan file untuk Vercel..."
+      )
+
+      xhr.send(
+        formData
+      )
+
+    }
+  )
+
+}
+
+chooseButton.addEventListener(
+  "click",
+  () => {
+    fileInput.click()
+  }
+)
+
+uploadArea.addEventListener(
+  "click",
+  event => {
+
+    if(
+      event.target.closest(
+        ".choose"
+      )
+    ){
+      return
+    }
+
+    fileInput.click()
+
+  }
+)
 
 fileInput.addEventListener(
-"change",
-()=>{
-chooseFile(fileInput.files[0]);
-}
-);
+  "change",
+  () => {
 
-remove.addEventListener(
-"click",
-event=>{
-event.stopPropagation();
-selectedFile=null;
-fileInput.value="";
-fileBox.classList.remove("show");
-}
-);
+    const file =
+      fileInput.files?.[0]
 
-[
-"dragenter",
-"dragover"
-].forEach(eventName=>{
-drop.addEventListener(
-eventName,
-event=>{
-event.preventDefault();
-drop.classList.add("drag");
-}
-);
-});
+    if(file){
+      setFile(file)
+    }
 
-[
-"dragleave",
-"drop"
-].forEach(eventName=>{
-drop.addEventListener(
-eventName,
-event=>{
-event.preventDefault();
-drop.classList.remove("drag");
-}
-);
-});
-
-drop.addEventListener(
-"drop",
-event=>{
-chooseFile(event.dataTransfer.files[0]);
-}
-);
-
-function showError(message){
-
-errorBox.textContent="❌ "+message;
-errorBox.classList.add("show");
-
-}
-
-function resetProgress(){
-
-progressBox.classList.remove("show");
-result.classList.remove("show");
-errorBox.classList.remove("show");
-
-bar.style.width="0%";
-percent.textContent="0%";
-progressTitle.textContent="Preparing...";
-stage.textContent="Menyiapkan deployment...";
-framework.textContent="-";
-files.textContent="-";
-projectMeta.textContent="-";
-status.textContent="Preparing";
-
-}
-
-function updateProgress(data){
-
-const value=
-Math.max(
-0,
-Math.min(
-100,
-Number(data.progress)||0
+  }
 )
-);
 
-bar.style.width=value+"%";
-percent.textContent=value+"%";
+removeButton.addEventListener(
+  "click",
+  removeFile
+)
 
-progressTitle.textContent=
-data.stage
-?data.stage.toUpperCase()
-:"DEPLOYING";
+hostname.addEventListener(
+  "input",
+  () => {
 
-stage.textContent=
-data.message||
-"Processing...";
+    const cleaned =
+      cleanHostname(
+        hostname.value
+      )
 
-if(data.framework){
-framework.textContent=data.framework;
-}
+    if(
+      hostname.value !==
+      cleaned
+    ){
 
-if(data.files){
-files.textContent=data.files;
-}
+      hostname.value =
+        cleaned
 
-if(data.projectName){
-projectMeta.textContent=data.projectName;
-}
+    }
 
-if(data.vercelState){
-status.textContent=data.vercelState;
-}else if(data.stage){
-status.textContent=data.stage;
-}
+    updateDomainPreview()
+    updateButton()
 
-}
+  }
+)
 
-async function readStream(response){
+uploadArea.addEventListener(
+  "dragover",
+  event => {
 
-if(!response.body){
-throw new Error(
-"Browser tidak mendukung streaming progress."
-);
-}
+    event.preventDefault()
 
-const reader=response.body.getReader();
-const decoder=new TextDecoder();
-let buffer="";
+    uploadArea.classList.add(
+      "dragover"
+    )
 
-while(true){
+  }
+)
 
-const {value,done}=await reader.read();
+uploadArea.addEventListener(
+  "dragleave",
+  () => {
 
-if(done){
-break;
-}
+    uploadArea.classList.remove(
+      "dragover"
+    )
 
-buffer+=decoder.decode(
-value,
-{
-stream:true
-}
-);
+  }
+)
 
-const lines=buffer.split("\n");
-buffer=lines.pop();
+uploadArea.addEventListener(
+  "drop",
+  event => {
 
-for(const line of lines){
+    event.preventDefault()
 
-if(!line.trim()){
-continue;
-}
+    uploadArea.classList.remove(
+      "dragover"
+    )
 
-let data;
+    const file =
+      event.dataTransfer.files?.[0]
 
-try{
-data=JSON.parse(line);
-}catch{
-continue;
-}
+    if(file){
+      setFile(file)
+    }
 
-if(data.type==="progress"){
-updateProgress(data);
-}
+  }
+)
 
-if(data.type==="complete"){
+deployButton.addEventListener(
+  "click",
+  async () => {
 
-updateProgress(data);
+    hideResult()
 
-vercelUrl.href=data.vercelUrl;
-vercelUrl.textContent=data.vercelUrl;
+    const file =
+      selectedFile
 
-finalUrl=data.vercelUrl;
+    const projectName =
+      cleanHostname(
+        hostname.value
+      )
 
-if(data.customDomain){
+    if(!file){
 
-customRow.style.display="flex";
-customUrl.href=data.customDomain;
-customUrl.textContent=data.customDomain;
+      showToast(
+        "Pilih file project terlebih dahulu."
+      )
 
-}else{
+      return
 
-customRow.style.display="none";
+    }
 
-}
+    if(!validHostname(projectName)){
 
-result.classList.add("show");
+      showToast(
+        "Hostname project tidak valid."
+      )
 
-}
-
-if(data.type==="error"){
-throw new Error(data.message);
-}
-
-}
-
-}
-
-}
-
-deploy.addEventListener(
-"click",
-async()=>{
-
-if(!selectedFile){
-showError("Pilih file project terlebih dahulu.");
-return;
-}
-
-const name=projectName.value
-.trim()
-.toLowerCase();
-
-if(
-!/^[a-z0-9][a-z0-9-]{1,62}$/.test(name)
-){
-
-showError(
-"Hostname tidak valid. Gunakan huruf kecil, angka, dan tanda -."
-);
-
-return;
-}
-
-resetProgress();
-
-progressBox.classList.add("show");
-
-deploy.disabled=true;
-deploy.textContent="⏳ Deploying...";
-
-const form=new FormData();
-
-form.append(
-"projectName",
-name
-);
-
-form.append(
-"file",
-selectedFile
-);
-
-try{
-
-const response=await fetch(
-"/api/deploy",
-{
-method:"POST",
-body:form
-}
-);
-
-if(!response.ok){
-
-let message=
-"Server deployment mengalami masalah.";
-
-try{
-
-const data=await response.json();
-
-message=
-data.error||
-message;
-
-}catch{}
-
-throw new Error(message);
-
-}
-
-await readStream(response);
-
-}catch(error){
-
-showError(error.message);
-
-}finally{
-
-deploy.disabled=false;
-deploy.textContent="🚀 Deploy ke Vercel";
-
-}
-
-}
-);
-
-document.querySelectorAll(".copy")
-.forEach(button=>{
-
-button.addEventListener(
-"click",
-async()=>{
-
-const id=button.dataset.copy;
-const element=document.getElementById(id);
-
-if(!element||!element.textContent){
-return;
-}
-
-try{
-
-await navigator.clipboard.writeText(
-element.textContent
-);
-
-const old=button.textContent;
-
-button.textContent="Copied!";
-
-setTimeout(
-()=>{
-button.textContent=old;
-},
-1200
-);
-
-}catch{}
-
-}
-);
-
-});
-
-openSite.addEventListener(
-"click",
-()=>{
-if(finalUrl){
-window.open(
-finalUrl,
-"_blank",
-"noopener"
-);
-}
-}
-);
-
-again.addEventListener(
-"click",
-()=>{
-
-selectedFile=null;
-fileInput.value="";
-projectName.value="";
-fileBox.classList.remove("show");
-resetProgress();
-
-window.scrollTo({
-top:0,
-behavior:"smooth"
-});
-
-}
-);
-</script></body>
-</html>
+      hostname.focus()
+
+      return
+
+    }
+
+    deployButton.disabled =
+      true
+
+    deployButton.classList.add(
+      "loading"
+    )
+
+    deployButton.innerHTML =
+      `
+        <span>⏳</span>
+        <span>Deploying...</span>
+      `
+
+    setProgress(
+      5,
+      "Preparing deployment...",
+      "Menyiapkan project..."
+    )
+
+    try{
+
+      const data =
+        await deployWithXHR(
+          file,
+          projectName
+        )
+
+      setProgress(
+        85,
+        "Finalizing deployment...",
+        "Menunggu hasil dari Vercel..."
+      )
+
+      await new Promise(
+        resolve =>
+          setTimeout(
+            resolve,
+            500
+          )
+      )
+
+      showSuccess(
+        data
+      )
+
+    }catch(error){
+
+      console.error(
+        "[DEPLOY]",
+        error
+      )
+
+      setProgress(
+        100,
+        "Deployment gagal",
+        error.message ||
+        "Terjadi kesalahan."
+      )
+
+      showFailure(
+        error.message
+      )
+
+      result.scrollIntoView({
+        behavior:"smooth",
+        block:"center"
+      })
+
+    }finally{
+
+      deployButton.classList.remove(
+        "loading"
+      )
+
+      deployButton.innerHTML =
+        `
+          <span>🚀</span>
+          <span>Deploy ke Vercel</span>
+          <span class="arrow">→</span>
+        `
+
+      updateButton()
+
+    }
+
+  }
+)
+
+updateButton()
+updateDomainPreview()
+</script>
+
+</body>
+      </html>
