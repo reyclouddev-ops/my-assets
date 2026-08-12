@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#07080d">
+<title>Downloader — ReyCloudShop</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+-webkit-tap-highlight-color:transparent
+}
+
+:root{
+--bg:#07080d;
+--card:rgba(15,18,28,.78);
+--line:rgba(255,255,255,.08);
+--text:#f7f8fc;
+--muted:#777e8f;
+--pink:#ff386f;
+--purple:#a855f7;
+--cyan:#22d3ee;
+--green:#4ade80
+}
+
+body{
+min-height:100vh;
+font-family:Inter,Arial,sans-serif;
+color:var(--text);
+background:
+radial-gradient(circle at 10% 0%,rgba(255,56,111,.14),transparent 30%),
+radial-gradient(circle at 100% 80%,rgba(168,85,247,.14),transparent 32%),
+var(--bg)
+}
+
+button,input{
+font:inherit
+}
+
+button{
+cursor:pointer
+}
+
+.app{
+width:100%;
+max-width:900px;
+margin:auto;
+padding:18px 14px 50px
+}
+
+.topbar{
+display:flex;
+align-items:center;
+gap:12px;
+margin-bottom:20px
+}
+
+.back{
+width:44px;
+height:44px;
+display:flex;
+align-items:center;
+justify-content:center;
+border:1px solid var(--line);
+border-radius:15px;
+background:rgba(255,255,255,.04);
+color:#fff;
+text-decoration:none;
+font-size:18px
+}
+
+.brand{
+flex:1
+}
+
+.brand small{
+display:block;
+color:#606878;
+font-size:8px;
+letter-spacing:2.5px
+}
+
+.brand strong{
+display:block;
+margin-top:4px;
+font-size:17px
+}
+
+.online{
+padding:7px 10px;
+border:1px solid rgba(74,222,128,.16);
+border-radius:20px;
+background:rgba(74,222,128,.05);
+color:#65df8c;
+font-size:8px;
+font-weight:800
+}
+
+.hero{
+position:relative;
+overflow:hidden;
+padding:25px;
+border:1px solid var(--line);
+border-radius:28px;
+background:
+linear-gradient(145deg,rgba(255,56,111,.1),rgba(15,18,28,.85) 50%);
+box-shadow:0 25px 80px rgba(0,0,0,.3)
+}
+
+.hero:before{
+content:"";
+position:absolute;
+width:220px;
+height:220px;
+right:-110px;
+top:-110px;
+border-radius:50%;
+background:var(--pink);
+filter:blur(80px);
+opacity:.18
+}
+
+.hero-icon{
+position:relative;
+width:58px;
+height:58px;
+display:flex;
+align-items:center;
+justify-content:center;
+border:1px solid rgba(255,255,255,.08);
+border-radius:18px;
+background:rgba(255,255,255,.05);
+font-size:26px;
+margin-bottom:18px
+}
+
+.hero h1{
+position:relative;
+font-size:27px;
+letter-spacing:-.7px
+}
+
+.hero p{
+position:relative;
+max-width:620px;
+margin-top:9px;
+color:var(--muted);
+font-size:12px;
+line-height:1.7
+}
+
+.search-card{
+margin-top:15px;
+padding:17px;
+border:1px solid var(--line);
+border-radius:24px;
+background:var(--card);
+backdrop-filter:blur(20px);
+box-shadow:0 20px 60px rgba(0,0,0,.22)
+}
+
+.input-label{
+display:block;
+margin-bottom:9px;
+color:#aeb4c1;
+font-size:9px;
+font-weight:800;
+letter-spacing:.5px
+}
+
+.input-wrap{
+display:flex;
+gap:8px
+}
+
+.input-wrap input{
+min-width:0;
+flex:1;
+height:52px;
+padding:0 15px;
+outline:none;
+border:1px solid rgba(255,255,255,.07);
+border-radius:15px;
+background:rgba(255,255,255,.035);
+color:#fff;
+font-size:12px
+}
+
+.input-wrap input:focus{
+border-color:rgba(255,56,111,.5);
+box-shadow:0 0 0 3px rgba(255,56,111,.06)
+}
+
+.input-wrap input::placeholder{
+color:#505665
+}
+
+.search-button{
+width:54px;
+height:52px;
+flex:none;
+border:0;
+border-radius:15px;
+background:linear-gradient(135deg,var(--pink),var(--purple));
+color:#fff;
+font-size:18px;
+box-shadow:0 10px 28px rgba(255,56,111,.16)
+}
+
+.search-button:active{
+transform:scale(.96)
+}
+
+.search-button:disabled{
+opacity:.55;
+pointer-events:none
+}
+
+.supported{
+display:flex;
+gap:7px;
+flex-wrap:wrap;
+margin-top:12px
+}
+
+.supported span{
+padding:6px 9px;
+border:1px solid rgba(255,255,255,.06);
+border-radius:10px;
+background:rgba(255,255,255,.025);
+color:#696f7d;
+font-size:8px
+}
+
+.loader{
+display:none;
+margin-top:15px;
+padding:20px;
+border:1px solid var(--line);
+border-radius:22px;
+background:rgba(15,18,28,.8);
+text-align:center
+}
+
+.loader.show{
+display:block
+}
+
+.spinner{
+width:35px;
+height:35px;
+margin:auto;
+border:3px solid rgba(255,255,255,.08);
+border-top-color:var(--pink);
+border-right-color:var(--purple);
+border-radius:50%;
+animation:spin .8s linear infinite
+}
+
+@keyframes spin{
+to{transform:rotate(360deg)}
+}
+
+.loader strong{
+display:block;
+margin-top:12px;
+font-size:11px
+}
+
+.loader span{
+display:block;
+margin-top:5px;
+color:var(--muted);
+font-size:9px
+}
+
+.result{
+display:none;
+margin-top:15px
+}
+
+.result.show{
+display:block
+}
+
+.preview-card{
+overflow:hidden;
+border:1px solid var(--line);
+border-radius:25px;
+background:var(--card);
+box-shadow:0 20px 65px rgba(0,0,0,.3)
+}
+
+.preview{
+position:relative;
+height:300px;
+background:#10131b
+}
+
+.preview img{
+width:100%;
+height:100%;
+display:block;
+object-fit:cover
+}
+
+.preview:after{
+content:"";
+position:absolute;
+inset:0;
+background:linear-gradient(
+180deg,
+transparent 35%,
+rgba(0,0,0,.85)
+)
+}
+
+.source{
+position:absolute;
+z-index:2;
+top:14px;
+left:14px;
+padding:7px 10px;
+border:1px solid rgba(255,255,255,.1);
+border-radius:10px;
+background:rgba(0,0,0,.42);
+backdrop-filter:blur(10px);
+font-size:8px;
+font-weight:800
+}
+
+.preview-info{
+position:absolute;
+z-index:2;
+left:18px;
+right:18px;
+bottom:17px
+}
+
+.preview-info strong{
+display:block;
+font-size:16px;
+line-height:1.35
+}
+
+.preview-info span{
+display:block;
+margin-top:5px;
+color:#b0b5c0;
+font-size:9px
+}
+
+.details{
+padding:17px
+}
+
+.stats{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:8px;
+margin-bottom:15px
+}
+
+.stat{
+padding:11px;
+border:1px solid rgba(255,255,255,.06);
+border-radius:13px;
+background:rgba(255,255,255,.025);
+text-align:center
+}
+
+.stat strong{
+display:block;
+font-size:11px
+}
+
+.stat span{
+display:block;
+margin-top:4px;
+color:#606777;
+font-size:8px
+}
+
+.section-title{
+margin-bottom:9px;
+color:#9da3b0;
+font-size:9px;
+font-weight:800;
+letter-spacing:.5px
+}
+
+.media-list{
+display:flex;
+flex-direction:column;
+gap:8px
+}
+
+.media-item{
+display:flex;
+align-items:center;
+gap:11px;
+padding:12px;
+border:1px solid rgba(255,255,255,.06);
+border-radius:15px;
+background:rgba(255,255,255,.025)
+}
+
+.media-icon{
+width:39px;
+height:39px;
+display:flex;
+align-items:center;
+justify-content:center;
+flex:none;
+border-radius:12px;
+background:rgba(255,56,111,.08);
+font-size:17px
+}
+
+.media-info{
+min-width:0;
+flex:1
+}
+
+.media-info strong{
+display:block;
+font-size:10px
+}
+
+.media-info span{
+display:block;
+margin-top:4px;
+overflow:hidden;
+color:#606777;
+font-size:8px;
+text-overflow:ellipsis;
+white-space:nowrap
+}
+
+.download{
+height:37px;
+padding:0 12px;
+border:0;
+border-radius:11px;
+background:linear-gradient(135deg,var(--pink),var(--purple));
+color:#fff;
+font-size:9px;
+font-weight:800;
+white-space:nowrap
+}
+
+.download:active{
+transform:scale(.96)
+}
+
+.error{
+display:none;
+margin-top:15px;
+padding:16px;
+border:1px solid rgba(255,56,111,.2);
+border-radius:17px;
+background:rgba(255,56,111,.055)
+}
+
+.error.show{
+display:block
+}
+
+.error strong{
+color:#ff7194;
+font-size:11px
+}
+
+.error p{
+margin-top:6px;
+color:#777d8d;
+font-size:9px;
+line-height:1.6
+}
+
+.footer{
+margin-top:18px;
+color:#343a47;
+text-align:center;
+font-size:8px;
+letter-spacing:2px
+}
+
+@media(max-width:600px){
+
+.app{
+padding:15px 12px 40px
+}
+
+.hero{
+padding:21px
+}
+
+.hero h1{
+font-size:24px
+}
+
+.preview{
+height:245px
+}
+
+.preview-info strong{
+font-size:14px
+}
+
+}
+
+@media(max-width:430px){
+
+.online{
+display:none
+}
+
+.input-wrap{
+gap:6px
+}
+
+.search-button{
+width:50px
+}
+
+.stats{
+grid-template-columns:1fr 1fr
+}
+
+.stats .stat:last-child{
+grid-column:span 2
+}
+
+.media-item{
+align-items:flex-start
+}
+
+.download{
+align-self:center
+}
+
+}
+
+@media(max-width:350px){
+
+.media-item{
+flex-wrap:wrap
+}
+
+.media-info{
+min-width:calc(100% - 52px)
+}
+
+.download{
+width:100%;
+margin-top:4px
+}
+
+}
+</style>
+</head>
+
+<body>
+
+<main class="app">
+
+<header class="topbar">
+
+<a
+class="back"
+href="/dashboard/tools/"
+>
+←
+</a>
+
+<div class="brand">
+<small>REYCLOUDSHOP TOOLS</small>
+<strong>All Media Downloader</strong>
+</div>
+
+<div class="online">
+● ONLINE
+</div>
+
+</header>
+
+<section class="hero">
+
+<div class="hero-icon">
+⬇️
+</div>
+
+<h1>Download Anything.</h1>
+
+<p>
+Masukkan link media yang ingin kamu download.
+ReyCloud akan mendeteksi platform dan menyediakan
+media yang tersedia secara otomatis.
+</p>
+
+</section>
+
+<section class="search-card">
+
+<label class="input-label">
+MEDIA URL
+</label>
+
+<div class="input-wrap">
+
+<input
+id="urlInput"
+type="url"
+placeholder="Paste link TikTok, Instagram, YouTube..."
+autocomplete="off"
+>
+
+<button
+class="search-button"
+id="searchButton"
+type="button"
+>
+↓
+</button>
+
+</div>
+
+<div class="supported">
+<span>🎵 TikTok</span>
+<span>📸 Instagram</span>
+<span>▶️ YouTube</span>
+<span>🌐 All Media</span>
+</div>
+
+</section>
+
+<section
+class="loader"
+id="loader"
+>
+
+<div class="spinner"></div>
+
+<strong>
+Memproses media...
+</strong>
+
+<span>
+Sedang mengambil informasi media.
+</span>
+
+</section>
+
+<section
+class="result"
+id="result"
+>
+
+<div class="preview-card">
+
+<div class="preview">
+
+<img
+id="thumbnail"
+src=""
+alt="Media Preview"
+>
+
+<div
+class="source"
+id="source"
+>
+MEDIA
+</div>
+
+<div class="preview-info">
+
+<strong id="mediaTitle">
+Media
+</strong>
+
+<span id="mediaAuthor">
+@unknown
+</span>
+
+</div>
+
+</div>
+
+<div class="details">
+
+<div class="stats">
+
+<div class="stat">
+<strong id="statType">
+-
+</strong>
+<span>TYPE</span>
+</div>
+
+<div class="stat">
+<strong id="statDuration">
+-
+</strong>
+<span>DURATION</span>
+</div>
+
+<div class="stat">
+<strong id="statId">
+-
+</strong>
+<span>MEDIA ID</span>
+</div>
+
+</div>
+
+<div class="section-title">
+AVAILABLE MEDIA
+</div>
+
+<div
+class="media-list"
+id="mediaList"
+></div>
+
+</div>
+
+</div>
+
+</section>
+
+<section
+class="error"
+id="error"
+>
+
+<strong>× DOWNLOAD GAGAL</strong>
+
+<p id="errorText">
+Terjadi kesalahan.
+</p>
+
+</section>
+
+<div class="footer">
+POWERED BY REYCLOUDSHOP
+</div>
+
+</main>
+
+<script>
+const API_URL =
+"https://api.nexray.eu.cc/downloader/aio"
+
+const urlInput =
+document.getElementById("urlInput")
+
+const searchButton =
+document.getElementById("searchButton")
+
+const loader =
+document.getElementById("loader")
+
+const result =
+document.getElementById("result")
+
+const error =
+document.getElementById("error")
+
+const errorText =
+document.getElementById("errorText")
+
+const thumbnail =
+document.getElementById("thumbnail")
+
+const source =
+document.getElementById("source")
+
+const mediaTitle =
+document.getElementById("mediaTitle")
+
+const mediaAuthor =
+document.getElementById("mediaAuthor")
+
+const statType =
+document.getElementById("statType")
+
+const statDuration =
+document.getElementById("statDuration")
+
+const statId =
+document.getElementById("statId")
+
+const mediaList =
+document.getElementById("mediaList")
+
+function showLoader(){
+loader.classList.add("show")
+result.classList.remove("show")
+error.classList.remove("show")
+}
+
+function hideLoader(){
+loader.classList.remove("show")
+}
+
+function showError(message){
+hideLoader()
+result.classList.remove("show")
+error.classList.add("show")
+errorText.textContent = message
+}
+
+function formatDuration(ms){
+if(!ms){
+return "-"
+}
+
+const seconds =
+Math.floor(Number(ms) / 1000)
+
+if(seconds < 60){
+return `${seconds}s`
+}
+
+const minutes =
+Math.floor(seconds / 60)
+
+const remain =
+seconds % 60
+
+return `${minutes}:${String(remain).padStart(2,"0")}`
+}
+
+function formatBytes(bytes){
+const value =
+Number(bytes)
+
+if(!value){
+return "-"
+}
+
+if(value < 1024){
+return `${value} B`
+}
+
+if(value < 1024 * 1024){
+return `${(value / 1024).toFixed(1)} KB`
+}
+
+if(value < 1024 * 1024 * 1024){
+return `${(value / 1024 / 1024).toFixed(2)} MB`
+}
+
+return `${(value / 1024 / 1024 / 1024).toFixed(2)} GB`
+}
+
+function mediaIcon(type){
+if(type === "audio"){
+return "🎵"
+}
+
+if(type === "image"){
+return "🖼️"
+}
+
+return "🎬"
+}
+
+function createMediaItem(media,index){
+
+const item =
+document.createElement("div")
+
+item.className =
+"media-item"
+
+const icon =
+document.createElement("div")
+
+icon.className =
+"media-icon"
+
+icon.textContent =
+mediaIcon(media.type)
+
+const info =
+document.createElement("div")
+
+info.className =
+"media-info"
+
+const name =
+document.createElement("strong")
+
+name.textContent =
+media.quality ||
+media.type ||
+`Media ${index + 1}`
+
+const meta =
+document.createElement("span")
+
+const size =
+formatBytes(media.data_size)
+
+const extension =
+String(
+media.extension ||
+"file"
+).toUpperCase()
+
+meta.textContent =
+`${extension} • ${size}`
+
+info.appendChild(name)
+info.appendChild(meta)
+
+const button =
+document.createElement("button")
+
+button.className =
+"download"
+
+button.type =
+"button"
+
+button.textContent =
+"DOWNLOAD"
+
+button.addEventListener(
+"click",
+()=>{
+downloadMedia(
+media.url,
+media.extension ||
+"file"
+)
+}
+)
+
+item.appendChild(icon)
+item.appendChild(info)
+item.appendChild(button)
+
+return item
+}
+
+function downloadMedia(url,extension){
+
+if(!url){
+return
+}
+
+const link =
+document.createElement("a")
+
+link.href =
+url
+
+link.target =
+"_blank"
+
+link.rel =
+"noopener noreferrer"
+
+document.body.appendChild(link)
+
+link.click()
+
+link.remove()
+}
+
+async function fetchMedia(){
+
+const url =
+urlInput.value.trim()
+
+if(!url){
+
+showError(
+"Masukkan URL media terlebih dahulu."
+)
+
+urlInput.focus()
+
+return
+}
+
+try{
+
+new URL(url)
+
+}catch{
+
+showError(
+"URL yang dimasukkan tidak valid."
+)
+
+return
+}
+
+searchButton.disabled =
+true
+
+showLoader()
+
+try{
+
+const response =
+await fetch(
+`${API_URL}?url=${encodeURIComponent(url)}`,
+{
+method:"GET",
+headers:{
+"Accept":"application/json"
+}
+}
+)
+
+if(!response.ok){
+
+throw new Error(
+`API mengembalikan HTTP ${response.status}.`
+)
+
+}
+
+const data =
+await response.json()
+
+if(
+!data ||
+data.status !== true ||
+!data.result
+){
+
+throw new Error(
+"Media tidak ditemukan atau URL tidak dapat diproses."
+)
+
+}
+
+renderResult(
+data.result
+)
+
+}catch(err){
+
+console.error(err)
+
+showError(
+err.message ||
+"Terjadi kesalahan saat mengambil media."
+)
+
+}finally{
+
+hideLoader()
+
+searchButton.disabled =
+false
+
+}
+
+}
+
+function renderResult(data){
+
+const medias =
+Array.isArray(data.medias)
+? data.medias
+: []
+
+if(!medias.length){
+
+showError(
+"API tidak mengembalikan media yang dapat didownload."
+)
+
+return
+}
+
+thumbnail.src =
+data.thumbnail ||
+""
+
+thumbnail.onerror =
+()=>{
+thumbnail.style.display =
+"none"
+}
+
+source.textContent =
+String(
+data.source ||
+"MEDIA"
+).toUpperCase()
+
+mediaTitle.textContent =
+data.title ||
+"Untitled Media"
+
+mediaAuthor.textContent =
+data.author
+? `@${data.unique_id || data.author}`
+: "@unknown"
+
+statType.textContent =
+data.type ||
+"MEDIA"
+
+statDuration.textContent =
+formatDuration(
+data.duration
+)
+
+statId.textContent =
+data.id ||
+"-"
+
+mediaList.innerHTML = ""
+
+medias.forEach(
+(media,index)=>{
+mediaList.appendChild(
+createMediaItem(
+media,
+index
+)
+}
+)
+
+error.classList.remove(
+"show"
+)
+
+result.classList.add(
+"show"
+)
+
+result.scrollIntoView({
+behavior:"smooth",
+block:"start"
+})
+
+}
+
+searchButton.addEventListener(
+"click",
+fetchMedia
+)
+
+urlInput.addEventListener(
+"keydown",
+event=>{
+if(event.key === "Enter"){
+fetchMedia()
+}
+}
+)
+</script>
+
+</body>
+  </html>
