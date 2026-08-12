@@ -1,379 +1,61 @@
-const fs = require("fs");
-const path = require("path");
+const { MongoClient } = require("mongodb");
 
-const DATA_DIR = path.join(process.cwd(), "data");
-const DATA_FILE = path.join(DATA_DIR, "activity.json");
+let clientPromise;
 
-const TYPES = [
-  "update",
-  "maintenance",
-  "request",
-  "fix"
-];
+function getClient() {
+  if (!process.env.MONGODB_URI) {
+    throw new Error("MONGODB_URI belum dikonfigurasi.");
+  }
 
-function ensureStorage() {
-  if (!fs.existsSync(DATA_DIR)) {
-    fs.mkdirSync(DATA_DIR, {
-      recursive: true
+  if (!clientPromise) {
+    const client = new MongoClient(process.env.MONGODB_URI);
+    clientPromise = client.connect();
+  }
+
+  return clientPromise;
+}
+
+module.exports = async function (req, res) {
+  if (req.method !== "GET") {
+    return res.status(405).json({
+      success: false,
+      error: "Method tidak diizinkan."
     });
   }
 
-  if (!fs.existsSync(DATA_FILE)) {
-    fs.writeFileSync(
-      DATA_FILE,
-      "[]",
-      "utf8"
-    );
-  }
-}
-
-function readActivities() {
-  ensureStorage();
-
   try {
-    const data = fs.readFileSync(
-      DATA_FILE,
-      "utf8"
+    const client = await getClient();
+
+    const db = client.db(
+      process.env.MONGODB_DB || "reycloudshop"
     );
 
-    const parsed = JSON.parse(data);
+    const activities = await db
+      .collection("activities")
+      .find({})
+      .sort({ createdAt: -1 })
+      .limit(50)
+      .toArray();
 
-    return Array.isArray(parsed)
-      ? parsed
-      : [];
-  } catch {
-    return [];
-  }
-}
-
-function writeActivities(data) {
-  ensureStorage();
-
-  fs.writeFileSync(
-    DATA_FILE,
-    JSON.stringify(
-      data,
-      null,
-      2
-    ),
-    "utf8"
-  );
-}
-
-function createId() {
-  return (
-    Date.now().toString(36) +
-    Math.random()
-      .toString(36)
-      .slice(2, 8)
-  );
-}
-
-function clean(value, max = 500) {
-  return String(value || "")
-    .trim()
-    .slice(0, max);
-}
-
-function normalizeType(value) {
-  const type = String(
-    value || ""
-  )
-    .trim()
-    .toLowerCase();
-
-  return TYPES.includes(type)
-    ? type
-    : null;
-}
-
-function json(res, status, data) {
-  res.statusCode = status;
-  res.setHeader(
-    "Content-Type",
-    "application/json; charset=utf-8"
-  );
-
-  res.end(
-    JSON.stringify(data)
-  );
-}
-
-function readBody(req) {
-  return new Promise(
-    (resolve, reject) => {
-      let body = "";
-
-      req.on(
-        "data",
-        chunk => {
-          body += chunk;
-
-          if (
-            body.length >
-            1024 * 1024
-          ) {
-            reject(
-              new Error(
-                "Request terlalu besar."
-              )
-            );
-
-            req.destroy();
-          }
-        }
-      );
-
-      req.on(
-        "end",
-        () => {
-          try {
-            resolve(
-              body
-                ? JSON.parse(body)
-                : {}
-            );
-          } catch {
-            reject(
-              new Error(
-                "JSON tidak valid."
-              )
-            );
-          }
-        }
-      );
-
-      req.on(
-        "error",
-        reject
-      );
-    }
-  );
-}
-
-module.exports = async function (
-  req,
-  res
-) {
-  try {
-    if (
-      req.method ===
-      "GET"
-    ) {
-      const activities =
-        readActivities()
-          .sort(
-            (a, b) =>
-              new Date(b.createdAt) -
-              new Date(a.createdAt)
-          );
-
-      return json(
-        res,
-        200,
-        {
-          success: true,
-          activities
-        }
-      );
-    }
-
-    if (
-      req.method ===
-      "POST"
-    ) {
-      const body =
-        await readBody(req);
-
-      const type =
-        normalizeType(
-          body.type
-        );
-
-      const title =
-        clean(
-          body.title,
-          120
-        );
-
-      const description =
-        clean(
-          body.description,
-          1000
-        );
-
-      const version =
-        clean(
-          body.version,
-          50
-        );
-
-      if (!type) {
-        return json(
-          res,
-          400,
-          {
-            success: false,
-            error:
-              "Kategori activity tidak valid."
-          }
-        );
-      }
-
-      if (!title) {
-        return json(
-          res,
-          400,
-          {
-            success: false,
-            error:
-              "Judul activity wajib diisi."
-          }
-        );
-      }
-
-      if (!description) {
-        return json(
-          res,
-          400,
-          {
-            success: false,
-            error:
-              "Deskripsi activity wajib diisi."
-          }
-        );
-      }
-
-      const now =
-        new Date();
-
-      const activity = {
-        id: createId(),
-        type,
-        title,
-        description,
-        version:
-          version || null,
-        createdAt:
-          now.toISOString()
-      };
-
-      const activities =
-        readActivities();
-
-      activities.unshift(
-        activity
-      );
-
-      writeActivities(
-        activities
-      );
-
-      return json(
-        res,
-        201,
-        {
-          success: true,
-          message:
-            "Activity berhasil dibuat.",
-          activity
-        }
-      );
-    }
-
-    if (
-      req.method ===
-      "DELETE"
-    ) {
-      const body =
-        await readBody(req);
-
-      const id =
-        clean(
-          body.id,
-          100
-        );
-
-      if (!id) {
-        return json(
-          res,
-          400,
-          {
-            success: false,
-            error:
-              "ID activity wajib diisi."
-          }
-        );
-      }
-
-      const activities =
-        readActivities();
-
-      const filtered =
-        activities.filter(
-          item =>
-            item.id !== id
-        );
-
-      if (
-        filtered.length ===
-        activities.length
-      ) {
-        return json(
-          res,
-          404,
-          {
-            success: false,
-            error:
-              "Activity tidak ditemukan."
-          }
-        );
-      }
-
-      writeActivities(
-        filtered
-      );
-
-      return json(
-        res,
-        200,
-        {
-          success: true,
-          message:
-            "Activity berhasil dihapus."
-        }
-      );
-    }
-
-    res.setHeader(
-      "Allow",
-      "GET, POST, DELETE"
-    );
-
-    return json(
-      res,
-      405,
-      {
-        success: false,
-        error:
-          "Method tidak diizinkan."
-      }
-    );
+    return res.status(200).json({
+      success: true,
+      activities: activities.map(item => ({
+        id: String(item._id),
+        type: item.type || "update",
+        title: item.title || "Update",
+        description: item.description || "",
+        version: item.version || "",
+        date: item.date || "",
+        time: item.time || "",
+        createdAt: item.createdAt || null
+      }))
+    });
   } catch (error) {
-    console.error(
-      "[ACTIVITY API]",
-      error
-    );
+    console.error("[ACTIVITY]", error);
 
-    return json(
-      res,
-      500,
-      {
-        success: false,
-        error:
-          error.message ||
-          "Internal server error."
-      }
-    );
+    return res.status(500).json({
+      success: false,
+      error: "Gagal mengambil activity."
+    });
   }
 };
