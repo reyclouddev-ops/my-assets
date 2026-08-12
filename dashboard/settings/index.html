@@ -461,72 +461,168 @@ const infoRole=document.getElementById("infoRole");
 const message=document.getElementById("message");
 const changeButton=document.getElementById("changeButton");
 
-function getUser(){
-const username=
-localStorage.getItem("reycloud_username")||"ReyCloud";
-
-const role=
-localStorage.getItem("reycloud_role")||"User";
-
-usernameElement.textContent=username;
-roleElement.textContent=role;
-infoUsername.textContent=username;
-infoRole.textContent=role;
-
-avatarElement.textContent=
-username.charAt(0).toUpperCase();
-}
-
-function togglePassword(id,button){
-const input=document.getElementById(id);
-
-if(input.type==="password"){
-input.type="text";
-button.textContent="🙈";
-}else{
-input.type="password";
-button.textContent="👁";
-}
-}
+let currentUser=null;
 
 function showMessage(text,type){
 message.textContent=text;
 message.className=`message show ${type}`;
 }
 
+function setUser(user){
+
+currentUser=user;
+
+const username=user.username||"User";
+const role=user.role||"User";
+
+usernameElement.textContent=username;
+roleElement.textContent=role;
+
+infoUsername.textContent=username;
+infoRole.textContent=role;
+
+avatarElement.textContent=
+username.charAt(0).toUpperCase();
+
+}
+
+async function getUser(){
+
+try{
+
+const response=await fetch(
+"/api/auth/me",
+{
+method:"GET",
+headers:{
+"Accept":"application/json"
+},
+credentials:"include"
+}
+);
+
+const data=await response.json();
+
+if(!response.ok||!data.success){
+throw new Error(
+data.error||"Sesi login tidak ditemukan."
+);
+}
+
+setUser(data.user);
+
+}catch(error){
+
+console.error(error);
+
+showMessage(
+"❌ "+(
+error.message||
+"Gagal mengambil data akun."
+),
+"error"
+);
+
+setTimeout(()=>{
+window.location.href="/";
+},1800);
+
+}
+
+}
+
+function togglePassword(id,button){
+
+const input=document.getElementById(id);
+
+if(input.type==="password"){
+
+input.type="text";
+button.textContent="🙈";
+
+}else{
+
+input.type="password";
+button.textContent="👁";
+
+}
+
+}
+
 async function changePassword(){
 
+if(!currentUser){
+
+showMessage(
+"❌ Data akun belum dimuat.",
+"error"
+);
+
+return;
+
+}
+
 const currentPassword=
-document.getElementById("currentPassword").value;
+document.getElementById(
+"currentPassword"
+).value;
 
 const newPassword=
-document.getElementById("newPassword").value;
+document.getElementById(
+"newPassword"
+).value;
 
 const confirmPassword=
-document.getElementById("confirmPassword").value;
+document.getElementById(
+"confirmPassword"
+).value;
 
-if(!currentPassword||!newPassword||!confirmPassword){
+if(
+!currentPassword||
+!newPassword||
+!confirmPassword
+){
+
 showMessage(
 "Semua password wajib diisi.",
 "error"
 );
+
 return;
+
 }
 
 if(newPassword.length<8){
+
 showMessage(
 "Password baru minimal 8 karakter.",
 "error"
 );
+
 return;
+
 }
 
 if(newPassword!==confirmPassword){
+
 showMessage(
 "Konfirmasi password tidak cocok.",
 "error"
 );
+
 return;
+
+}
+
+if(currentPassword===newPassword){
+
+showMessage(
+"Password baru harus berbeda dari password lama.",
+"error"
+);
+
+return;
+
 }
 
 changeButton.disabled=true;
@@ -542,9 +638,8 @@ headers:{
 "Content-Type":"application/json",
 "Accept":"application/json"
 },
+credentials:"include",
 body:JSON.stringify({
-username:
-localStorage.getItem("reycloud_username"),
 currentPassword,
 newPassword
 })
@@ -554,14 +649,25 @@ newPassword
 const data=await response.json();
 
 if(!response.ok||!data.success){
+
 throw new Error(
-data.error||"Gagal mengubah password."
+data.error||
+"Gagal mengubah password."
 );
+
 }
 
-document.getElementById("currentPassword").value="";
-document.getElementById("newPassword").value="";
-document.getElementById("confirmPassword").value="";
+document.getElementById(
+"currentPassword"
+).value="";
+
+document.getElementById(
+"newPassword"
+).value="";
+
+document.getElementById(
+"confirmPassword"
+).value="";
 
 showMessage(
 "✅ Password berhasil diperbarui.",
@@ -570,8 +676,13 @@ showMessage(
 
 }catch(error){
 
+console.error(error);
+
 showMessage(
-"❌ "+(error.message||"Terjadi kesalahan."),
+"❌ "+(
+error.message||
+"Terjadi kesalahan."
+),
 "error"
 );
 
