@@ -4,6 +4,7 @@
 "private": true,
 "dependencies": {
 "axios": "^1.11.0",
-"adm-zip": "^0.5.16"
+"adm-zip": "^0.5.16", 
+"mongodb": "^6.18.0"
 }
 }
