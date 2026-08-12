@@ -56,22 +56,6 @@ module.exports = async function(req, res) {
       })
     }
 
-    const adminUsername = String(
-      process.env.ADMIN_USERNAME || ""
-    )
-      .trim()
-      .toLowerCase()
-
-    if (
-      adminUsername &&
-      username === adminUsername
-    ) {
-      return send(res, 409, {
-        success: false,
-        error: "Username tidak tersedia."
-      })
-    }
-
     const existingUser = await User.findOne({
       username
     })
@@ -98,7 +82,7 @@ module.exports = async function(req, res) {
       {
         userId: user._id.toString(),
         username: user.username,
-        role: "user"
+        role: user.role
       },
       process.env.JWT_SECRET,
       {
@@ -116,10 +100,7 @@ module.exports = async function(req, res) {
       }
     })
   } catch (error) {
-    console.error(
-      "[REGISTER]",
-      error
-    )
+    console.error("[REGISTER]", error)
 
     if (error.code === 11000) {
       return send(res, 409, {
