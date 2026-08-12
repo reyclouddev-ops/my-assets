@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Admin Control - ReyCloudShop</title>
+<title>ReyCloudShop - Admin</title>
 
 <style>
 *{
@@ -18,20 +18,20 @@ box-sizing:border-box;
 --card:#0c1119;
 --card2:#101722;
 --line:rgba(255,255,255,.08);
---text:#f5f7fb;
 --muted:#747d8d;
+--text:#f5f7fb;
 --cyan:#00d9ff;
 --purple:#9d5cff;
 --green:#22c55e;
---orange:#ff9d42;
---red:#ff426d
+--red:#ff426d;
+--yellow:#f5c542
 }
 
 body{
 min-height:100vh;
 background:
-radial-gradient(circle at 5% 0%,rgba(0,217,255,.12),transparent 30%),
-radial-gradient(circle at 95% 100%,rgba(157,92,255,.12),transparent 30%),
+radial-gradient(circle at 10% 5%,rgba(0,217,255,.1),transparent 28%),
+radial-gradient(circle at 90% 90%,rgba(157,92,255,.1),transparent 30%),
 var(--bg);
 font-family:Arial,sans-serif;
 color:var(--text)
@@ -39,9 +39,9 @@ color:var(--text)
 
 .app{
 width:100%;
-max-width:900px;
+max-width:850px;
 margin:auto;
-padding:24px 18px 50px
+padding:25px 18px 45px
 }
 
 .top{
@@ -63,154 +63,147 @@ margin-top:7px
 }
 
 .back{
-width:50px;
-height:50px;
+width:48px;
+height:48px;
 border-radius:16px;
 border:1px solid var(--line);
 background:rgba(255,255,255,.04);
 color:white;
-font-size:23px;
+font-size:22px;
 cursor:pointer
 }
 
-.info{
-padding:18px;
-border:1px solid rgba(0,217,255,.14);
-border-radius:22px;
-background:rgba(0,217,255,.035);
-margin-bottom:20px
-}
-
-.infoTop{
+.status{
 display:flex;
 align-items:center;
-gap:12px
-}
-
-.adminIcon{
-width:45px;
-height:45px;
-display:flex;
-align-items:center;
-justify-content:center;
-border-radius:14px;
-background:rgba(0,217,255,.1);
-font-size:22px
-}
-
-.infoTitle{
-font-weight:800;
-font-size:14px
-}
-
-.infoText{
+gap:8px;
 font-size:11px;
-color:var(--muted);
-margin-top:4px
+color:#7f8999;
+margin-bottom:18px
 }
 
-.clock{
-margin-top:15px;
-font-size:11px;
-color:#626b7b
+.dot{
+width:8px;
+height:8px;
+border-radius:50%;
+background:var(--green);
+box-shadow:0 0 12px rgba(34,197,94,.6)
 }
 
 .panel{
-padding:22px;
 border:1px solid var(--line);
-border-radius:25px;
 background:rgba(12,17,25,.9);
-box-shadow:0 25px 70px rgba(0,0,0,.3);
-margin-bottom:20px
+border-radius:27px;
+padding:22px;
+box-shadow:0 25px 80px rgba(0,0,0,.4);
+margin-bottom:18px
 }
 
 .panelHead{
 display:flex;
-align-items:center;
 justify-content:space-between;
+align-items:center;
+gap:15px;
 margin-bottom:20px
 }
 
 .panelTitle{
-font-size:17px;
+font-size:18px;
 font-weight:800
 }
 
 .panelSub{
-font-size:10px;
+font-size:11px;
 color:var(--muted);
 margin-top:5px
 }
 
 .refresh{
-width:40px;
-height:40px;
-border-radius:12px;
 border:1px solid var(--line);
 background:rgba(255,255,255,.04);
 color:white;
+padding:10px 13px;
+border-radius:12px;
 cursor:pointer
+}
+
+.grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:15px
+}
+
+.field{
+margin-bottom:16px
+}
+
+.field.full{
+grid-column:1/-1
 }
 
 .label{
 display:block;
 font-size:10px;
-letter-spacing:1.5px;
-color:#737d8d;
-margin:17px 0 8px
+letter-spacing:1px;
+color:#858e9e;
+margin-bottom:8px;
+text-transform:uppercase
 }
 
 .input,
-.textarea,
-.select{
+.select,
+.textarea{
 width:100%;
-border:1px solid rgba(255,255,255,.09);
+border:1px solid rgba(255,255,255,.1);
 border-radius:15px;
 background:rgba(255,255,255,.035);
-color:white;
 outline:none;
-font-family:Arial,sans-serif;
-font-size:13px;
+padding:13px 15px;
+color:white;
+font-size:14px;
 transition:.2s
 }
 
 .input,
 .select{
-height:53px;
-padding:0 15px
+height:52px
 }
 
 .textarea{
-min-height:120px;
-padding:15px;
-resize:vertical
+min-height:125px;
+resize:vertical;
+font-family:Arial,sans-serif;
+line-height:1.5
 }
 
-.input:focus,
-.textarea:focus,
-.select:focus{
-border-color:var(--cyan);
-box-shadow:0 0 0 3px rgba(0,217,255,.07)
+.select{
+appearance:none
 }
 
 .select option{
-background:#101722;
+background:#0c1119;
 color:white
+}
+
+.input:focus,
+.select:focus,
+.textarea:focus{
+border-color:var(--cyan);
+box-shadow:0 0 0 3px rgba(0,217,255,.07)
 }
 
 .publish{
 width:100%;
 height:55px;
-margin-top:20px;
 border:0;
 border-radius:16px;
 background:linear-gradient(135deg,#00d9ff,#6575ff);
 color:white;
 font-weight:800;
-font-size:14px;
+font-size:15px;
 cursor:pointer;
-box-shadow:0 12px 30px rgba(0,217,255,.14);
-transition:.2s
+box-shadow:0 12px 35px rgba(0,217,255,.15);
+margin-top:3px
 }
 
 .publish:active{
@@ -218,17 +211,17 @@ transform:scale(.98)
 }
 
 .publish:disabled{
-opacity:.45;
+opacity:.5;
 cursor:not-allowed
 }
 
 .message{
 display:none;
-margin-top:15px;
 padding:13px 15px;
 border-radius:14px;
 font-size:12px;
-line-height:1.5
+line-height:1.5;
+margin-bottom:16px
 }
 
 .message.show{
@@ -237,159 +230,185 @@ display:block
 
 .message.success{
 border:1px solid rgba(34,197,94,.2);
-background:rgba(34,197,94,.05);
+background:rgba(34,197,94,.06);
 color:#6ee7a0
 }
 
 .message.error{
 border:1px solid rgba(255,66,109,.2);
-background:rgba(255,66,109,.05);
+background:rgba(255,66,109,.06);
 color:#ff7895
 }
 
 .activity{
 display:flex;
-align-items:flex-start;
-gap:13px;
-padding:17px 0;
-border-bottom:1px solid rgba(255,255,255,.055)
+flex-direction:column;
+gap:12px
 }
 
-.activity:last-child{
-border-bottom:0
+.item{
+padding:17px;
+border:1px solid rgba(255,255,255,.07);
+background:rgba(255,255,255,.025);
+border-radius:19px
 }
 
-.activityIcon{
-width:42px;
-height:42px;
-flex-shrink:0;
+.itemTop{
 display:flex;
-align-items:center;
-justify-content:center;
-border-radius:13px;
-background:rgba(0,217,255,.08);
-font-size:18px
-}
-
-.activityContent{
-flex:1;
-min-width:0
-}
-
-.activityTop{
-display:flex;
-align-items:center;
 justify-content:space-between;
-gap:10px
-}
-
-.badge{
-font-size:8px;
-font-weight:800;
-letter-spacing:1px;
-padding:5px 8px;
-border-radius:7px;
-background:rgba(0,217,255,.1);
-color:var(--cyan)
-}
-
-.badge.maintenance{
-background:rgba(255,157,66,.1);
-color:var(--orange)
-}
-
-.badge.request{
-background:rgba(157,92,255,.1);
-color:var(--purple)
-}
-
-.badge.fix{
-background:rgba(34,197,94,.1);
-color:var(--green)
-}
-
-.activityDate{
-font-size:9px;
-color:#596170
-}
-
-.activityTitle{
-font-size:14px;
-font-weight:800;
-margin-top:9px
-}
-
-.activityDescription{
-font-size:11px;
-line-height:1.6;
-color:#7e8796;
-margin-top:5px
-}
-
-.activityMeta{
-font-size:9px;
-color:#596170;
-margin-top:9px
-}
-
-.delete{
-width:38px;
-height:38px;
-flex-shrink:0;
-border:1px solid rgba(255,66,109,.12);
-border-radius:11px;
-background:rgba(255,66,109,.06);
-color:#ff6684;
-cursor:pointer
-}
-
-.empty{
-padding:35px 10px;
-text-align:center;
-color:var(--muted);
-font-size:12px
-}
-
-.emptyIcon{
-font-size:30px;
+align-items:center;
+gap:10px;
 margin-bottom:10px
 }
 
-.loading{
-padding:30px;
+.badge{
+font-size:9px;
+letter-spacing:1px;
+padding:6px 9px;
+border-radius:8px;
+background:rgba(0,217,255,.1);
+color:var(--cyan);
+text-transform:uppercase
+}
+
+.badge.maintenance{
+color:var(--yellow);
+background:rgba(245,197,66,.1)
+}
+
+.badge.request{
+color:var(--purple);
+background:rgba(157,92,255,.1)
+}
+
+.date{
+font-size:10px;
+color:#697384
+}
+
+.itemTitle{
+font-size:15px;
+font-weight:800;
+margin-bottom:6px
+}
+
+.itemDesc{
+font-size:12px;
+color:#929baa;
+line-height:1.55
+}
+
+.itemVersion{
+display:inline-block;
+margin-top:10px;
+font-size:9px;
+color:#9d5cff;
+letter-spacing:1px
+}
+
+.empty{
 text-align:center;
-color:var(--muted);
-font-size:11px
+padding:35px;
+font-size:12px;
+color:#697384;
+border:1px dashed rgba(255,255,255,.08);
+border-radius:18px
+}
+
+.login{
+position:fixed;
+inset:0;
+z-index:20;
+background:
+radial-gradient(circle at 50% 10%,rgba(0,217,255,.1),transparent 30%),
+#05070b;
+display:flex;
+align-items:center;
+justify-content:center;
+padding:20px
+}
+
+.loginBox{
+width:100%;
+max-width:400px;
+border:1px solid var(--line);
+background:rgba(12,17,25,.95);
+border-radius:28px;
+padding:25px;
+box-shadow:0 30px 100px rgba(0,0,0,.55)
+}
+
+.loginBrand{
+text-align:center;
+margin-bottom:25px
+}
+
+.loginBrand small{
+font-size:10px;
+letter-spacing:3px;
+color:#687181
+}
+
+.loginBrand h2{
+font-size:25px;
+margin-top:8px
+}
+
+.loginField{
+margin-bottom:14px
+}
+
+.loginBtn{
+width:100%;
+height:53px;
+border:0;
+border-radius:15px;
+background:linear-gradient(135deg,#00d9ff,#6575ff);
+color:white;
+font-weight:800;
+cursor:pointer;
+margin-top:4px
+}
+
+.loginError{
+display:none;
+font-size:12px;
+color:#ff7895;
+margin-bottom:13px;
+line-height:1.5
+}
+
+.loginError.show{
+display:block
+}
+
+.hidden{
+display:none!important
 }
 
 .footer{
 text-align:center;
+margin-top:20px;
 font-size:9px;
 letter-spacing:2px;
-color:#343b47;
-margin-top:25px
+color:#343b47
 }
 
-@media(max-width:500px){
-.app{
-padding:20px 14px 40px
+@media(max-width:600px){
+.grid{
+grid-template-columns:1fr
+}
+
+.field.full{
+grid-column:auto
+}
+
+.panel{
+padding:18px
 }
 
 .brand h1{
 font-size:27px
-}
-
-.panel{
-padding:18px;
-border-radius:22px
-}
-
-.activity{
-gap:10px
-}
-
-.activityDate{
-display:none
 }
 }
 </style>
@@ -397,43 +416,63 @@ display:none
 
 <body>
 
-<div class="app">
+<div class="login" id="loginScreen">
+
+<div class="loginBox">
+
+<div class="loginBrand">
+<small>REYCLOUDSHOP</small>
+<h2>Admin Panel</h2>
+</div>
+
+<div class="loginError" id="loginError"></div>
+
+<div class="loginField">
+<label class="label">Username</label>
+<input
+class="input"
+id="adminUser"
+type="text"
+placeholder="Username"
+autocomplete="username"
+>
+</div>
+
+<div class="loginField">
+<label class="label">Password</label>
+<input
+class="input"
+id="adminPass"
+type="password"
+placeholder="Password"
+autocomplete="current-password"
+>
+</div>
+
+<button class="loginBtn" id="loginBtn">
+🔐 Masuk Admin
+</button>
+
+</div>
+
+</div>
+
+<div class="app hidden" id="adminApp">
 
 <div class="top">
 
 <div class="brand">
-<small>REYCLOUDSHOP</small>
-<h1>Admin Control</h1>
+<small>REYCLOUDSHOP ADMIN</small>
+<h1>Control Panel</h1>
 </div>
 
 <button class="back" onclick="history.back()">←</button>
 
 </div>
 
-<div class="info">
-
-<div class="infoTop">
-
-<div class="adminIcon">
-👑
-</div>
-
-<div>
-<div class="infoTitle">
-Activity Control
-</div>
-
-<div class="infoText">
-Kelola pembaruan yang tampil kepada user.
-</div>
-</div>
-
-</div>
-
-<div class="clock" id="clock">
-Memuat waktu...
-</div>
-
+<div class="status">
+<div class="dot"></div>
+Admin Control Online
 </div>
 
 <div class="panel">
@@ -442,19 +481,22 @@ Memuat waktu...
 
 <div>
 <div class="panelTitle">
-🚀 Publish Activity
+Publish Activity
 </div>
 
 <div class="panelSub">
-Buat pembaruan baru untuk user.
+Update yang dibuat di sini akan tampil di halaman Activity user.
 </div>
 </div>
 
 </div>
 
-<label class="label">
-CATEGORY
-</label>
+<div class="message" id="message"></div>
+
+<div class="grid">
+
+<div class="field">
+<label class="label">Kategori</label>
 
 <select class="select" id="type">
 
@@ -462,66 +504,76 @@ CATEGORY
 Update
 </option>
 
-<option value="maintenance">
-Maintenance
-</option>
-
 <option value="request">
 Request
 </option>
 
-<option value="fix">
-Fix
+<option value="maintenance">
+Maintenance
 </option>
 
 </select>
+</div>
 
-<label class="label">
-TITLE
-</label>
-
-<input
-class="input"
-id="title"
-type="text"
-maxlength="120"
-placeholder="Contoh: Dashboard UI diperbarui"
->
-
-<label class="label">
-DESCRIPTION
-</label>
-
-<textarea
-class="textarea"
-id="description"
-maxlength="1000"
-placeholder="Tulis informasi pembaruan..."
-></textarea>
-
-<label class="label">
-VERSION
-</label>
+<div class="field">
+<label class="label">Version</label>
 
 <input
 class="input"
 id="version"
 type="text"
-maxlength="50"
-placeholder="Contoh: v2.1.0"
+placeholder="v1.2.0"
 >
+</div>
 
-<button
-class="publish"
-id="publish"
+<div class="field full">
+<label class="label">Judul</label>
+
+<input
+class="input"
+id="title"
+type="text"
+placeholder="Contoh: Dashboard UI diperbarui"
+maxlength="150"
 >
-🚀 Publish Update
+</div>
+
+<div class="field full">
+<label class="label">Deskripsi</label>
+
+<textarea
+class="textarea"
+id="description"
+placeholder="Tulis informasi update untuk user..."
+maxlength="1000"
+></textarea>
+</div>
+
+<div class="field">
+<label class="label">Tanggal</label>
+
+<input
+class="input"
+id="date"
+type="date"
+>
+</div>
+
+<div class="field">
+<label class="label">Jam</label>
+
+<input
+class="input"
+id="time"
+type="time"
+>
+</div>
+
+</div>
+
+<button class="publish" id="publishBtn">
+🚀 Publish Activity
 </button>
-
-<div
-class="message"
-id="message"
-></div>
 
 </div>
 
@@ -531,27 +583,24 @@ id="message"
 
 <div>
 <div class="panelTitle">
-📋 Activity History
+Activity Terbaru
 </div>
 
 <div class="panelSub">
-Update yang sudah dipublikasikan.
+Daftar update yang sudah dipublish.
 </div>
 </div>
 
-<button
-class="refresh"
-id="refresh"
->
+<button class="refresh" id="refreshBtn">
 ↻
 </button>
 
 </div>
 
-<div id="activityList">
+<div class="activity" id="activityList">
 
-<div class="loading">
-⏳ Memuat activity...
+<div class="empty">
+Memuat activity...
 </div>
 
 </div>
@@ -565,280 +614,189 @@ REYCLOUDSHOP ADMIN CONTROL
 </div>
 
 <script>
-const API="/api/activity";
+const loginScreen=document.getElementById("loginScreen");
+const adminApp=document.getElementById("adminApp");
 
-const typeInput=
-document.getElementById("type");
+const adminUser=document.getElementById("adminUser");
+const adminPass=document.getElementById("adminPass");
+const loginBtn=document.getElementById("loginBtn");
+const loginError=document.getElementById("loginError");
 
-const titleInput=
-document.getElementById("title");
+const typeInput=document.getElementById("type");
+const versionInput=document.getElementById("version");
+const titleInput=document.getElementById("title");
+const descriptionInput=document.getElementById("description");
+const dateInput=document.getElementById("date");
+const timeInput=document.getElementById("time");
 
-const descriptionInput=
-document.getElementById("description");
+const publishBtn=document.getElementById("publishBtn");
+const refreshBtn=document.getElementById("refreshBtn");
+const activityList=document.getElementById("activityList");
+const message=document.getElementById("message");
 
-const versionInput=
-document.getElementById("version");
+let credentials=null;
 
-const publishButton=
-document.getElementById("publish");
-
-const refreshButton=
-document.getElementById("refresh");
-
-const message=
-document.getElementById("message");
-
-const activityList=
-document.getElementById("activityList");
-
-const clock=
-document.getElementById("clock");
-
-let activities=[];
-
-function updateClock(){
-
+function today(){
 const now=new Date();
 
-clock.textContent=
-now.toLocaleDateString(
-"id-ID",
-{
-weekday:"long",
-day:"2-digit",
-month:"long",
-year:"numeric"
-}
-)+
-" • "+
-now.toLocaleTimeString(
-"id-ID",
-{
-hour:"2-digit",
-minute:"2-digit",
-second:"2-digit",
-hour12:false
-}
-);
+const year=now.getFullYear();
+const month=String(now.getMonth()+1).padStart(2,"0");
+const day=String(now.getDate()).padStart(2,"0");
 
+return`${year}-${month}-${day}`;
 }
+
+function currentTime(){
+const now=new Date();
+
+return`${String(now.getHours()).padStart(2,"0")}:${String(now.getMinutes()).padStart(2,"0")}`;
+}
+
+dateInput.value=today();
+timeInput.value=currentTime();
 
 function escapeHTML(value){
-
 return String(value||"")
 .replace(/&/g,"&amp;")
 .replace(/</g,"&lt;")
 .replace(/>/g,"&gt;")
 .replace(/"/g,"&quot;")
 .replace(/'/g,"&#039;");
-
 }
 
-function formatDate(value){
-
-const date=new Date(value);
-
-return date.toLocaleDateString(
-"id-ID",
-{
-day:"2-digit",
-month:"short",
-year:"numeric"
-}
-);
-
+function showMessage(text,type){
+message.textContent=text;
+message.className=`message show ${type}`;
 }
 
-function getIcon(type){
+function hideMessage(){
+message.className="message";
+message.textContent="";
+}
 
-const icons={
-update:"🚀",
-maintenance:"🛠️",
-request:"💡",
-fix:"🔧"
+function login(){
+
+const user=adminUser.value.trim();
+const pass=adminPass.value;
+
+if(!user||!pass){
+
+loginError.textContent=
+"Username dan password wajib diisi.";
+
+loginError.classList.add("show");
+
+return;
+}
+
+credentials={
+user,
+pass
 };
 
-return icons[type]||"📌";
+loginError.classList.remove("show");
 
+loginScreen.classList.add("hidden");
+adminApp.classList.remove("hidden");
+
+loadActivity();
 }
 
-function showMessage(
-text,
-type
-){
-
-message.textContent=text;
-
-message.className=
-`message show ${type}`;
-
-setTimeout(()=>{
-message.classList.remove("show");
-},4000);
-
-}
-
-function renderActivities(){
-
-if(!activities.length){
+async function loadActivity(){
 
 activityList.innerHTML=`
 <div class="empty">
-<div class="emptyIcon">📭</div>
-Belum ada activity.
-</div>
-`;
-
-return;
-
-}
-
-activityList.innerHTML="";
-
-activities.forEach(item=>{
-
-const element=
-document.createElement("div");
-
-element.className="activity";
-
-element.innerHTML=`
-
-<div class="activityIcon">
-${getIcon(item.type)}
-</div>
-
-<div class="activityContent">
-
-<div class="activityTop">
-
-<span class="badge ${escapeHTML(item.type)}">
-${escapeHTML(item.type).toUpperCase()}
-</span>
-
-<span class="activityDate">
-${formatDate(item.createdAt)}
-</span>
-
-</div>
-
-<div class="activityTitle">
-${escapeHTML(item.title)}
-</div>
-
-<div class="activityDescription">
-${escapeHTML(item.description)}
-</div>
-
-<div class="activityMeta">
-🕐 ${new Date(item.createdAt).toLocaleTimeString(
-"id-ID",
-{
-hour:"2-digit",
-minute:"2-digit"
-}
-)}
-${item.version
-?` • ${escapeHTML(item.version)}`
-:""}
-</div>
-
-</div>
-
-<button
-class="delete"
-data-id="${escapeHTML(item.id)}"
->
-×
-</button>
-
-`;
-
-activityList.appendChild(element);
-
-});
-
-document
-.querySelectorAll(".delete")
-.forEach(button=>{
-
-button.addEventListener(
-"click",
-()=>deleteActivity(
-button.dataset.id
-)
-);
-
-});
-
-}
-
-async function loadActivities(){
-
-activityList.innerHTML=`
-<div class="loading">
-⏳ Memuat activity...
+Memuat activity...
 </div>
 `;
 
 try{
 
 const response=
-await fetch(API,{
-method:"GET",
-headers:{
-Accept:"application/json"
-}
+await fetch("/api/activity",{
+cache:"no-store"
 });
 
 const data=
 await response.json();
 
-if(
-!response.ok||
-!data.success
-){
-
-throw new Error(
-data.error||
-"Gagal mengambil activity."
-);
-
+if(!response.ok){
+throw new Error(data.error||"Gagal mengambil activity.");
 }
 
-activities=
-Array.isArray(data.activities)
-?data.activities
-:[];
+if(!data.activities?.length){
 
-renderActivities();
+activityList.innerHTML=`
+<div class="empty">
+Belum ada activity.
+</div>
+`;
+
+return;
+}
+
+activityList.innerHTML=
+data.activities.map(item=>{
+
+const category=
+String(item.type||"update").toLowerCase();
+
+return`
+
+<div class="item">
+
+<div class="itemTop">
+
+<div class="badge ${category}">
+${escapeHTML(category)}
+</div>
+
+<div class="date">
+${escapeHTML(item.date||"")}
+${item.time?" · "+escapeHTML(item.time):""}
+</div>
+
+</div>
+
+<div class="itemTitle">
+${escapeHTML(item.title)}
+</div>
+
+<div class="itemDesc">
+${escapeHTML(item.description)}
+</div>
+
+${item.version?`
+<div class="itemVersion">
+VERSION ${escapeHTML(item.version)}
+</div>
+`:""}
+
+</div>
+
+`;
+
+}).join("");
 
 }catch(error){
 
 activityList.innerHTML=`
 <div class="empty">
-<div class="emptyIcon">⚠️</div>
-${escapeHTML(error.message)}
+Gagal memuat activity.
 </div>
 `;
 
+console.error(error);
 }
-
 }
 
 async function publishActivity(){
 
-const type=
-typeInput.value;
+hideMessage();
 
-const title=
-titleInput.value.trim();
-
-const description=
-descriptionInput.value.trim();
-
-const version=
-versionInput.value.trim();
+const title=titleInput.value.trim();
+const description=descriptionInput.value.trim();
+const version=versionInput.value.trim();
 
 if(!title){
 
@@ -847,10 +805,7 @@ showMessage(
 "error"
 );
 
-titleInput.focus();
-
 return;
-
 }
 
 if(!description){
@@ -860,174 +815,119 @@ showMessage(
 "error"
 );
 
-descriptionInput.focus();
-
 return;
-
 }
 
-publishButton.disabled=true;
+if(!credentials){
 
-publishButton.textContent=
-"⏳ Publishing...";
+showMessage(
+"Session admin tidak ditemukan.",
+"error"
+);
+
+return;
+}
+
+publishBtn.disabled=true;
+publishBtn.textContent="⏳ Publishing...";
 
 try{
 
 const response=
-await fetch(API,{
-
+await fetch("/api/admin/activity",{
 method:"POST",
-
 headers:{
-"Content-Type":
-"application/json",
-Accept:
-"application/json"
+"Content-Type":"application/json",
+"X-Admin-User":credentials.user,
+"X-Admin-Pass":credentials.pass
 },
-
 body:JSON.stringify({
-type,
+type:typeInput.value,
 title,
 description,
-version
+version,
+date:dateInput.value,
+time:timeInput.value
 })
-
 });
 
 const data=
 await response.json();
 
-if(
-!response.ok||
-!data.success
-){
+if(!response.ok){
 
 throw new Error(
 data.error||
-"Gagal membuat activity."
+"Activity gagal dipublish."
 );
 
 }
+
+showMessage(
+"✅ Activity berhasil dipublish.",
+"success"
+);
 
 titleInput.value="";
 descriptionInput.value="";
 versionInput.value="";
 
-showMessage(
-"✅ Activity berhasil dipublikasikan.",
-"success"
-);
+dateInput.value=today();
+timeInput.value=currentTime();
 
-await loadActivities();
+await loadActivity();
 
 }catch(error){
 
 showMessage(
-"❌ "+
-(error.message||
-"Gagal publish activity."),
+"❌ "+(
+error.message||
+"Activity gagal dipublish."
+),
 "error"
 );
 
 }finally{
 
-publishButton.disabled=false;
-
-publishButton.textContent=
-"🚀 Publish Update";
+publishBtn.disabled=false;
+publishBtn.textContent="🚀 Publish Activity";
 
 }
 
 }
 
-async function deleteActivity(id){
-
-if(!id){
-return;
-}
-
-const confirmed=
-window.confirm(
-"Yakin ingin menghapus activity ini?"
+loginBtn.addEventListener(
+"click",
+login
 );
 
-if(!confirmed){
-return;
+adminPass.addEventListener(
+"keydown",
+event=>{
+if(event.key==="Enter"){
+login();
 }
-
-try{
-
-const response=
-await fetch(API,{
-
-method:"DELETE",
-
-headers:{
-"Content-Type":
-"application/json",
-Accept:
-"application/json"
-},
-
-body:JSON.stringify({
-id
-})
-
-});
-
-const data=
-await response.json();
-
-if(
-!response.ok||
-!data.success
-){
-
-throw new Error(
-data.error||
-"Gagal menghapus activity."
+}
 );
 
+adminUser.addEventListener(
+"keydown",
+event=>{
+if(event.key==="Enter"){
+login();
 }
-
-showMessage(
-"🗑️ Activity berhasil dihapus.",
-"success"
+}
 );
 
-await loadActivities();
-
-}catch(error){
-
-showMessage(
-"❌ "+
-(error.message||
-"Gagal menghapus activity."),
-"error"
-);
-
-}
-
-}
-
-publishButton.addEventListener(
+publishBtn.addEventListener(
 "click",
 publishActivity
 );
 
-refreshButton.addEventListener(
+refreshBtn.addEventListener(
 "click",
-loadActivities
+loadActivity
 );
-
-updateClock();
-
-setInterval(
-updateClock,
-1000
-);
-
-loadActivities();
 </script>
 
 </body>
