@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>ReyCloudShop - Admin</title>
+<title>ReyCloudShop — Admin Control</title>
 
 <style>
 *{
@@ -16,7 +16,6 @@ box-sizing:border-box;
 :root{
 --bg:#05070b;
 --card:#0c1119;
---card2:#101722;
 --line:rgba(255,255,255,.08);
 --muted:#747d8d;
 --text:#f5f7fb;
@@ -29,60 +28,142 @@ box-sizing:border-box;
 
 body{
 min-height:100vh;
+font-family:Arial,sans-serif;
+color:var(--text);
 background:
 radial-gradient(circle at 10% 5%,rgba(0,217,255,.1),transparent 28%),
-radial-gradient(circle at 90% 90%,rgba(157,92,255,.1),transparent 30%),
-var(--bg);
-font-family:Arial,sans-serif;
-color:var(--text)
+radial-gradient(circle at 90% 90%,rgba(157,92,255,.12),transparent 30%),
+var(--bg)
+}
+
+button,
+input,
+select,
+textarea{
+font-family:inherit
+}
+
+button{
+-webkit-tap-highlight-color:transparent
 }
 
 .app{
 width:100%;
-max-width:850px;
+max-width:900px;
 margin:auto;
-padding:25px 18px 45px
+padding:20px 18px 45px
 }
 
 .top{
 display:flex;
 align-items:center;
 justify-content:space-between;
-margin-bottom:25px
+gap:15px;
+margin-bottom:18px
 }
 
 .brand small{
-font-size:10px;
+font-size:9px;
 letter-spacing:3px;
 color:#687181
 }
 
 .brand h1{
-font-size:30px;
+font-size:28px;
 margin-top:7px
 }
 
-.back{
-width:48px;
-height:48px;
-border-radius:16px;
+.actions{
+display:flex;
+gap:8px
+}
+
+.topBtn{
+width:46px;
+height:46px;
 border:1px solid var(--line);
-background:rgba(255,255,255,.04);
-color:white;
-font-size:22px;
+border-radius:15px;
+background:rgba(255,255,255,.045);
+color:#fff;
+font-size:18px;
 cursor:pointer
+}
+
+.topBtn:active{
+transform:scale(.94)
+}
+
+.adminBar{
+display:flex;
+align-items:center;
+gap:12px;
+padding:15px;
+border:1px solid var(--line);
+border-radius:20px;
+background:rgba(255,255,255,.025);
+margin-bottom:18px
+}
+
+.avatar{
+width:43px;
+height:43px;
+display:flex;
+align-items:center;
+justify-content:center;
+border-radius:14px;
+background:linear-gradient(135deg,var(--cyan),var(--purple));
+font-weight:800
+}
+
+.adminData{
+flex:1;
+min-width:0
+}
+
+.adminName{
+font-size:13px;
+font-weight:800;
+word-break:break-word
+}
+
+.adminRole{
+display:inline-block;
+margin-top:4px;
+padding:4px 8px;
+border-radius:7px;
+font-size:8px;
+letter-spacing:1px;
+color:var(--cyan);
+background:rgba(0,217,255,.08);
+border:1px solid rgba(0,217,255,.12)
+}
+
+.clock{
+text-align:right
+}
+
+.clock strong{
+display:block;
+font-size:12px
+}
+
+.clock span{
+display:block;
+margin-top:3px;
+font-size:9px;
+color:#697384
 }
 
 .status{
 display:flex;
 align-items:center;
 gap:8px;
-font-size:11px;
+font-size:10px;
 color:#7f8999;
 margin-bottom:18px
 }
 
-.dot{
+.statusDot{
 width:8px;
 height:8px;
 border-radius:50%;
@@ -115,13 +196,14 @@ font-weight:800
 .panelSub{
 font-size:11px;
 color:var(--muted);
-margin-top:5px
+margin-top:5px;
+line-height:1.5
 }
 
 .refresh{
 border:1px solid var(--line);
 background:rgba(255,255,255,.04);
-color:white;
+color:#fff;
 padding:10px 13px;
 border-radius:12px;
 cursor:pointer
@@ -137,7 +219,7 @@ gap:15px
 margin-bottom:16px
 }
 
-.field.full{
+.full{
 grid-column:1/-1
 }
 
@@ -159,7 +241,7 @@ border-radius:15px;
 background:rgba(255,255,255,.035);
 outline:none;
 padding:13px 15px;
-color:white;
+color:#fff;
 font-size:14px;
 transition:.2s
 }
@@ -172,7 +254,6 @@ height:52px
 .textarea{
 min-height:125px;
 resize:vertical;
-font-family:Arial,sans-serif;
 line-height:1.5
 }
 
@@ -182,7 +263,7 @@ appearance:none
 
 .select option{
 background:#0c1119;
-color:white
+color:#fff
 }
 
 .input:focus,
@@ -197,13 +278,12 @@ width:100%;
 height:55px;
 border:0;
 border-radius:16px;
-background:linear-gradient(135deg,#00d9ff,#6575ff);
-color:white;
+background:linear-gradient(135deg,var(--cyan),#6575ff);
+color:#fff;
 font-weight:800;
-font-size:15px;
+font-size:14px;
 cursor:pointer;
-box-shadow:0 12px 35px rgba(0,217,255,.15);
-margin-top:3px
+box-shadow:0 12px 35px rgba(0,217,255,.15)
 }
 
 .publish:active{
@@ -281,9 +361,15 @@ color:var(--purple);
 background:rgba(157,92,255,.1)
 }
 
+.badge.update{
+color:var(--cyan);
+background:rgba(0,217,255,.1)
+}
+
 .date{
 font-size:10px;
-color:#697384
+color:#697384;
+text-align:right
 }
 
 .itemTitle{
@@ -302,7 +388,7 @@ line-height:1.55
 display:inline-block;
 margin-top:10px;
 font-size:9px;
-color:#9d5cff;
+color:var(--purple);
 letter-spacing:1px
 }
 
@@ -315,77 +401,6 @@ border:1px dashed rgba(255,255,255,.08);
 border-radius:18px
 }
 
-.login{
-position:fixed;
-inset:0;
-z-index:20;
-background:
-radial-gradient(circle at 50% 10%,rgba(0,217,255,.1),transparent 30%),
-#05070b;
-display:flex;
-align-items:center;
-justify-content:center;
-padding:20px
-}
-
-.loginBox{
-width:100%;
-max-width:400px;
-border:1px solid var(--line);
-background:rgba(12,17,25,.95);
-border-radius:28px;
-padding:25px;
-box-shadow:0 30px 100px rgba(0,0,0,.55)
-}
-
-.loginBrand{
-text-align:center;
-margin-bottom:25px
-}
-
-.loginBrand small{
-font-size:10px;
-letter-spacing:3px;
-color:#687181
-}
-
-.loginBrand h2{
-font-size:25px;
-margin-top:8px
-}
-
-.loginField{
-margin-bottom:14px
-}
-
-.loginBtn{
-width:100%;
-height:53px;
-border:0;
-border-radius:15px;
-background:linear-gradient(135deg,#00d9ff,#6575ff);
-color:white;
-font-weight:800;
-cursor:pointer;
-margin-top:4px
-}
-
-.loginError{
-display:none;
-font-size:12px;
-color:#ff7895;
-margin-bottom:13px;
-line-height:1.5
-}
-
-.loginError.show{
-display:block
-}
-
-.hidden{
-display:none!important
-}
-
 .footer{
 text-align:center;
 margin-top:20px;
@@ -395,11 +410,12 @@ color:#343b47
 }
 
 @media(max-width:600px){
+
 .grid{
 grid-template-columns:1fr
 }
 
-.field.full{
+.full{
 grid-column:auto
 }
 
@@ -408,7 +424,16 @@ padding:18px
 }
 
 .brand h1{
-font-size:27px
+font-size:25px
+}
+
+.clock{
+display:none
+}
+
+.topBtn{
+width:43px;
+height:43px
 }
 }
 </style>
@@ -416,48 +441,7 @@ font-size:27px
 
 <body>
 
-<div class="login" id="loginScreen">
-
-<div class="loginBox">
-
-<div class="loginBrand">
-<small>REYCLOUDSHOP</small>
-<h2>Admin Panel</h2>
-</div>
-
-<div class="loginError" id="loginError"></div>
-
-<div class="loginField">
-<label class="label">Username</label>
-<input
-class="input"
-id="adminUser"
-type="text"
-placeholder="Username"
-autocomplete="username"
->
-</div>
-
-<div class="loginField">
-<label class="label">Password</label>
-<input
-class="input"
-id="adminPass"
-type="password"
-placeholder="Password"
-autocomplete="current-password"
->
-</div>
-
-<button class="loginBtn" id="loginBtn">
-🔐 Masuk Admin
-</button>
-
-</div>
-
-</div>
-
-<div class="app hidden" id="adminApp">
+<div class="app">
 
 <div class="top">
 
@@ -466,13 +450,66 @@ autocomplete="current-password"
 <h1>Control Panel</h1>
 </div>
 
-<button class="back" onclick="history.back()">←</button>
+<div class="actions">
+
+<button
+class="topBtn"
+id="dashboardBtn"
+type="button"
+>
+←
+</button>
+
+<button
+class="topBtn"
+id="logoutBtn"
+type="button"
+>
+↪
+</button>
+
+</div>
+
+</div>
+
+<div class="adminBar">
+
+<div class="avatar" id="avatar">
+?
+</div>
+
+<div class="adminData">
+
+<div class="adminName" id="adminName">
+Loading...
+</div>
+
+<div class="adminRole" id="adminRole">
+Loading...
+</div>
+
+</div>
+
+<div class="clock">
+
+<strong id="clock">
+00:00:00
+</strong>
+
+<span id="date">
+Loading...
+</span>
+
+</div>
 
 </div>
 
 <div class="status">
-<div class="dot"></div>
+
+<div class="statusDot"></div>
+
 Admin Control Online
+
 </div>
 
 <div class="panel">
@@ -480,13 +517,15 @@ Admin Control Online
 <div class="panelHead">
 
 <div>
+
 <div class="panelTitle">
 Publish Activity
 </div>
 
 <div class="panelSub">
-Update yang dibuat di sini akan tampil di halaman Activity user.
+Update yang dibuat di sini akan tampil pada Activity user.
 </div>
+
 </div>
 
 </div>
@@ -496,7 +535,10 @@ Update yang dibuat di sini akan tampil di halaman Activity user.
 <div class="grid">
 
 <div class="field">
-<label class="label">Kategori</label>
+
+<label class="label">
+Kategori
+</label>
 
 <select class="select" id="type">
 
@@ -513,21 +555,30 @@ Maintenance
 </option>
 
 </select>
+
 </div>
 
 <div class="field">
-<label class="label">Version</label>
+
+<label class="label">
+Version
+</label>
 
 <input
 class="input"
 id="version"
 type="text"
 placeholder="v1.2.0"
+maxlength="30"
 >
+
 </div>
 
 <div class="field full">
-<label class="label">Judul</label>
+
+<label class="label">
+Judul
+</label>
 
 <input
 class="input"
@@ -536,10 +587,14 @@ type="text"
 placeholder="Contoh: Dashboard UI diperbarui"
 maxlength="150"
 >
+
 </div>
 
 <div class="field full">
-<label class="label">Deskripsi</label>
+
+<label class="label">
+Deskripsi
+</label>
 
 <textarea
 class="textarea"
@@ -547,31 +602,44 @@ id="description"
 placeholder="Tulis informasi update untuk user..."
 maxlength="1000"
 ></textarea>
+
 </div>
 
 <div class="field">
-<label class="label">Tanggal</label>
+
+<label class="label">
+Tanggal
+</label>
 
 <input
 class="input"
 id="date"
 type="date"
 >
+
 </div>
 
 <div class="field">
-<label class="label">Jam</label>
+
+<label class="label">
+Jam
+</label>
 
 <input
 class="input"
 id="time"
 type="time"
 >
-</div>
 
 </div>
 
-<button class="publish" id="publishBtn">
+</div>
+
+<button
+class="publish"
+id="publishBtn"
+type="button"
+>
 🚀 Publish Activity
 </button>
 
@@ -582,22 +650,31 @@ type="time"
 <div class="panelHead">
 
 <div>
+
 <div class="panelTitle">
 Activity Terbaru
 </div>
 
 <div class="panelSub">
-Daftar update yang sudah dipublish.
-</div>
+Activity tersimpan di MongoDB.
 </div>
 
-<button class="refresh" id="refreshBtn">
-↻
+</div>
+
+<button
+class="refresh"
+id="refreshBtn"
+type="button"
+>
+↻ Refresh
 </button>
 
 </div>
 
-<div class="activity" id="activityList">
+<div
+class="activity"
+id="activityList"
+>
 
 <div class="empty">
 Memuat activity...
@@ -614,13 +691,12 @@ REYCLOUDSHOP ADMIN CONTROL
 </div>
 
 <script>
-const loginScreen=document.getElementById("loginScreen");
-const adminApp=document.getElementById("adminApp");
+const adminName=document.getElementById("adminName");
+const adminRole=document.getElementById("adminRole");
+const avatar=document.getElementById("avatar");
 
-const adminUser=document.getElementById("adminUser");
-const adminPass=document.getElementById("adminPass");
-const loginBtn=document.getElementById("loginBtn");
-const loginError=document.getElementById("loginError");
+const clock=document.getElementById("clock");
+const dateElement=document.getElementById("date");
 
 const typeInput=document.getElementById("type");
 const versionInput=document.getElementById("version");
@@ -634,72 +710,217 @@ const refreshBtn=document.getElementById("refreshBtn");
 const activityList=document.getElementById("activityList");
 const message=document.getElementById("message");
 
-let credentials=null;
+let currentUser=null;
 
-function today(){
+function goDashboard(){
+window.location.href="/dashboard/";
+}
+
+async function logout(){
+
+try{
+
+await fetch("/api/auth/logout",{
+method:"POST",
+credentials:"include",
+headers:{
+"Accept":"application/json"
+}
+});
+
+}catch(error){
+
+console.error(error);
+
+}
+
+window.location.href="/";
+
+}
+
+function updateClock(){
+
 const now=new Date();
 
-const year=now.getFullYear();
-const month=String(now.getMonth()+1).padStart(2,"0");
-const day=String(now.getDate()).padStart(2,"0");
+clock.textContent=
+now.toLocaleTimeString("id-ID",{
+hour:"2-digit",
+minute:"2-digit",
+second:"2-digit"
+});
 
-return`${year}-${month}-${day}`;
+dateElement.textContent=
+now.toLocaleDateString("id-ID",{
+weekday:"long",
+day:"2-digit",
+month:"long",
+year:"numeric"
+});
+
+}
+
+function today(){
+
+const now=new Date();
+
+return[
+now.getFullYear(),
+String(now.getMonth()+1).padStart(2,"0"),
+String(now.getDate()).padStart(2,"0")
+].join("-");
+
 }
 
 function currentTime(){
+
 const now=new Date();
 
-return`${String(now.getHours()).padStart(2,"0")}:${String(now.getMinutes()).padStart(2,"0")}`;
+return[
+String(now.getHours()).padStart(2,"0"),
+String(now.getMinutes()).padStart(2,"0")
+].join(":");
+
 }
 
-dateInput.value=today();
-timeInput.value=currentTime();
-
 function escapeHTML(value){
+
 return String(value||"")
 .replace(/&/g,"&amp;")
 .replace(/</g,"&lt;")
 .replace(/>/g,"&gt;")
 .replace(/"/g,"&quot;")
 .replace(/'/g,"&#039;");
+
 }
 
 function showMessage(text,type){
+
 message.textContent=text;
-message.className=`message show ${type}`;
+
+message.className=
+`message show ${type}`;
+
 }
 
 function hideMessage(){
-message.className="message";
+
 message.textContent="";
+
+message.className="message";
+
 }
 
-function login(){
+async function requestAPI(url,options={}){
 
-const user=adminUser.value.trim();
-const pass=adminPass.value;
+const response=
+await fetch(url,{
+...options,
+credentials:"include",
+headers:{
+Accept:"application/json",
+...(options.headers||{})
+}
+});
 
-if(!user||!pass){
+let data={};
 
-loginError.textContent=
-"Username dan password wajib diisi.";
+try{
 
-loginError.classList.add("show");
+data=await response.json();
+
+}catch{
+
+data={};
+
+}
+
+if(response.status===401){
+
+window.location.href="/";
+
+throw new Error(
+"Session login sudah berakhir."
+);
+
+}
+
+if(response.status===403){
+
+window.location.href="/dashboard/";
+
+throw new Error(
+"Akun tidak memiliki akses Admin."
+);
+
+}
+
+if(!response.ok){
+
+throw new Error(
+data.error||
+"Request gagal."
+);
+
+}
+
+return data;
+
+}
+
+async function loadCurrentUser(){
+
+try{
+
+const data=
+await requestAPI(
+"/api/auth/me",
+{
+method:"GET",
+cache:"no-store"
+}
+);
+
+if(!data.user){
+
+throw new Error(
+"Data user tidak ditemukan."
+);
+
+}
+
+currentUser=data.user;
+
+const role=
+String(currentUser.role||"")
+.toLowerCase();
+
+if(role!=="admin"){
+
+window.location.href="/dashboard/";
 
 return;
+
 }
 
-credentials={
-user,
-pass
-};
+adminName.textContent=
+currentUser.username;
 
-loginError.classList.remove("show");
+adminRole.textContent=
+role.toUpperCase();
 
-loginScreen.classList.add("hidden");
-adminApp.classList.remove("hidden");
+avatar.textContent=
+String(currentUser.username||"?")
+.charAt(0)
+.toUpperCase();
 
-loadActivity();
+await loadActivity();
+
+}catch(error){
+
+console.error(error);
+
+}
+
 }
 
 async function loadActivity(){
@@ -712,19 +933,21 @@ Memuat activity...
 
 try{
 
-const response=
-await fetch("/api/activity",{
-cache:"no-store"
-});
-
 const data=
-await response.json();
-
-if(!response.ok){
-throw new Error(data.error||"Gagal mengambil activity.");
+await requestAPI(
+"/api/activity",
+{
+method:"GET",
+cache:"no-store"
 }
+);
 
-if(!data.activities?.length){
+const activities=
+Array.isArray(data.activities)
+?data.activities
+:[];
+
+if(!activities.length){
 
 activityList.innerHTML=`
 <div class="empty">
@@ -733,13 +956,15 @@ Belum ada activity.
 `;
 
 return;
+
 }
 
 activityList.innerHTML=
-data.activities.map(item=>{
+activities.map(item=>{
 
 const category=
-String(item.type||"update").toLowerCase();
+String(item.type||"update")
+.toLowerCase();
 
 return`
 
@@ -747,13 +972,15 @@ return`
 
 <div class="itemTop">
 
-<div class="badge ${category}">
+<div class="badge ${escapeHTML(category)}">
 ${escapeHTML(category)}
 </div>
 
 <div class="date">
 ${escapeHTML(item.date||"")}
-${item.time?" · "+escapeHTML(item.time):""}
+${item.time?
+" · "+escapeHTML(item.time):
+""}
 </div>
 
 </div>
@@ -767,9 +994,11 @@ ${escapeHTML(item.description)}
 </div>
 
 ${item.version?`
+
 <div class="itemVersion">
 VERSION ${escapeHTML(item.version)}
 </div>
+
 `:""}
 
 </div>
@@ -782,21 +1011,26 @@ VERSION ${escapeHTML(item.version)}
 
 activityList.innerHTML=`
 <div class="empty">
-Gagal memuat activity.
+${escapeHTML(error.message)}
 </div>
 `;
 
-console.error(error);
 }
+
 }
 
 async function publishActivity(){
 
 hideMessage();
 
-const title=titleInput.value.trim();
-const description=descriptionInput.value.trim();
-const version=versionInput.value.trim();
+const title=
+titleInput.value.trim();
+
+const description=
+descriptionInput.value.trim();
+
+const version=
+versionInput.value.trim();
 
 if(!title){
 
@@ -806,6 +1040,7 @@ showMessage(
 );
 
 return;
+
 }
 
 if(!description){
@@ -816,52 +1051,34 @@ showMessage(
 );
 
 return;
-}
 
-if(!credentials){
-
-showMessage(
-"Session admin tidak ditemukan.",
-"error"
-);
-
-return;
 }
 
 publishBtn.disabled=true;
-publishBtn.textContent="⏳ Publishing...";
+publishBtn.textContent=
+"⏳ Publishing...";
 
 try{
 
-const response=
-await fetch("/api/admin/activity",{
+await requestAPI(
+"/api/admin/activity",
+{
 method:"POST",
 headers:{
-"Content-Type":"application/json",
-"X-Admin-User":credentials.user,
-"X-Admin-Pass":credentials.pass
+"Content-Type":"application/json"
 },
 body:JSON.stringify({
+
 type:typeInput.value,
 title,
 description,
 version,
 date:dateInput.value,
 time:timeInput.value
+
 })
-});
-
-const data=
-await response.json();
-
-if(!response.ok){
-
-throw new Error(
-data.error||
-"Activity gagal dipublish."
-);
-
 }
+);
 
 showMessage(
 "✅ Activity berhasil dipublish.",
@@ -880,43 +1097,33 @@ await loadActivity();
 }catch(error){
 
 showMessage(
-"❌ "+(
-error.message||
-"Activity gagal dipublish."
-),
+"❌ "+error.message,
 "error"
 );
 
 }finally{
 
 publishBtn.disabled=false;
-publishBtn.textContent="🚀 Publish Activity";
+
+publishBtn.textContent=
+"🚀 Publish Activity";
 
 }
 
 }
 
-loginBtn.addEventListener(
+document
+.getElementById("dashboardBtn")
+.addEventListener(
 "click",
-login
+goDashboard
 );
 
-adminPass.addEventListener(
-"keydown",
-event=>{
-if(event.key==="Enter"){
-login();
-}
-}
-);
-
-adminUser.addEventListener(
-"keydown",
-event=>{
-if(event.key==="Enter"){
-login();
-}
-}
+document
+.getElementById("logoutBtn")
+.addEventListener(
+"click",
+logout
 );
 
 publishBtn.addEventListener(
@@ -928,6 +1135,18 @@ refreshBtn.addEventListener(
 "click",
 loadActivity
 );
+
+dateInput.value=today();
+timeInput.value=currentTime();
+
+updateClock();
+
+setInterval(
+updateClock,
+1000
+);
+
+loadCurrentUser();
 </script>
 
 </body>
