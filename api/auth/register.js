@@ -7,6 +7,13 @@ function send(res, status, data) {
   return res.status(status).json(data)
 }
 
+function setCookie(res, token) {
+  res.setHeader(
+    "Set-Cookie",
+    `reycloud_session=${token}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=604800`
+  )
+}
+
 module.exports = async function(req, res) {
   if (req.method !== "POST") {
     return send(res, 405, {
@@ -45,7 +52,7 @@ module.exports = async function(req, res) {
     if (!/^[a-z0-9_]{3,32}$/.test(username)) {
       return send(res, 400, {
         success: false,
-        error: "Username hanya boleh menggunakan huruf kecil, angka, dan underscore."
+        error: "Username hanya boleh huruf kecil, angka, dan underscore."
       })
     }
 
@@ -56,33 +63,29 @@ module.exports = async function(req, res) {
       })
     }
 
-    const existingUser = await User.findOne({
+    const exists = await User.findOne({
       username
     })
 
-    if (existingUser) {
+    if (exists) {
       return send(res, 409, {
         success: false,
         error: "Username sudah digunakan."
       })
     }
 
-    const hashedPassword = await bcrypt.hash(
-      password,
-      12
-    )
+    const hashedPassword =
+      await bcrypt.hash(password, 12)
 
     const user = await User.create({
       username,
       password: hashedPassword,
-      role: "user"
+      role: "User"
     })
 
     const token = jwt.sign(
       {
-        userId: user._id.toString(),
-        username: user.username,
-        role: user.role
+        userId: user._id.toString()
       },
       process.env.JWT_SECRET,
       {
@@ -90,14 +93,11 @@ module.exports = async function(req, res) {
       }
     )
 
+    setCookie(res, token)
+
     return send(res, 201, {
       success: true,
-      message: "Registrasi berhasil.",
-      token,
-      user: {
-        username: user.username,
-        role: user.role
-      }
+      message: "Registrasi berhasil."
     })
   } catch (error) {
     console.error("[REGISTER]", error)
