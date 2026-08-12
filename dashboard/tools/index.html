@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#07080d">
+<title>Tools — ReyCloudShop</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+-webkit-tap-highlight-color:transparent
+}
+
+:root{
+--bg:#07080d;
+--card:rgba(15,18,28,.9);
+--line:rgba(255,255,255,.08);
+--text:#fff;
+--muted:#777d8d;
+--cyan:#00d9ff;
+--purple:#a855f7;
+--pink:#ff386f;
+--orange:#ff9d3d;
+--green:#22c55e
+}
+
+body{
+min-height:100vh;
+font-family:Arial,sans-serif;
+color:var(--text);
+background:
+radial-gradient(circle at 85% 5%,rgba(0,217,255,.12),transparent 28%),
+radial-gradient(circle at 5% 90%,rgba(168,85,247,.13),transparent 32%),
+var(--bg)
+}
+
+.app{
+width:100%;
+max-width:950px;
+margin:auto;
+padding:20px 16px 45px
+}
+
+.topbar{
+display:flex;
+align-items:center;
+gap:12px;
+margin-bottom:22px
+}
+
+.back{
+width:44px;
+height:44px;
+display:flex;
+align-items:center;
+justify-content:center;
+border:1px solid var(--line);
+border-radius:14px;
+background:rgba(255,255,255,.045);
+color:#fff;
+text-decoration:none;
+font-size:18px
+}
+
+.brand{
+flex:1;
+min-width:0
+}
+
+.brand small{
+color:#626979;
+font-size:9px;
+letter-spacing:2px
+}
+
+.brand h1{
+margin-top:4px;
+font-size:20px
+}
+
+.user{
+display:flex;
+align-items:center;
+gap:8px
+}
+
+.avatar{
+width:36px;
+height:36px;
+display:flex;
+align-items:center;
+justify-content:center;
+border-radius:12px;
+background:linear-gradient(135deg,#00d9ff,#a855f7);
+font-size:13px;
+font-weight:800
+}
+
+.user-info{
+display:none;
+flex-direction:column;
+gap:3px
+}
+
+.user-info strong{
+font-size:10px
+}
+
+.user-info span{
+font-size:8px;
+color:var(--muted);
+text-transform:uppercase
+}
+
+.hero{
+position:relative;
+overflow:hidden;
+padding:27px;
+border:1px solid var(--line);
+border-radius:28px;
+background:
+linear-gradient(145deg,rgba(0,217,255,.08),rgba(15,18,28,.9) 50%);
+box-shadow:0 25px 80px rgba(0,0,0,.3)
+}
+
+.hero:before{
+content:"";
+position:absolute;
+width:220px;
+height:220px;
+right:-100px;
+top:-120px;
+border-radius:50%;
+background:var(--cyan);
+filter:blur(80px);
+opacity:.18
+}
+
+.hero-icon{
+position:relative;
+z-index:2;
+width:60px;
+height:60px;
+display:flex;
+align-items:center;
+justify-content:center;
+border:1px solid rgba(255,255,255,.08);
+border-radius:19px;
+background:rgba(255,255,255,.05);
+font-size:27px;
+margin-bottom:19px
+}
+
+.hero h2{
+position:relative;
+z-index:2;
+font-size:27px
+}
+
+.hero p{
+position:relative;
+z-index:2;
+margin-top:9px;
+color:#858b9b;
+font-size:13px;
+line-height:1.7
+}
+
+.section-title{
+display:flex;
+align-items:center;
+justify-content:space-between;
+margin:25px 3px 12px
+}
+
+.section-title strong{
+font-size:12px
+}
+
+.section-title span{
+color:#4f5563;
+font-size:9px
+}
+
+.tools{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:12px
+}
+
+.tool{
+position:relative;
+overflow:hidden;
+min-height:175px;
+padding:20px;
+border:1px solid var(--line);
+border-radius:23px;
+background:var(--card);
+text-decoration:none;
+color:#fff;
+transition:.25s;
+box-shadow:0 18px 45px rgba(0,0,0,.18)
+}
+
+.tool:active{
+transform:scale(.98)
+}
+
+.tool:before{
+content:"";
+position:absolute;
+width:120px;
+height:120px;
+right:-55px;
+top:-55px;
+border-radius:50%;
+background:var(--glow);
+filter:blur(45px);
+opacity:.2
+}
+
+.tool-icon{
+position:relative;
+z-index:2;
+width:49px;
+height:49px;
+display:flex;
+align-items:center;
+justify-content:center;
+border:1px solid rgba(255,255,255,.07);
+border-radius:16px;
+background:rgba(255,255,255,.05);
+font-size:22px;
+margin-bottom:17px
+}
+
+.tool h3{
+position:relative;
+z-index:2;
+font-size:17px
+}
+
+.tool p{
+position:relative;
+z-index:2;
+margin-top:7px;
+color:#777d8d;
+font-size:10px;
+line-height:1.6
+}
+
+.arrow{
+position:absolute;
+right:17px;
+bottom:16px;
+z-index:2;
+color:#626979;
+font-size:15px
+}
+
+.downloader{
+--glow:#00d9ff
+}
+
+.iqc{
+--glow:#a855f7
+}
+
+.url{
+--glow:#ff9d3d
+}
+
+.utility{
+--glow:#22c55e
+}
+
+.media{
+--glow:#ff386f
+}
+
+.more{
+--glow:#94a3b8
+}
+
+.footer{
+margin-top:25px;
+text-align:center;
+color:#343b48;
+font-size:8px;
+letter-spacing:2px
+}
+
+.session{
+position:fixed;
+inset:0;
+z-index:999;
+display:flex;
+align-items:center;
+justify-content:center;
+background:#07080d;
+color:#777d8d;
+font-size:12px
+}
+
+.session.hidden{
+display:none
+}
+
+@media(min-width:650px){
+
+.user-info{
+display:flex
+}
+
+.tools{
+grid-template-columns:repeat(3,1fr)
+}
+
+}
+
+@media(max-width:400px){
+
+.app{
+padding:17px 13px 35px
+}
+
+.hero{
+padding:22px
+}
+
+.hero h2{
+font-size:24px
+}
+
+.tool{
+min-height:165px;
+padding:17px
+}
+
+}
+</style>
+</head>
+
+<body>
+
+<div class="session" id="session">
+Memeriksa session...
+</div>
+
+<div class="app">
+
+<div class="topbar">
+
+<a
+href="/dashboard/"
+class="back"
+>
+←
+</a>
+
+<div class="brand">
+<small>REYCLOUDSHOP</small>
+<h1>Tools Center</h1>
+</div>
+
+<div class="user">
+
+<div class="user-info">
+<strong id="username">...</strong>
+<span id="role">...</span>
+</div>
+
+<div class="avatar" id="avatar">
+R
+</div>
+
+</div>
+
+</div>
+
+<section class="hero">
+
+<div class="hero-icon">
+🛠️
+</div>
+
+<h2>Tools Center</h2>
+
+<p>
+Kumpulan tools ReyCloudShop untuk membantu
+kebutuhan project, media, development, dan
+utility lainnya.
+</p>
+
+</section>
+
+<div class="section-title">
+<strong>TOOLS</strong>
+<span id="toolCount">6 tools</span>
+</div>
+
+<div class="tools">
+
+<a
+class="tool downloader"
+href="/dashboard/tools/downloader/"
+>
+
+<div class="tool-icon">
+📥
+</div>
+
+<h3>Downloader</h3>
+
+<p>
+Download media dari berbagai platform
+dengan satu dashboard.
+</p>
+
+<span class="arrow">
+→
+</span>
+
+</a>
+
+<a
+class="tool iqc"
+href="/dashboard/tools/iqc/"
+>
+
+<div class="tool-icon">
+🖼️
+</div>
+
+<h3>IQC</h3>
+
+<p>
+Image Quality Checker untuk memeriksa
+informasi dan kualitas gambar.
+</p>
+
+<span class="arrow">
+→
+</span>
+
+</a>
+
+<a
+class="tool url"
+href="/dashboard/tools/url/"
+>
+
+<div class="tool-icon">
+🔗
+</div>
+
+<h3>URL Tools</h3>
+
+<p>
+Utility untuk memproses dan memeriksa
+URL project.
+</p>
+
+<span class="arrow">
+→
+</span>
+
+</a>
+
+<a
+class="tool utility"
+href="/dashboard/tools/utility/"
+>
+
+<div class="tool-icon">
+⚙️
+</div>
+
+<h3>Utility</h3>
+
+<p>
+Tools kecil untuk membantu pekerjaan
+developer sehari-hari.
+</p>
+
+<span class="arrow">
+→
+</span>
+
+</a>
+
+<a
+class="tool media"
+href="/dashboard/tools/media/"
+>
+
+<div class="tool-icon">
+🎬
+</div>
+
+<h3>Media Tools</h3>
+
+<p>
+Berbagai utility untuk mengolah
+media dan file.
+</p>
+
+<span class="arrow">
+→
+</span>
+
+</a>
+
+<a
+class="tool more"
+href="/dashboard/tools/more/"
+>
+
+<div class="tool-icon">
+➕
+</div>
+
+<h3>More Tools</h3>
+
+<p>
+Tools lainnya yang akan ditambahkan
+ke ReyCloudShop.
+</p>
+
+<span class="arrow">
+→
+</span>
+
+</a>
+
+</div>
+
+<div class="footer">
+REYCLOUDSHOP TOOLS CENTER
+</div>
+
+</div>
+
+<script>
+const session =
+document.getElementById("session")
+
+const usernameElement =
+document.getElementById("username")
+
+const roleElement =
+document.getElementById("role")
+
+const avatarElement =
+document.getElementById("avatar")
+
+async function getSession(){
+
+try{
+
+const response =
+await fetch(
+"/api/auth/me",
+{
+method:"GET",
+headers:{
+"Accept":"application/json"
+},
+credentials:"include",
+cache:"no-store"
+}
+)
+
+if(!response.ok){
+throw new Error(
+"Session tidak valid."
+)
+}
+
+const data =
+await response.json()
+
+if(
+!data.success ||
+!data.user ||
+!data.user.username ||
+!data.user.role
+){
+throw new Error(
+"Data user tidak ditemukan."
+)
+}
+
+const username =
+String(
+data.user.username
+)
+
+const role =
+String(
+data.user.role
+)
+
+usernameElement.textContent =
+username
+
+roleElement.textContent =
+role
+
+avatarElement.textContent =
+username
+.charAt(0)
+.toUpperCase()
+
+session.classList.add(
+"hidden"
+)
+
+}catch(error){
+
+window.location.replace("/")
+
+}
+
+}
+
+getSession()
+</script>
+
+</body>
+  </html>
