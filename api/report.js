@@ -1,4 +1,22 @@
+const { MongoClient, ObjectId } = require("mongodb")
+const jwt = require("jsonwebtoken")
+
 const TELEGRAM_API = "https://api.telegram.org"
+
+let clientPromise
+
+function getClient() {
+  if (!process.env.MONGODB_URI) {
+    throw new Error("MONGODB_URI belum dikonfigurasi.")
+  }
+
+  if (!clientPromise) {
+    const client = new MongoClient(process.env.MONGODB_URI)
+    clientPromise = client.connect()
+  }
+
+  return clientPromise
+}
 
 function clean(value, max = 3000) {
   return String(value || "")
@@ -25,6 +43,26 @@ function getClientIp(req) {
   return req.socket?.remoteAddress || "Unknown"
 }
 
+function getCookie(req, name) {
+  const cookieHeader = req.headers.cookie || ""
+
+  const cookies = cookieHeader
+    .split(";")
+    .map(item => item.trim())
+
+  const cookie = cookies.find(
+    item => item.startsWith(`${name}=`)
+  )
+
+  if (!cookie) {
+    return null
+  }
+
+  return decodeURIComponent(
+    cookie.substring(name.length + 1)
+  )
+}
+
 function generateReportId() {
   const chars =
     "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"
@@ -48,26 +86,23 @@ async function sendTelegram(
   chatId,
   message
 ) {
-  const response =
-    await fetch(
-      `${TELEGRAM_API}/bot${token}/sendMessage`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type":
-            "application/json"
-        },
-        body: JSON.stringify({
-          chat_id: chatId,
-          text: message,
-          parse_mode: "HTML",
-          disable_web_page_preview: true
-        })
-      }
-    )
+  const response = await fetch(
+    `${TELEGRAM_API}/bot${token}/sendMessage`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        chat_id: chatId,
+        text: message,
+        parse_mode: "HTML",
+        disable_web_page_preview: true
+      })
+    }
+  )
 
-  const data =
-    await response.json()
+  const data = await response.json()
 
   if (!response.ok || !data.ok) {
     throw new Error(
@@ -77,6 +112,63 @@ async function sendTelegram(
   }
 
   return data
+}
+
+async function authenticateUser(req) {
+  const token = getCookie(
+    req,
+    "reycloud_session"
+  )
+
+  if (!token) {
+    throw new Error("UNAUTHORIZED")
+  }
+
+  if (!process.env.JWT_SECRET) {
+    throw new Error(
+      "JWT_SECRET belum dikonfigurasi."
+    )
+  }
+
+  let payload
+
+  try {
+    payload = jwt.verify(
+      token,
+      process.env.JWT_SECRET
+    )
+  } catch {
+    throw new Error("INVALID_TOKEN")
+  }
+
+  if (!payload?.userId) {
+    throw new Error("INVALID_TOKEN")
+  }
+
+  if (!ObjectId.isValid(payload.userId)) {
+    throw new Error("INVALID_TOKEN")
+  }
+
+  const client = await getClient()
+
+  const db = client.db(
+    process.env.MONGODB_DB || "Reyz4You"
+  )
+
+  const user =
+    await db
+      .collection("users")
+      .findOne({
+        _id: new ObjectId(
+          payload.userId
+        )
+      })
+
+  if (!user) {
+    throw new Error("USER_NOT_FOUND")
+  }
+
+  return user
 }
 
 export default async function handler(
@@ -90,113 +182,186 @@ export default async function handler(
     })
   }
 
-  const token =
-    String(
-      process.env.TOKEN_BOT || ""
-    ).trim()
+  try {
+    const token =
+      String(
+        process.env.TOKEN_BOT || ""
+      ).trim()
 
-  const ownerId =
-    String(
-      process.env.ID_OWN || ""
-    ).trim()
+    const ownerId =
+      String(
+        process.env.ID_OWN || ""
+      ).trim()
 
-  if (!token) {
-    console.error(
-      "[REPORT] TOKEN_BOT belum dikonfigurasi."
-    )
+    if (!token) {
+      console.error(
+        "[REPORT] TOKEN_BOT belum dikonfigurasi."
+      )
 
-    return res.status(500).json({
-      success: false,
-      message:
-        "Server report belum dikonfigurasi."
-    })
-  }
+      return res.status(500).json({
+        success: false,
+        message:
+          "Server report belum dikonfigurasi."
+      })
+    }
 
-  if (!ownerId) {
-    console.error(
-      "[REPORT] ID_OWN belum dikonfigurasi."
-    )
+    if (!ownerId) {
+      console.error(
+        "[REPORT] ID_OWN belum dikonfigurasi."
+      )
 
-    return res.status(500).json({
-      success: false,
-      message:
-        "Tujuan report belum dikonfigurasi."
-    })
-  }
+      return res.status(500).json({
+        success: false,
+        message:
+          "Tujuan report belum dikonfigurasi."
+      })
+    }
 
-  const body =
-    req.body || {}
+    const user =
+      await authenticateUser(req)
 
-  const title =
-    clean(body.title, 100)
+    const username =
+      clean(user.username, 32) ||
+      "Unknown"
 
-  const category =
-    clean(body.category, 50)
+    const role =
+      clean(user.role, 30) ||
+      "User"
 
-  const priority =
-    clean(body.priority, 30)
+    const body =
+      req.body || {}
 
-  const description =
-    clean(body.description, 3000)
+    const title =
+      clean(body.title, 100)
 
-  if (!title) {
-    return res.status(400).json({
-      success: false,
-      message:
-        "Judul report wajib diisi."
-    })
-  }
+    const category =
+      clean(body.category, 50)
 
-  if (!category) {
-    return res.status(400).json({
-      success: false,
-      message:
-        "Kategori report wajib dipilih."
-    })
-  }
+    const priority =
+      clean(body.priority, 30)
 
-  if (!description) {
-    return res.status(400).json({
-      success: false,
-      message:
-        "Deskripsi report wajib diisi."
-    })
-  }
+    const description =
+      clean(body.description, 3000)
 
-  if (description.length < 10) {
-    return res.status(400).json({
-      success: false,
-      message:
-        "Deskripsi report terlalu singkat."
-    })
-  }
+    if (!title) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "Judul report wajib diisi."
+      })
+    }
 
-  const reportId =
-    generateReportId()
+    if (!category) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "Kategori report wajib dipilih."
+      })
+    }
 
-  const createdAt =
-    new Date().toLocaleString(
-      "id-ID",
-      {
-        timeZone:
-          "Asia/Jakarta",
-        dateStyle:
-          "full",
-        timeStyle:
-          "medium"
-      }
-    )
+    if (!description) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "Deskripsi report wajib diisi."
+      })
+    }
 
-  const ip =
-    getClientIp(req)
+    if (description.length < 10) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "Deskripsi report terlalu singkat."
+      })
+    }
 
-  const message =
+    const allowedCategories = [
+      "Bug",
+      "Deployment",
+      "Tools",
+      "Dashboard",
+      "Suggestion",
+      "Other"
+    ]
+
+    if (!allowedCategories.includes(category)) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "Kategori report tidak valid."
+      })
+    }
+
+    const allowedPriorities = [
+      "Low",
+      "Medium",
+      "High"
+    ]
+
+    if (!allowedPriorities.includes(priority)) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "Priority report tidak valid."
+      })
+    }
+
+    const reportId =
+      generateReportId()
+
+    const createdAt =
+      new Date().toLocaleString(
+        "id-ID",
+        {
+          timeZone:
+            "Asia/Jakarta",
+          dateStyle:
+            "full",
+          timeStyle:
+            "medium"
+        }
+      )
+
+    const ip =
+      getClientIp(req)
+
+    const client =
+      await getClient()
+
+    const db =
+      client.db(
+        process.env.MONGODB_DB ||
+        "Reyz4You"
+      )
+
+    await db
+      .collection("reports")
+      .insertOne({
+        reportId,
+        username,
+        role,
+        category,
+        priority,
+        title,
+        description,
+        ip,
+        status: "Pending",
+        createdAt: new Date()
+      })
+
+    const message =
 `🐛 <b>REYCLOUDSHOP — NEW REPORT</b>
 
 ━━━━━━━━━━━━━━━━━━
 
 🆔 <b>Report ID</b>
 <code>${escapeHtml(reportId)}</code>
+
+👤 <b>Username</b>
+<code>${escapeHtml(username)}</code>
+
+🛡️ <b>Role</b>
+<code>${escapeHtml(role)}</code>
 
 📌 <b>Category</b>
 ${escapeHtml(category)}
@@ -218,11 +383,13 @@ ${escapeHtml(createdAt)}
 🌐 <b>IP</b>
 <code>${escapeHtml(ip)}</code>
 
+📊 <b>Status</b>
+<code>Pending</code>
+
 ━━━━━━━━━━━━━━━━━━
 
 🚀 <b>ReyCloudShop Issue Center</b>`
 
-  try {
     await sendTelegram(
       token,
       ownerId,
@@ -235,11 +402,27 @@ ${escapeHtml(createdAt)}
       message:
         "Report berhasil dikirim."
     })
+
   } catch (error) {
     console.error(
-      "[REPORT TELEGRAM]",
+      "[REPORT]",
       error
     )
+
+    if (
+      error.message ===
+        "UNAUTHORIZED" ||
+      error.message ===
+        "INVALID_TOKEN" ||
+      error.message ===
+        "USER_NOT_FOUND"
+    ) {
+      return res.status(401).json({
+        success: false,
+        message:
+          "Sesi login tidak valid atau sudah berakhir. Silakan login kembali."
+      })
+    }
 
     return res.status(500).json({
       success: false,
