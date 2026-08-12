@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>ReyCloudShop - Admin</title>
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+-webkit-tap-highlight-color:transparent
+}
+
+:root{
+--bg:#05070b;
+--card:#0c1119;
+--card2:#101722;
+--line:rgba(255,255,255,.08);
+--text:#f5f7fb;
+--muted:#778192;
+--cyan:#00d9ff;
+--purple:#9d5cff;
+--green:#22c55e;
+--red:#ff426d;
+--yellow:#facc15
+}
+
+body{
+min-height:100vh;
+background:
+radial-gradient(circle at 5% 0%,rgba(0,217,255,.11),transparent 28%),
+radial-gradient(circle at 95% 100%,rgba(157,92,255,.12),transparent 32%),
+var(--bg);
+font-family:Arial,sans-serif;
+color:var(--text)
+}
+
+.app{
+width:100%;
+max-width:900px;
+margin:auto;
+padding:24px 16px 40px
+}
+
+.top{
+display:flex;
+align-items:center;
+justify-content:space-between;
+margin-bottom:24px
+}
+
+.brand small{
+font-size:10px;
+letter-spacing:3px;
+color:#687181
+}
+
+.brand h1{
+font-size:30px;
+margin-top:7px
+}
+
+.clock{
+text-align:right
+}
+
+.clockTime{
+font-size:18px;
+font-weight:800
+}
+
+.clockDate{
+font-size:10px;
+color:var(--muted);
+margin-top:5px
+}
+
+.adminBadge{
+display:inline-flex;
+align-items:center;
+gap:7px;
+padding:8px 12px;
+margin-bottom:20px;
+border:1px solid rgba(157,92,255,.25);
+border-radius:13px;
+background:rgba(157,92,255,.07);
+color:#c9a9ff;
+font-size:11px;
+font-weight:700
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:13px;
+margin-bottom:18px
+}
+
+.stat{
+padding:18px;
+border:1px solid var(--line);
+border-radius:20px;
+background:rgba(12,17,25,.9)
+}
+
+.statIcon{
+font-size:22px;
+margin-bottom:13px
+}
+
+.statValue{
+font-size:22px;
+font-weight:800
+}
+
+.statLabel{
+font-size:10px;
+letter-spacing:1px;
+text-transform:uppercase;
+color:var(--muted);
+margin-top:5px
+}
+
+.panel{
+padding:20px;
+margin-bottom:18px;
+border:1px solid var(--line);
+border-radius:24px;
+background:rgba(12,17,25,.9);
+box-shadow:0 20px 60px rgba(0,0,0,.22)
+}
+
+.panelHead{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:10px;
+margin-bottom:18px
+}
+
+.panelTitle{
+font-size:17px;
+font-weight:800
+}
+
+.panelSub{
+font-size:11px;
+color:var(--muted);
+margin-top:5px
+}
+
+.status{
+display:flex;
+align-items:center;
+gap:8px;
+font-size:11px;
+font-weight:700
+}
+
+.dot{
+width:8px;
+height:8px;
+border-radius:50%;
+background:var(--green);
+box-shadow:0 0 12px rgba(34,197,94,.7)
+}
+
+.maintenance{
+border:1px solid rgba(250,204,21,.2);
+background:rgba(250,204,21,.035)
+}
+
+.maintenanceInfo{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:15px;
+padding:16px;
+border-radius:18px;
+background:rgba(255,255,255,.025);
+margin-bottom:15px
+}
+
+.maintenanceState{
+font-weight:800
+}
+
+.maintenanceDesc{
+font-size:11px;
+color:var(--muted);
+margin-top:5px;
+line-height:1.5
+}
+
+.switch{
+position:relative;
+width:52px;
+height:30px;
+flex:none
+}
+
+.switch input{
+display:none
+}
+
+.slider{
+position:absolute;
+inset:0;
+border-radius:30px;
+background:#242b36;
+cursor:pointer;
+transition:.25s
+}
+
+.slider:before{
+content:"";
+position:absolute;
+width:22px;
+height:22px;
+left:4px;
+top:4px;
+border-radius:50%;
+background:white;
+transition:.25s
+}
+
+.switch input:checked+.slider{
+background:var(--yellow)
+}
+
+.switch input:checked+.slider:before{
+transform:translateX(22px)
+}
+
+.formGrid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:12px
+}
+
+.field{
+margin-bottom:13px
+}
+
+.label{
+display:block;
+font-size:10px;
+letter-spacing:1.3px;
+text-transform:uppercase;
+color:#7c8696;
+margin-bottom:8px
+}
+
+.input,
+.textarea{
+width:100%;
+border:1px solid rgba(255,255,255,.09);
+border-radius:15px;
+background:rgba(255,255,255,.035);
+color:white;
+outline:none;
+font-family:inherit;
+font-size:14px;
+padding:14px
+}
+
+.input{
+height:50px
+}
+
+.textarea{
+min-height:110px;
+resize:vertical;
+line-height:1.5
+}
+
+.input:focus,
+.textarea:focus{
+border-color:var(--cyan);
+box-shadow:0 0 0 3px rgba(0,217,255,.07)
+}
+
+.full{
+grid-column:1/-1
+}
+
+.btn{
+width:100%;
+height:50px;
+border:0;
+border-radius:15px;
+color:white;
+font-weight:800;
+cursor:pointer;
+transition:.2s
+}
+
+.btn:active{
+transform:scale(.98)
+}
+
+.btnPrimary{
+background:linear-gradient(135deg,var(--cyan),#6575ff);
+box-shadow:0 10px 30px rgba(0,217,255,.13)
+}
+
+.btnDanger{
+background:rgba(255,66,109,.1);
+border:1px solid rgba(255,66,109,.2);
+color:#ff7895
+}
+
+.activity{
+display:flex;
+gap:13px;
+padding:15px 0;
+border-bottom:1px solid rgba(255,255,255,.055)
+}
+
+.activity:last-child{
+border-bottom:0;
+padding-bottom:0
+}
+
+.activityIcon{
+width:40px;
+height:40px;
+display:flex;
+align-items:center;
+justify-content:center;
+border-radius:13px;
+background:rgba(0,217,255,.08);
+font-size:18px;
+flex:none
+}
+
+.activityBody{
+flex:1;
+min-width:0
+}
+
+.activityTitle{
+font-size:13px;
+font-weight:700
+}
+
+.activityText{
+font-size:11px;
+color:var(--muted);
+line-height:1.5;
+margin-top:4px
+}
+
+.activityTime{
+font-size:9px;
+color:#505968;
+margin-top:7px
+}
+
+.request{
+padding:16px;
+border:1px solid rgba(255,255,255,.06);
+border-radius:17px;
+background:rgba(255,255,255,.02);
+margin-bottom:10px
+}
+
+.request:last-child{
+margin-bottom:0
+}
+
+.requestTop{
+display:flex;
+justify-content:space-between;
+gap:10px
+}
+
+.requestTitle{
+font-size:13px;
+font-weight:800
+}
+
+.requestBadge{
+padding:5px 8px;
+border-radius:8px;
+font-size:9px;
+font-weight:800;
+background:rgba(250,204,21,.08);
+color:#facc15
+}
+
+.requestText{
+font-size:11px;
+color:var(--muted);
+line-height:1.5;
+margin-top:8px
+}
+
+.requestMeta{
+font-size:9px;
+color:#505968;
+margin-top:10px
+}
+
+.empty{
+padding:25px;
+text-align:center;
+color:#505968;
+font-size:11px
+}
+
+.toast{
+position:fixed;
+left:50%;
+bottom:22px;
+transform:translate(-50%,20px);
+opacity:0;
+pointer-events:none;
+padding:13px 17px;
+border:1px solid rgba(0,217,255,.2);
+border-radius:14px;
+background:#101722;
+box-shadow:0 15px 40px rgba(0,0,0,.4);
+font-size:12px;
+transition:.25s;
+z-index:10
+}
+
+.toast.show{
+opacity:1;
+transform:translate(-50%,0)
+}
+
+.footer{
+text-align:center;
+font-size:9px;
+letter-spacing:2px;
+color:#343b47;
+margin-top:25px
+}
+
+@media(max-width:650px){
+.grid{
+grid-template-columns:1fr 1fr
+}
+
+.grid .stat:last-child{
+grid-column:1/-1
+}
+
+.formGrid{
+grid-template-columns:1fr
+}
+
+.full{
+grid-column:auto
+}
+
+.top{
+align-items:flex-start
+}
+
+.clockTime{
+font-size:16px
+}
+}
+
+@media(max-width:400px){
+.app{
+padding:20px 13px 35px
+}
+
+.brand h1{
+font-size:26px
+}
+
+.panel{
+padding:17px
+}
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<div class="top">
+<div class="brand">
+<small>REYCLOUDSHOP</small>
+<h1>Admin Panel</h1>
+</div>
+
+<div class="clock">
+<div class="clockTime" id="clock">00:00:00</div>
+<div class="clockDate" id="date">Memuat...</div>
+</div>
+</div>
+
+<div class="adminBadge">
+👑 ADMINISTRATOR
+<span>•</span>
+<span id="adminName">REYCLOUD</span>
+</div>
+
+<div class="grid">
+
+<div class="stat">
+<div class="statIcon">🚀</div>
+<div class="statValue" id="deployCount">0</div>
+<div class="statLabel">Deployment</div>
+</div>
+
+<div class="stat">
+<div class="statIcon">📥</div>
+<div class="statValue" id="requestCount">0</div>
+<div class="statLabel">Request</div>
+</div>
+
+<div class="stat">
+<div class="statIcon">🟢</div>
+<div class="statValue" id="systemStatus">Online</div>
+<div class="statLabel">System</div>
+</div>
+
+</div>
+
+<div class="panel maintenance">
+
+<div class="panelHead">
+<div>
+<div class="panelTitle">🛠️ Maintenance</div>
+<div class="panelSub">Atur status maintenance website</div>
+</div>
+
+<div class="status">
+<span class="dot" id="maintenanceDot"></span>
+<span id="maintenanceText">OFF</span>
+</div>
+</div>
+
+<div class="maintenanceInfo">
+
+<div>
+<div class="maintenanceState" id="maintenanceState">
+System Normal
+</div>
+<div class="maintenanceDesc" id="maintenanceDesc">
+Website sedang berjalan normal.
+</div>
+</div>
+
+<label class="switch">
+<input type="checkbox" id="maintenanceToggle">
+<span class="slider"></span>
+</label>
+
+</div>
+
+<div class="formGrid">
+
+<div class="field">
+<label class="label">Maintenance Start</label>
+<input class="input" id="maintenanceStart" type="datetime-local">
+</div>
+
+<div class="field">
+<label class="label">Maintenance End</label>
+<input class="input" id="maintenanceEnd" type="datetime-local">
+</div>
+
+<div class="field full">
+<label class="label">Pesan Maintenance</label>
+<textarea class="textarea" id="maintenanceMessage" placeholder="Contoh: ReyCloudShop sedang melakukan pembaruan sistem..."></textarea>
+</div>
+
+<div class="field full">
+<button class="btn btnPrimary" id="saveMaintenance">
+💾 Simpan Maintenance
+</button>
+</div>
+
+</div>
+
+</div>
+
+<div class="panel">
+
+<div class="panelHead">
+<div>
+<div class="panelTitle">📢 Publish Update</div>
+<div class="panelSub">Tambahkan pembaruan ke Activity</div>
+</div>
+</div>
+
+<div class="formGrid">
+
+<div class="field">
+<label class="label">Version</label>
+<input class="input" id="version" placeholder="v1.1.0">
+</div>
+
+<div class="field">
+<label class="label">Update Type</label>
+<select class="input" id="updateType">
+<option value="update">Update</option>
+<option value="feature">Feature</option>
+<option value="fix">Bug Fix</option>
+<option value="maintenance">Maintenance</option>
+</select>
+</div>
+
+<div class="field full">
+<label class="label">Judul Update</label>
+<input class="input" id="updateTitle" placeholder="Contoh: Dashboard diperbarui">
+</div>
+
+<div class="field full">
+<label class="label">Deskripsi</label>
+<textarea class="textarea" id="updateDescription" placeholder="Tulis detail pembaruan..."></textarea>
+</div>
+
+<div class="field full">
+<button class="btn btnPrimary" id="publishUpdate">
+📢 Publish Activity
+</button>
+</div>
+
+</div>
+
+</div>
+
+<div class="panel">
+
+<div class="panelHead">
+<div>
+<div class="panelTitle">📋 Activity</div>
+<div class="panelSub">Riwayat pembaruan sistem</div>
+</div>
+</div>
+
+<div id="activityList"></div>
+
+</div>
+
+<div class="panel">
+
+<div class="panelHead">
+<div>
+<div class="panelTitle">📥 Request Masuk</div>
+<div class="panelSub">Request yang dikirim user</div>
+</div>
+</div>
+
+<div id="requestList">
+<div class="empty">Belum ada request.</div>
+</div>
+
+</div>
+
+<div class="footer">
+POWERED BY REYCLOUDSHOP
+</div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const clock=document.getElementById("clock");
+const date=document.getElementById("date");
+const maintenanceToggle=document.getElementById("maintenanceToggle");
+const maintenanceStart=document.getElementById("maintenanceStart");
+const maintenanceEnd=document.getElementById("maintenanceEnd");
+const maintenanceMessage=document.getElementById("maintenanceMessage");
+const maintenanceText=document.getElementById("maintenanceText");
+const maintenanceState=document.getElementById("maintenanceState");
+const maintenanceDesc=document.getElementById("maintenanceDesc");
+const maintenanceDot=document.getElementById("maintenanceDot");
+const activityList=document.getElementById("activityList");
+const requestList=document.getElementById("requestList");
+const toast=document.getElementById("toast");
+
+function updateClock(){
+const now=new Date();
+
+clock.textContent=now.toLocaleTimeString("id-ID",{
+hour12:false,
+hour:"2-digit",
+minute:"2-digit",
+second:"2-digit"
+});
+
+date.textContent=now.toLocaleDateString("id-ID",{
+weekday:"long",
+day:"2-digit",
+month:"long",
+year:"numeric"
+});
+}
+
+function showToast(message){
+toast.textContent=message;
+toast.classList.add("show");
+
+setTimeout(()=>{
+toast.classList.remove("show");
+},2200);
+}
+
+function getData(key,fallback){
+try{
+return JSON.parse(localStorage.getItem(key))||fallback;
+}catch{
+return fallback;
+}
+}
+
+function saveData(key,value){
+localStorage.setItem(key,JSON.stringify(value));
+}
+
+function renderMaintenance(){
+const active=maintenanceToggle.checked;
+
+maintenanceText.textContent=active?"ON":"OFF";
+maintenanceState.textContent=active?"Maintenance Aktif":"System Normal";
+
+maintenanceDesc.textContent=active
+?(maintenanceMessage.value||"Website sedang dalam maintenance.")
+:"Website sedang berjalan normal.";
+
+maintenanceDot.style.background=active?"#facc15":"#22c55e";
+maintenanceDot.style.boxShadow=active
+?"0 0 12px rgba(250,204,21,.7)"
+:"0 0 12px rgba(34,197,94,.7)";
+}
+
+function renderActivity(){
+const data=getData("reycloud_activity",[]);
+
+if(!data.length){
+activityList.innerHTML='<div class="empty">Belum ada activity.</div>';
+return;
+}
+
+activityList.innerHTML=data.map(item=>`
+<div class="activity">
+<div class="activityIcon">${item.icon||"📢"}</div>
+<div class="activityBody">
+<div class="activityTitle">${item.title||"Update"}</div>
+<div class="activityText">${item.description||"-"}</div>
+<div class="activityTime">${item.version||""} · ${item.date||"-"} · ${item.time||"-"}</div>
+</div>
+</div>
+`).join("");
+}
+
+function renderRequests(){
+const data=getData("reycloud_requests",[]);
+
+document.getElementById("requestCount").textContent=data.length;
+
+if(!data.length){
+requestList.innerHTML='<div class="empty">Belum ada request.</div>';
+return;
+}
+
+requestList.innerHTML=data.map(item=>`
+<div class="request">
+<div class="requestTop">
+<div class="requestTitle">${item.title||"Request"}</div>
+<div class="requestBadge">${item.status||"PENDING"}</div>
+</div>
+<div class="requestText">${item.message||"-"}</div>
+<div class="requestMeta">${item.date||"-"} · ${item.time||"-"}</div>
+</div>
+`).join("");
+}
+
+function loadMaintenance(){
+const data=getData("reycloud_maintenance",null);
+
+if(!data)return;
+
+maintenanceToggle.checked=!!data.active;
+maintenanceStart.value=data.start||"";
+maintenanceEnd.value=data.end||"";
+maintenanceMessage.value=data.message||"";
+
+renderMaintenance();
+}
+
+document.getElementById("saveMaintenance").addEventListener("click",()=>{
+const data={
+active:maintenanceToggle.checked,
+start:maintenanceStart.value,
+end:maintenanceEnd.value,
+message:maintenanceMessage.value,
+updatedAt:new Date().toISOString()
+};
+
+saveData("reycloud_maintenance",data);
+renderMaintenance();
+showToast("🛠️ Maintenance berhasil disimpan");
+});
+
+maintenanceToggle.addEventListener("change",renderMaintenance);
+
+document.getElementById("publishUpdate").addEventListener("click",()=>{
+const version=document.getElementById("version").value.trim();
+const title=document.getElementById("updateTitle").value.trim();
+const description=document.getElementById("updateDescription").value.trim();
+const type=document.getElementById("updateType").value;
+
+if(!version||!title||!description){
+showToast("⚠️ Lengkapi data update");
+return;
+}
+
+const now=new Date();
+
+const icons={
+update:"📢",
+feature:"✨",
+fix:"🔧",
+maintenance:"🛠️"
+};
+
+const activity={
+id:Date.now(),
+version,
+title,
+description,
+type,
+icon:icons[type]||"📢",
+date:now.toLocaleDateString("id-ID"),
+time:now.toLocaleTimeString("id-ID",{hour12:false}),
+createdAt:now.toISOString()
+};
+
+const data=getData("reycloud_activity",[]);
+data.unshift(activity);
+saveData("reycloud_activity",data.slice(0,30));
+
+document.getElementById("version").value="";
+document.getElementById("updateTitle").value="";
+document.getElementById("updateDescription").value="";
+
+renderActivity();
+showToast("📢 Activity berhasil dipublish");
+});
+
+function loadStats(){
+const deploys=getData("reycloud_deployments",[]);
+document.getElementById("deployCount").textContent=deploys.length;
+}
+
+updateClock();
+setInterval(updateClock,1000);
+
+loadMaintenance();
+renderActivity();
+renderRequests();
+loadStats();
+renderMaintenance();
+</script>
+
+</body>
+</html>
