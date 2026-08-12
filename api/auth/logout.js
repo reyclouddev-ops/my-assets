@@ -1,6 +1,10 @@
+function send(res, status, data) {
+  return res.status(status).json(data)
+}
+
 module.exports = async function(req, res) {
   if (req.method !== "POST") {
-    return res.status(405).json({
+    return send(res, 405, {
       success: false,
       error: "Method tidak diizinkan."
     })
@@ -11,7 +15,7 @@ module.exports = async function(req, res) {
     "reycloud_session=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0"
   )
 
-  return res.status(200).json({
+  return send(res, 200, {
     success: true,
     message: "Logout berhasil."
   })
