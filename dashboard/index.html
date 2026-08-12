@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-
 <title>ReyCloudShop Dashboard</title>
 
 <style>
@@ -52,16 +51,8 @@ display:flex;
 flex-direction:column;
 padding:25px 20px;
 background:
-radial-gradient(
-circle at 50% 42%,
-rgba(0,210,255,.09),
-transparent 30%
-),
-radial-gradient(
-circle at 20% 90%,
-rgba(150,60,255,.12),
-transparent 35%
-),
+radial-gradient(circle at 50% 42%,rgba(0,210,255,.09),transparent 30%),
+radial-gradient(circle at 20% 90%,rgba(150,60,255,.12),transparent 35%),
 var(--bg)
 }
 
@@ -104,16 +95,10 @@ display:flex;
 align-items:center;
 justify-content:center;
 border-radius:13px;
-background:
-linear-gradient(
-135deg,
-#00d9ff,
-#8b5cf6
-);
+background:linear-gradient(135deg,#00d9ff,#8b5cf6);
 font-size:15px;
 font-weight:800;
-box-shadow:
-0 8px 25px rgba(0,217,255,.12)
+box-shadow:0 8px 25px rgba(0,217,255,.12)
 }
 
 .user-data{
@@ -232,12 +217,7 @@ content:"";
 position:absolute;
 inset:0;
 border-radius:inherit;
-background:
-linear-gradient(
-135deg,
-rgba(255,255,255,.05),
-transparent 35%
-);
+background:linear-gradient(135deg,rgba(255,255,255,.05),transparent 35%);
 pointer-events:none
 }
 
@@ -478,11 +458,11 @@ R
 <div class="user-data">
 
 <div class="username" id="username">
-Hallo, ReyCloud 👋
+Hallo, ...
 </div>
 
 <div class="role" id="role">
-User
+...
 </div>
 
 </div>
@@ -509,27 +489,18 @@ Loading...
 
 <div class="card deploy">
 
-<span class="number">
-01
-</span>
+<span class="number">01</span>
 
-<div class="icon">
-🚀
-</div>
+<div class="icon">🚀</div>
 
-<h2>
-Deploy
-</h2>
+<h2>Deploy</h2>
 
 <p>
 Deploy project dengan cepat dan
 pantau status deployment kamu.
 </p>
 
-<button
-class="open"
-onclick="openFeature('deploy')"
->
+<button class="open" onclick="openFeature('deploy')">
 Buka Deploy →
 </button>
 
@@ -537,27 +508,18 @@ Buka Deploy →
 
 <div class="card scrape">
 
-<span class="number">
-02
-</span>
+<span class="number">02</span>
 
-<div class="icon">
-🔎
-</div>
+<div class="icon">🔎</div>
 
-<h2>
-Scrape
-</h2>
+<h2>Scrape</h2>
 
 <p>
 Tools scraping untuk kebutuhan
 project dan pengembangan API.
 </p>
 
-<button
-class="open"
-onclick="openFeature('scrape')"
->
+<button class="open" onclick="openFeature('scrape')">
 Buka Scrape →
 </button>
 
@@ -565,27 +527,18 @@ Buka Scrape →
 
 <div class="card report">
 
-<span class="number">
-03
-</span>
+<span class="number">03</span>
 
-<div class="icon">
-🐛
-</div>
+<div class="icon">🐛</div>
 
-<h2>
-Report Isu
-</h2>
+<h2>Report Isu</h2>
 
 <p>
 Laporkan bug, masalah, atau
 saran untuk pengembangan.
 </p>
 
-<button
-class="open"
-onclick="openFeature('report')"
->
+<button class="open" onclick="openFeature('report')">
 Report Isu →
 </button>
 
@@ -593,27 +546,18 @@ Report Isu →
 
 <div class="card tools">
 
-<span class="number">
-04
-</span>
+<span class="number">04</span>
 
-<div class="icon">
-🛠️
-</div>
+<div class="icon">🛠️</div>
 
-<h2>
-Tools
-</h2>
+<h2>Tools</h2>
 
 <p>
 Kumpulan utility tools untuk
 membantu pekerjaan kamu.
 </p>
 
-<button
-class="open"
-onclick="openFeature('tools')"
->
+<button class="open" onclick="openFeature('tools')">
 Buka Tools →
 </button>
 
@@ -621,27 +565,18 @@ Buka Tools →
 
 <div class="card activity">
 
-<span class="number">
-05
-</span>
+<span class="number">05</span>
 
-<div class="icon">
-📊
-</div>
+<div class="icon">📊</div>
 
-<h2>
-Activity
-</h2>
+<h2>Activity</h2>
 
 <p>
 Lihat pembaruan dan aktivitas
 terbaru dari ReyCloudShop.
 </p>
 
-<button
-class="open"
-onclick="openFeature('activity')"
->
+<button class="open" onclick="openFeature('activity')">
 Lihat Activity →
 </button>
 
@@ -649,27 +584,18 @@ Lihat Activity →
 
 <div class="card settings">
 
-<span class="number">
-06
-</span>
+<span class="number">06</span>
 
-<div class="icon">
-⚙️
-</div>
+<div class="icon">⚙️</div>
 
-<h2>
-Settings
-</h2>
+<h2>Settings</h2>
 
 <p>
 Atur profile, akun, dan
 pengaturan dashboard.
 </p>
 
-<button
-class="open"
-onclick="openFeature('settings')"
->
+<button class="open" onclick="openFeature('settings')">
 Buka Settings →
 </button>
 
@@ -679,24 +605,13 @@ Buka Settings →
 
 <div class="controls">
 
-<button
-class="control"
-id="prev"
-type="button"
->
+<button class="control" id="prev" type="button">
 ←
 </button>
 
-<div
-class="dots"
-id="dots"
-></div>
+<div class="dots" id="dots"></div>
 
-<button
-class="control"
-id="next"
-type="button"
->
+<button class="control" id="next" type="button">
 →
 </button>
 
@@ -710,79 +625,66 @@ type="button"
 
 <script>
 const session=document.getElementById("session")
-
 const carousel=document.getElementById("carousel")
+const cards=[...document.querySelectorAll(".card")]
+const dotsBox=document.getElementById("dots")
 
-const cards=[
-...document.querySelectorAll(".card")
-]
-
-const dotsBox=
-document.getElementById("dots")
-
-const usernameElement=
-document.getElementById("username")
-
-const roleElement=
-document.getElementById("role")
-
-const avatarElement=
-document.getElementById("avatar")
-
-const clockElement=
-document.getElementById("clock")
-
-const dateElement=
-document.getElementById("date")
+const usernameElement=document.getElementById("username")
+const roleElement=document.getElementById("role")
+const avatarElement=document.getElementById("avatar")
+const clockElement=document.getElementById("clock")
+const dateElement=document.getElementById("date")
 
 let active=0
 let startX=0
 let dragX=0
 let dragging=false
+let authenticatedUser=null
 
 const total=cards.length
 
-function getSession(){
-
-const token=
-localStorage.getItem(
-"reycloud_token"
-)
-
-const rawUser=
-localStorage.getItem(
-"reycloud_user"
-)
-
-if(!token||!rawUser){
-
-window.location.replace("/")
-
-return false
-}
+async function getSession(){
 
 try{
 
-const user=
-JSON.parse(rawUser)
-
-if(
-!user||
-!user.username||
-!user.role
-){
-
-throw new Error(
-"Session tidak valid."
+const response=await fetch(
+"/api/auth/me",
+{
+method:"GET",
+headers:{
+"Accept":"application/json"
+},
+credentials:"include",
+cache:"no-store"
+}
 )
+
+if(!response.ok){
+
+throw new Error("Session tidak valid.")
 
 }
 
+const data=await response.json()
+
+if(
+!data.success||
+!data.user||
+!data.user.username||
+!data.user.role
+){
+
+throw new Error("Data user tidak ditemukan.")
+
+}
+
+authenticatedUser=data.user
+
 const username=
-String(user.username)
+String(authenticatedUser.username)
 
 const role=
-String(user.role).toLowerCase()
+String(authenticatedUser.role).toLowerCase()
 
 usernameElement.textContent=
 `Hallo, ${username} 👋`
@@ -793,23 +695,13 @@ role==="admin"
 :"User"
 
 avatarElement.textContent=
-username
-.charAt(0)
-.toUpperCase()
+username.charAt(0).toUpperCase()
 
 session.classList.add("hidden")
 
 return true
 
 }catch(error){
-
-localStorage.removeItem(
-"reycloud_token"
-)
-
-localStorage.removeItem(
-"reycloud_user"
-)
 
 window.location.replace("/")
 
@@ -848,8 +740,7 @@ year:"numeric"
 
 cards.forEach((_,index)=>{
 
-const dot=
-document.createElement("span")
+const dot=document.createElement("span")
 
 dot.className="dot"
 
@@ -865,9 +756,7 @@ dotsBox.appendChild(dot)
 
 })
 
-const dots=[
-...document.querySelectorAll(".dot")
-]
+const dots=[...document.querySelectorAll(".dot")]
 
 function getPosition(index){
 
@@ -887,65 +776,46 @@ return position
 
 function render(){
 
-cards.forEach(
-(card,index)=>{
+cards.forEach((card,index)=>{
 
-const position=
-getPosition(index)
-
-const distance=
-Math.abs(position)
+const position=getPosition(index)
+const distance=Math.abs(position)
 
 if(distance>2){
 
 card.style.opacity="0"
-
-card.style.pointerEvents=
-"none"
-
+card.style.pointerEvents="none"
 card.style.transform=
 "translate3d(0,0,-500px) scale(.55)"
-
-card.style.filter=
-"blur(10px)"
+card.style.filter="blur(10px)"
 
 return
 
 }
 
-const angle=
-position*38
-
+const angle=position*38
 const radius=115
 
 const x=
-Math.sin(
-angle*Math.PI/180
-)*radius
+Math.sin(angle*Math.PI/180)*radius
 
 const z=
-Math.cos(
-angle*Math.PI/180
-)*radius-radius
+Math.cos(angle*Math.PI/180)*radius-radius
 
 const scale=
 position===0
 ?1
 :.82-distance*.035
 
-const rotate=
-position*-5
+const rotate=position*-5
 
 const opacity=
 position===0
 ?1
 :.5-distance*.08
 
-card.style.zIndex=
-100-distance*10
-
-card.style.opacity=
-opacity
+card.style.zIndex=100-distance*10
+card.style.opacity=opacity
 
 card.style.pointerEvents=
 position===0
@@ -962,36 +832,29 @@ card.style.transform=
 rotateY(${rotate}deg)
 scale(${scale})`
 
-}
-)
+})
 
-dots.forEach(
-(dot,index)=>{
+dots.forEach((dot,index)=>{
 
 dot.classList.toggle(
 "active",
 index===active
 )
 
-}
-)
+})
 
 }
 
 function next(){
 
-active=
-(active+1)%total
-
+active=(active+1)%total
 render()
 
 }
 
 function prev(){
 
-active=
-(active-1+total)%total
-
+active=(active-1+total)%total
 render()
 
 }
@@ -1008,59 +871,35 @@ settings:"/dashboard/settings/"
 }
 
 if(routes[feature]){
-
-window.location.href=
-routes[feature]
-
+window.location.href=routes[feature]
 }
 
 }
 
 document
 .getElementById("next")
-.addEventListener(
-"click",
-next
-)
+.addEventListener("click",next)
 
 document
 .getElementById("prev")
-.addEventListener(
-"click",
-prev
-)
+.addEventListener("click",prev)
 
 carousel.addEventListener(
 "pointerdown",
 event=>{
 
-if(
-event.target.closest(".open")
-){
-
+if(event.target.closest(".open")){
 return
-
 }
 
 dragging=true
+startX=event.clientX
+dragX=startX
 
-startX=
-event.clientX
-
-dragX=
-startX
-
-cards[active]
-.classList.add(
-"dragging"
-)
+cards[active].classList.add("dragging")
 
 try{
-
-carousel.setPointerCapture(
-event.pointerId
-)
-
+carousel.setPointerCapture(event.pointerId)
 }catch{}
 
 }
@@ -1071,22 +910,14 @@ carousel.addEventListener(
 event=>{
 
 if(!dragging){
-
 return
-
 }
 
-dragX=
-event.clientX
+dragX=event.clientX
 
-const distance=
-dragX-startX
-
-const card=
-cards[active]
-
-const rotate=
-distance*.035
+const distance=dragX-startX
+const card=cards[active]
+const rotate=distance*.035
 
 card.style.transform=
 `translate3d(${distance}px,0,0)
@@ -1100,35 +931,23 @@ scale(1.02)`
 function finishDrag(){
 
 if(!dragging){
-
 return
-
 }
 
 dragging=false
 
-const card=
-cards[active]
+const card=cards[active]
 
-card.classList.remove(
-"dragging"
-)
+card.classList.remove("dragging")
 
-const distance=
-dragX-startX
+const distance=dragX-startX
 
-if(
-Math.abs(distance)>70
-){
+if(Math.abs(distance)>70){
 
 if(distance<0){
-
 next()
-
 }else{
-
 prev()
-
 }
 
 }else{
@@ -1139,41 +958,31 @@ render()
 
 }
 
-carousel.addEventListener(
-"pointerup",
-finishDrag
-)
-
-carousel.addEventListener(
-"pointercancel",
-finishDrag
-)
+carousel.addEventListener("pointerup",finishDrag)
+carousel.addEventListener("pointercancel",finishDrag)
 
 document.addEventListener(
 "keydown",
 event=>{
 
 if(event.key==="ArrowRight"){
-
 next()
-
 }
 
 if(event.key==="ArrowLeft"){
-
 prev()
-
 }
 
 }
 )
 
-function start(){
+async function start(){
 
-if(!getSession()){
+const valid=
+await getSession()
 
+if(!valid){
 return
-
 }
 
 updateClock()
