@@ -42,6 +42,12 @@ module.exports = async function(req, res) {
       req.body?.password || ""
     )
 
+    const email = String(
+      req.body?.email || ""
+    )
+      .trim()
+      .toLowerCase()
+
     if (!username || !password) {
       return send(res, 400, {
         success: false,
@@ -63,24 +69,23 @@ module.exports = async function(req, res) {
       })
     }
 
-    const exists = await User.findOne({
+    const existingUser = await User.findOne({
       username
     })
 
-    if (exists) {
+    if (existingUser) {
       return send(res, 409, {
         success: false,
         error: "Username sudah digunakan."
       })
     }
 
-    const hashedPassword = await bcrypt.hash(
-      password,
-      12
-    )
+    const hashedPassword =
+      await bcrypt.hash(password, 12)
 
     const user = await User.create({
       username,
+      email,
       password: hashedPassword,
       role: "User"
     })
@@ -99,7 +104,12 @@ module.exports = async function(req, res) {
 
     return send(res, 201, {
       success: true,
-      message: "Registrasi berhasil."
+      message: "Registrasi berhasil.",
+      user: {
+        username: user.username,
+        role: user.role,
+        email: user.email
+      }
     })
   } catch (error) {
     console.error("[REGISTER]", error)
