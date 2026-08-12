@@ -1,8 +1,26 @@
-<!DOCTYPE html><html lang="id">
+<!DOCTYPE html>
+<html lang="id">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>ReyCloudShop</title><style>
+<title>ReyCloudShop — Authentication</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+--bg:#05070b;
+--card:rgba(12,17,25,.94);
+--card2:#101722;
+--line:rgba(255,255,255,.08);
+--text:#f7f9fc;
+--muted:#7f8999;
+--cyan:#00d9ff;
+--blue:#5b7cff;
+--purple:#a05cff;
+--red:#ff5577;
+}
+
 *{
 margin:0;
 padding:0;
@@ -12,178 +30,737 @@ box-sizing:border-box;
 
 body{
 min-height:100vh;
-font-family:Arial,sans-serif;
-color:#fff;
-background:#07080d;
-overflow:hidden
-}
-
-.page{
-position:relative;
-min-height:100vh;
 display:flex;
-align-items:center;
 justify-content:center;
-padding:25px;
-overflow:hidden;
+align-items:center;
+padding:22px;
+font-family:Inter,Arial,sans-serif;
+color:var(--text);
 background:
-radial-gradient(circle at 50% 35%,rgba(0,217,255,.12),transparent 30%),
-radial-gradient(circle at 15% 85%,rgba(168,85,247,.13),transparent 35%),
-#07080d
+radial-gradient(circle at 10% 10%,rgba(0,217,255,.13),transparent 30%),
+radial-gradient(circle at 90% 90%,rgba(160,92,255,.14),transparent 32%),
+var(--bg);
+overflow-x:hidden
 }
 
-.glow{
-position:absolute;
-width:280px;
-height:280px;
+.bg-orb{
+position:fixed;
+width:420px;
+height:420px;
 border-radius:50%;
-filter:blur(140px);
-opacity:.12;
-pointer-events:none
+background:radial-gradient(circle,rgba(0,217,255,.12),transparent 68%);
+filter:blur(35px);
+pointer-events:none;
+animation:float 10s ease-in-out infinite alternate
 }
 
-.glow.one{
-top:-120px;
-right:-100px;
-background:#00d9ff
+@keyframes float{
+from{transform:translate(-100px,-80px)}
+to{transform:translate(100px,80px)}
 }
 
-.glow.two{
-bottom:-130px;
-left:-100px;
-background:#a855f7
-}
-
-.content{
-position:relative;
-z-index:2;
+.auth{
 width:100%;
 max-width:430px;
-text-align:center
+position:relative;
+z-index:2
 }
 
-.logo{
-width:78px;
-height:78px;
-margin:0 auto 24px;
+.brand{
+text-align:center;
+margin-bottom:18px
+}
+
+.brand small{
+font-size:10px;
+letter-spacing:4px;
+color:#687384
+}
+
+.brand h1{
+font-size:27px;
+margin-top:7px;
+font-weight:800;
+letter-spacing:-.8px
+}
+
+.banner{
+height:145px;
+border:1px solid var(--line);
+border-radius:25px;
+overflow:hidden;
+margin-bottom:18px;
+position:relative;
+background:var(--card2);
+box-shadow:0 20px 55px rgba(0,0,0,.35)
+}
+
+.banner img{
+width:100%;
+height:100%;
+display:block;
+object-fit:cover
+}
+
+.banner:after{
+content:"";
+position:absolute;
+inset:0;
+background:linear-gradient(180deg,transparent 35%,rgba(5,7,11,.65))
+}
+
+.bannerText{
+position:absolute;
+left:18px;
+bottom:15px;
+z-index:2
+}
+
+.bannerText strong{
+display:block;
+font-size:16px
+}
+
+.bannerText span{
+display:block;
+margin-top:4px;
+font-size:11px;
+color:#c2c9d4
+}
+
+.scene{
+width:100%;
+height:475px;
+perspective:1500px
+}
+
+.card{
+height:100%;
+width:100%;
+position:relative;
+transform-style:preserve-3d;
+transition:transform .8s cubic-bezier(.6,-.28,.735,.045)
+}
+
+.card.flipped{
+transform:rotateY(180deg)
+}
+
+.face{
+position:absolute;
+inset:0;
+padding:28px;
+border:1px solid var(--line);
+border-radius:30px;
+background:var(--card);
+backdrop-filter:blur(20px);
+-webkit-backdrop-filter:blur(20px);
+box-shadow:0 30px 80px rgba(0,0,0,.5);
+backface-visibility:hidden;
+-webkit-backface-visibility:hidden;
+display:flex;
+flex-direction:column
+}
+
+.back{
+transform:rotateY(180deg)
+}
+
+.icon{
+width:55px;
+height:55px;
+border-radius:18px;
 display:flex;
 align-items:center;
 justify-content:center;
-border-radius:24px;
-background:rgba(255,255,255,.06);
-border:1px solid rgba(255,255,255,.1);
-box-shadow:
-0 20px 60px rgba(0,0,0,.4),
-inset 0 1px rgba(255,255,255,.05);
-font-size:32px
+font-size:25px;
+background:linear-gradient(135deg,rgba(0,217,255,.14),rgba(91,124,255,.14));
+border:1px solid rgba(0,217,255,.15);
+margin-bottom:18px
 }
 
-.label{
-display:inline-block;
-padding:7px 13px;
-border-radius:50px;
-border:1px solid rgba(0,217,255,.2);
-background:rgba(0,217,255,.06);
-color:#00d9ff;
-font-size:10px;
-font-weight:700;
-letter-spacing:2px
+h2{
+font-size:25px;
+letter-spacing:-.5px
 }
 
-h1{
-margin-top:18px;
-font-size:38px;
-line-height:1.1;
-letter-spacing:-1px
+.subtitle{
+color:var(--muted);
+font-size:12px;
+line-height:1.6;
+margin-top:7px;
+margin-bottom:25px
 }
 
-h1 span{
-display:block;
-margin-top:4px;
-background:linear-gradient(90deg,#fff,#00d9ff);
--webkit-background-clip:text;
-background-clip:text;
-color:transparent
+.inputBox{
+position:relative;
+margin-bottom:14px
 }
 
-.description{
-max-width:350px;
-margin:17px auto 0;
-color:#858b9b;
-font-size:14px;
-line-height:1.7
+.inputBox span{
+position:absolute;
+left:16px;
+top:50%;
+transform:translateY(-50%);
+font-size:16px;
+opacity:.75
 }
 
-.continue{
+.inputBox input{
 width:100%;
 height:54px;
-margin-top:30px;
-border:1px solid rgba(0,217,255,.2);
+padding:0 16px 0 45px;
+border:1px solid var(--line);
 border-radius:16px;
-background:rgba(255,255,255,.055);
-color:#fff;
+background:rgba(255,255,255,.035);
+color:white;
 font-size:14px;
+outline:none;
+transition:.2s
+}
+
+.inputBox input::placeholder{
+color:#596272
+}
+
+.inputBox input:focus{
+border-color:rgba(0,217,255,.65);
+box-shadow:0 0 0 3px rgba(0,217,255,.07)
+}
+
+.action{
+width:100%;
+height:55px;
+border:0;
+border-radius:16px;
+margin-top:5px;
 font-weight:800;
+font-size:14px;
 cursor:pointer;
-transition:.25s
+color:#031015;
+background:linear-gradient(135deg,var(--cyan),var(--blue));
+box-shadow:0 13px 30px rgba(0,217,255,.14);
+transition:.2s
 }
 
-.continue:hover{
-transform:translateY(-2px);
-background:rgba(0,217,255,.1);
-border-color:rgba(0,217,255,.4)
+.action:active{
+transform:scale(.98)
 }
 
-.continue:active{
-transform:scale(.97)
+.action:disabled{
+opacity:.5;
+cursor:not-allowed
+}
+
+.switch{
+margin-top:auto;
+text-align:center;
+font-size:12px;
+color:#697383
+}
+
+.switch button{
+border:0;
+background:none;
+color:var(--cyan);
+font-weight:700;
+cursor:pointer;
+font-size:12px
+}
+
+.status{
+display:none;
+margin-top:14px;
+padding:12px 14px;
+border-radius:14px;
+font-size:11px;
+line-height:1.5;
+border:1px solid rgba(255,85,119,.2);
+background:rgba(255,85,119,.06);
+color:#ff829c
+}
+
+.status.show{
+display:block
+}
+
+.status.success{
+border-color:rgba(34,197,94,.2);
+background:rgba(34,197,94,.06);
+color:#6ee79a
 }
 
 .footer{
-margin-top:25px;
-color:#4f5563;
-font-size:10px
+text-align:center;
+font-size:9px;
+letter-spacing:2px;
+color:#353d49;
+margin-top:16px
 }
 
-@media(max-width:380px){
-
-.logo{
-width:68px;
-height:68px;
-font-size:28px
+@media(max-width:500px){
+body{
+padding:15px
 }
 
-h1{
-font-size:32px
+.brand h1{
+font-size:24px
 }
 
-.description{
-font-size:13px
+.banner{
+height:125px;
+border-radius:21px
 }
 
-.continue{
-margin-top:24px
+.scene{
+height:455px
 }
 
+.face{
+padding:23px;
+border-radius:25px
 }
-</style></head><body><div class="page"><div class="glow one"></div>
-<div class="glow two"></div><div class="content"><div class="logo">
-☁️
-</div><div class="label">
-REYCLOUDSHOP
-</div><h1>
-Hallo,
-<span>Selamat Datang!</span>
-</h1><p class="description">
-Selamat datang di assets ReyCloudShop.
-Di sini ada beberapa fitur yang tersedia
-untuk membantu kebutuhan project kamu.
-</p><button class="continue" onclick="continueToDashboard()">
-Lanjut ke Dashboard →
-</button><div class="footer">
-Powered by ReyCloudShop
-</div></div></div><script>
-function continueToDashboard(){
-window.location.href="/dashboard/";
 }
-</script></body>
-</html>
+</style>
+</head>
+<body>
+
+<div class="bg-orb"></div>
+
+<main class="auth">
+
+<div class="brand">
+<small>REYCLOUDSHOP</small>
+<h1>Welcome to ReyCloud</h1>
+</div>
+
+<div class="banner">
+<img src="/image/banner.png" alt="ReyCloud Banner">
+<div class="bannerText">
+<strong>ReyCloudShop</strong>
+<span>Digital cloud platform</span>
+</div>
+</div>
+
+<div class="scene">
+
+<div class="card" id="authCard">
+
+<section class="face front">
+
+<div class="icon">🔐</div>
+
+<h2>Welcome Back</h2>
+
+<p class="subtitle">
+Login untuk melanjutkan ke dashboard ReyCloud.
+</p>
+
+<div class="inputBox">
+<span>👤</span>
+<input
+id="loginUsername"
+type="text"
+placeholder="Username"
+autocomplete="username"
+maxlength="32"
+>
+</div>
+
+<div class="inputBox">
+<span>🔒</span>
+<input
+id="loginPassword"
+type="password"
+placeholder="Password"
+autocomplete="current-password"
+>
+</div>
+
+<button
+class="action"
+id="loginButton"
+type="button"
+>
+LOGIN
+</button>
+
+<div class="status" id="loginStatus"></div>
+
+<div class="switch">
+Belum punya akun?
+<button type="button" id="showRegister">
+Register
+</button>
+</div>
+
+</section>
+
+<section class="face back">
+
+<div class="icon">✨</div>
+
+<h2>Create Account</h2>
+
+<p class="subtitle">
+Buat akun baru untuk mulai menggunakan ReyCloud.
+</p>
+
+<div class="inputBox">
+<span>👤</span>
+<input
+id="registerUsername"
+type="text"
+placeholder="Username"
+autocomplete="username"
+maxlength="32"
+>
+</div>
+
+<div class="inputBox">
+<span>🔒</span>
+<input
+id="registerPassword"
+type="password"
+placeholder="Password"
+autocomplete="new-password"
+>
+</div>
+
+<div class="inputBox">
+<span>🔑</span>
+<input
+id="registerPasswordConfirm"
+type="password"
+placeholder="Konfirmasi Password"
+autocomplete="new-password"
+>
+</div>
+
+<button
+class="action"
+id="registerButton"
+type="button"
+>
+REGISTER
+</button>
+
+<div class="status" id="registerStatus"></div>
+
+<div class="switch">
+Sudah punya akun?
+<button type="button" id="showLogin">
+Login
+</button>
+</div>
+
+</section>
+
+</div>
+
+</div>
+
+<div class="footer">
+POWERED BY REYCLOUDSHOP
+</div>
+
+</main>
+
+<script>
+const authCard=document.getElementById("authCard")
+
+const loginButton=document.getElementById("loginButton")
+const registerButton=document.getElementById("registerButton")
+
+const loginStatus=document.getElementById("loginStatus")
+const registerStatus=document.getElementById("registerStatus")
+
+const loginUsername=document.getElementById("loginUsername")
+const loginPassword=document.getElementById("loginPassword")
+
+const registerUsername=document.getElementById("registerUsername")
+const registerPassword=document.getElementById("registerPassword")
+const registerPasswordConfirm=document.getElementById("registerPasswordConfirm")
+
+function showLogin(){
+authCard.classList.remove("flipped")
+clearStatus()
+}
+
+function showRegister(){
+authCard.classList.add("flipped")
+clearStatus()
+}
+
+function clearStatus(){
+loginStatus.className="status"
+loginStatus.textContent=""
+
+registerStatus.className="status"
+registerStatus.textContent=""
+}
+
+function setStatus(element,message,success=false){
+element.textContent=message
+element.className=success
+?"status show success"
+:"status show"
+}
+
+async function requestAPI(url,data){
+const response=await fetch(url,{
+method:"POST",
+headers:{
+"Content-Type":"application/json",
+"Accept":"application/json"
+},
+body:JSON.stringify(data)
+})
+
+let result
+
+try{
+result=await response.json()
+}catch{
+throw new Error("Server mengirim response yang tidak valid.")
+}
+
+if(!response.ok||!result.success){
+throw new Error(
+result.error||
+"Request gagal."
+)
+}
+
+return result
+}
+
+function saveSession(result){
+localStorage.setItem(
+"reycloud_token",
+result.token
+)
+
+localStorage.setItem(
+"reycloud_user",
+JSON.stringify(result.user)
+)
+}
+
+function redirectDashboard(result){
+const role=result.user?.role
+
+if(role==="admin"){
+window.location.replace("/dashboard/admin/")
+return
+}
+
+window.location.replace("/dashboard/")
+}
+
+async function login(){
+clearStatus()
+
+const username=loginUsername.value
+.trim()
+.toLowerCase()
+
+const password=loginPassword.value
+
+if(!username||!password){
+setStatus(
+loginStatus,
+"Username dan password wajib diisi."
+)
+return
+}
+
+loginButton.disabled=true
+loginButton.textContent="LOGIN..."
+
+try{
+
+const result=await requestAPI(
+"/api/auth/login",
+{
+username,
+password
+}
+)
+
+saveSession(result)
+
+setStatus(
+loginStatus,
+"Login berhasil. Membuka dashboard...",
+true
+)
+
+setTimeout(()=>{
+redirectDashboard(result)
+},300)
+
+}catch(error){
+
+setStatus(
+loginStatus,
+error.message||
+"Login gagal."
+)
+
+}finally{
+
+loginButton.disabled=false
+loginButton.textContent="LOGIN"
+
+}
+}
+
+async function register(){
+clearStatus()
+
+const username=registerUsername.value
+.trim()
+.toLowerCase()
+
+const password=registerPassword.value
+const confirm=registerPasswordConfirm.value
+
+if(!username||!password||!confirm){
+setStatus(
+registerStatus,
+"Semua field wajib diisi."
+)
+return
+}
+
+if(!/^[a-z0-9_]{3,32}$/.test(username)){
+setStatus(
+registerStatus,
+"Username 3-32 karakter: huruf kecil, angka, atau underscore."
+)
+return
+}
+
+if(password.length<6){
+setStatus(
+registerStatus,
+"Password minimal 6 karakter."
+)
+return
+}
+
+if(password!==confirm){
+setStatus(
+registerStatus,
+"Konfirmasi password tidak sama."
+)
+return
+}
+
+registerButton.disabled=true
+registerButton.textContent="REGISTER..."
+
+try{
+
+const result=await requestAPI(
+"/api/auth/register",
+{
+username,
+password
+}
+)
+
+saveSession(result)
+
+setStatus(
+registerStatus,
+"Registrasi berhasil. Membuka dashboard...",
+true
+)
+
+setTimeout(()=>{
+redirectDashboard(result)
+},300)
+
+}catch(error){
+
+setStatus(
+registerStatus,
+error.message||
+"Registrasi gagal."
+)
+
+}finally{
+
+registerButton.disabled=false
+registerButton.textContent="REGISTER"
+
+}
+}
+
+document
+.getElementById("showRegister")
+.addEventListener(
+"click",
+showRegister
+)
+
+document
+.getElementById("showLogin")
+.addEventListener(
+"click",
+showLogin
+)
+
+loginButton.addEventListener(
+"click",
+login
+)
+
+registerButton.addEventListener(
+"click",
+register
+)
+
+loginPassword.addEventListener(
+"keydown",
+event=>{
+if(event.key==="Enter"){
+login()
+}
+})
+
+registerPasswordConfirm.addEventListener(
+"keydown",
+event=>{
+if(event.key==="Enter"){
+register()
+}
+})
+
+if(
+localStorage.getItem("reycloud_token")&&
+localStorage.getItem("reycloud_user")
+){
+try{
+
+const user=JSON.parse(
+localStorage.getItem("reycloud_user")
+)
+
+if(user?.role==="admin"){
+window.location.replace("/dashboard/admin/")
+}else{
+window.location.replace("/dashboard/")
+}
+
+}catch{
+localStorage.removeItem("reycloud_token")
+localStorage.removeItem("reycloud_user")
+}
+}
+</script>
+
+</body>
+  </html>
