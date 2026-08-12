@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Activity - ReyCloudShop</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+-webkit-tap-highlight-color:transparent
+}
+
+:root{
+--bg:#05070b;
+--card:#0c1119;
+--card2:#101722;
+--line:rgba(255,255,255,.08);
+--text:#f5f7fb;
+--muted:#747d8d;
+--cyan:#00d9ff;
+--purple:#9d5cff;
+--green:#22c55e;
+--orange:#ff9d42;
+--red:#ff426d
+}
+
+body{
+min-height:100vh;
+background:
+radial-gradient(circle at 10% 0%,rgba(0,217,255,.12),transparent 30%),
+radial-gradient(circle at 90% 90%,rgba(157,92,255,.12),transparent 30%),
+var(--bg);
+font-family:Arial,sans-serif;
+color:var(--text)
+}
+
+.app{
+width:100%;
+max-width:760px;
+margin:auto;
+padding:25px 18px 45px
+}
+
+.top{
+display:flex;
+align-items:center;
+justify-content:space-between;
+margin-bottom:24px
+}
+
+.brand small{
+font-size:10px;
+letter-spacing:3px;
+color:#687181
+}
+
+.brand h1{
+font-size:30px;
+margin-top:7px
+}
+
+.back{
+width:50px;
+height:50px;
+border-radius:16px;
+border:1px solid var(--line);
+background:rgba(255,255,255,.04);
+color:white;
+font-size:23px;
+cursor:pointer
+}
+
+.clock{
+padding:17px 18px;
+border:1px solid var(--line);
+border-radius:22px;
+background:rgba(12,17,25,.8);
+margin-bottom:20px
+}
+
+.clockTop{
+display:flex;
+align-items:center;
+justify-content:space-between
+}
+
+.clockTime{
+font-size:24px;
+font-weight:800;
+letter-spacing:1px
+}
+
+.live{
+display:flex;
+align-items:center;
+gap:7px;
+font-size:10px;
+color:var(--green);
+letter-spacing:1px
+}
+
+.dot{
+width:7px;
+height:7px;
+border-radius:50%;
+background:var(--green);
+box-shadow:0 0 10px var(--green)
+}
+
+.date{
+margin-top:7px;
+font-size:12px;
+color:var(--muted)
+}
+
+.filter{
+display:flex;
+gap:8px;
+overflow-x:auto;
+padding-bottom:5px;
+margin-bottom:22px
+}
+
+.filter::-webkit-scrollbar{
+display:none
+}
+
+.filter button{
+white-space:nowrap;
+padding:10px 15px;
+border-radius:13px;
+border:1px solid var(--line);
+background:rgba(255,255,255,.035);
+color:#858e9e;
+font-size:11px;
+cursor:pointer
+}
+
+.filter button.active{
+background:rgba(0,217,255,.1);
+border-color:rgba(0,217,255,.35);
+color:var(--cyan)
+}
+
+.timeline{
+position:relative;
+padding-left:22px
+}
+
+.timeline:before{
+content:"";
+position:absolute;
+left:6px;
+top:5px;
+bottom:5px;
+width:1px;
+background:linear-gradient(
+to bottom,
+var(--cyan),
+rgba(157,92,255,.2),
+transparent
+)
+}
+
+.item{
+position:relative;
+margin-bottom:18px;
+padding:19px;
+border:1px solid var(--line);
+border-radius:23px;
+background:rgba(12,17,25,.88);
+box-shadow:0 15px 45px rgba(0,0,0,.18);
+animation:show .35s ease
+}
+
+.item:before{
+content:"";
+position:absolute;
+left:-21px;
+top:22px;
+width:9px;
+height:9px;
+border-radius:50%;
+background:var(--cyan);
+box-shadow:0 0 13px rgba(0,217,255,.8)
+}
+
+.item.maintenance:before{
+background:var(--orange);
+box-shadow:0 0 13px rgba(255,157,66,.7)
+}
+
+.item.request:before{
+background:var(--purple);
+box-shadow:0 0 13px rgba(157,92,255,.7)
+}
+
+.item.fix:before{
+background:var(--green);
+box-shadow:0 0 13px rgba(34,197,94,.7)
+}
+
+.itemHead{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:10px;
+margin-bottom:12px
+}
+
+.badge{
+font-size:9px;
+font-weight:800;
+letter-spacing:1px;
+padding:6px 9px;
+border-radius:8px;
+background:rgba(0,217,255,.1);
+color:var(--cyan)
+}
+
+.maintenance .badge{
+background:rgba(255,157,66,.1);
+color:var(--orange)
+}
+
+.request .badge{
+background:rgba(157,92,255,.1);
+color:var(--purple)
+}
+
+.fix .badge{
+background:rgba(34,197,94,.1);
+color:var(--green)
+}
+
+.itemTime{
+font-size:10px;
+color:#626b7b
+}
+
+.item h2{
+font-size:16px;
+margin-bottom:8px
+}
+
+.item p{
+font-size:12px;
+line-height:1.7;
+color:#969eac
+}
+
+.meta{
+display:flex;
+align-items:center;
+gap:8px;
+margin-top:15px;
+padding-top:12px;
+border-top:1px solid rgba(255,255,255,.055);
+font-size:9px;
+color:#596170
+}
+
+.empty{
+display:none;
+text-align:center;
+padding:45px 20px;
+border:1px dashed var(--line);
+border-radius:22px;
+color:var(--muted)
+}
+
+.empty.show{
+display:block
+}
+
+.emptyIcon{
+font-size:35px;
+margin-bottom:12px
+}
+
+.footer{
+text-align:center;
+margin-top:30px;
+font-size:9px;
+letter-spacing:2px;
+color:#343b47
+}
+
+@keyframes show{
+from{
+opacity:0;
+transform:translateY(8px)
+}
+to{
+opacity:1;
+transform:translateY(0)
+}
+}
+
+@media(max-width:500px){
+.app{
+padding:20px 14px 35px
+}
+
+.brand h1{
+font-size:27px
+}
+
+.timeline{
+padding-left:20px
+}
+
+.item{
+padding:17px
+}
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<div class="top">
+
+<div class="brand">
+<small>REYCLOUDSHOP</small>
+<h1>Activity</h1>
+</div>
+
+<button class="back" onclick="history.back()">←</button>
+
+</div>
+
+<div class="clock">
+
+<div class="clockTop">
+
+<div class="clockTime" id="clock">
+00:00:00
+</div>
+
+<div class="live">
+<span class="dot"></span>
+LIVE
+</div>
+
+</div>
+
+<div class="date" id="date">
+Memuat tanggal...
+</div>
+
+</div>
+
+<div class="filter">
+
+<button class="active" data-filter="all">
+Semua
+</button>
+
+<button data-filter="update">
+Update
+</button>
+
+<button data-filter="maintenance">
+Maintenance
+</button>
+
+<button data-filter="request">
+Request
+</button>
+
+<button data-filter="fix">
+Fix
+</button>
+
+</div>
+
+<div class="timeline" id="timeline">
+
+<div class="item update">
+
+<div class="itemHead">
+
+<span class="badge">
+UPDATE
+</span>
+
+<span class="itemTime">
+22:15
+</span>
+
+</div>
+
+<h2>Dashboard UI diperbarui</h2>
+
+<p>
+Tampilan dashboard ReyCloudShop mendapatkan
+pembaruan UI agar lebih nyaman digunakan
+di perangkat mobile.
+</p>
+
+<div class="meta">
+<span>📅 12 Agustus 2026</span>
+<span>•</span>
+<span>v2.1.0</span>
+</div>
+
+</div>
+
+<div class="item fix">
+
+<div class="itemHead">
+
+<span class="badge">
+FIX
+</span>
+
+<span class="itemTime">
+20:40
+</span>
+
+</div>
+
+<h2>Perbaikan halaman Deploy</h2>
+
+<p>
+Memperbaiki proses upload project dan
+meningkatkan informasi progress deployment.
+</p>
+
+<div class="meta">
+<span>📅 12 Agustus 2026</span>
+<span>•</span>
+<span>v2.0.9</span>
+</div>
+
+</div>
+
+<div class="item maintenance">
+
+<div class="itemHead">
+
+<span class="badge">
+MAINTENANCE
+</span>
+
+<span class="itemTime">
+18:00
+</span>
+
+</div>
+
+<h2>Maintenance sistem</h2>
+
+<p>
+Maintenance dilakukan untuk meningkatkan
+stabilitas layanan ReyCloudShop.
+</p>
+
+<div class="meta">
+<span>📅 11 Agustus 2026</span>
+<span>•</span>
+<span>18:00 - 19:00</span>
+</div>
+
+</div>
+
+<div class="item request">
+
+<div class="itemHead">
+
+<span class="badge">
+REQUEST
+</span>
+
+<span class="itemTime">
+16:25
+</span>
+
+</div>
+
+<h2>Request fitur baru</h2>
+
+<p>
+Fitur baru sedang dipertimbangkan berdasarkan
+request dari pengguna ReyCloudShop.
+</p>
+
+<div class="meta">
+<span>📅 11 Agustus 2026</span>
+<span>•</span>
+<span>User Request</span>
+</div>
+
+</div>
+
+</div>
+
+<div class="empty" id="empty">
+
+<div class="emptyIcon">
+📭
+</div>
+
+Tidak ada activity pada kategori ini.
+
+</div>
+
+<div class="footer">
+POWERED BY REYCLOUDSHOP
+</div>
+
+</div>
+
+<script>
+const clock=document.getElementById("clock");
+const date=document.getElementById("date");
+const timeline=document.getElementById("timeline");
+const empty=document.getElementById("empty");
+const filters=document.querySelectorAll(".filter button");
+const items=document.querySelectorAll(".item");
+
+function updateClock(){
+
+const now=new Date();
+
+clock.textContent=
+now.toLocaleTimeString(
+"id-ID",
+{
+hour:"2-digit",
+minute:"2-digit",
+second:"2-digit",
+hour12:false
+}
+);
+
+date.textContent=
+now.toLocaleDateString(
+"id-ID",
+{
+weekday:"long",
+day:"2-digit",
+month:"long",
+year:"numeric"
+}
+);
+
+}
+
+updateClock();
+setInterval(updateClock,1000);
+
+filters.forEach(button=>{
+
+button.addEventListener("click",()=>{
+
+filters.forEach(
+item=>item.classList.remove("active")
+);
+
+button.classList.add("active");
+
+const filter=button.dataset.filter;
+
+let visible=0;
+
+items.forEach(item=>{
+
+const type=
+item.classList.contains(filter);
+
+const show=
+filter==="all"||
+type;
+
+item.style.display=
+show?"block":"none";
+
+if(show){
+visible++;
+}
+
+});
+
+if(visible===0){
+empty.classList.add("show");
+}else{
+empty.classList.remove("show");
+}
+
+});
+
+});
+
+</script>
+
+</body>
+</html>
