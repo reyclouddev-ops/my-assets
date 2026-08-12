@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+
 <title>ReyCloudShop Dashboard</title>
 
 <style>
@@ -24,7 +25,8 @@ box-sizing:border-box;
 --pink:#ff386f;
 --orange:#ff9d3d;
 --green:#22c55e;
---gray:#94a3b8
+--gray:#94a3b8;
+--red:#ff426d
 }
 
 html,
@@ -114,7 +116,7 @@ font-weight:700;
 white-space:nowrap;
 overflow:hidden;
 text-overflow:ellipsis;
-max-width:190px
+max-width:170px
 }
 
 .role{
@@ -142,6 +144,34 @@ margin-top:3px;
 color:#666c7b;
 font-size:9px;
 white-space:nowrap
+}
+
+.power{
+width:40px;
+height:40px;
+flex:0 0 40px;
+border-radius:13px;
+border:1px solid rgba(255,66,109,.18);
+background:rgba(255,66,109,.07);
+color:#ff6f91;
+font-size:18px;
+cursor:pointer;
+transition:.2s;
+box-shadow:0 8px 25px rgba(255,66,109,.08)
+}
+
+.power:hover{
+background:rgba(255,66,109,.13);
+border-color:rgba(255,66,109,.3)
+}
+
+.power:active{
+transform:scale(.92)
+}
+
+.power.loading{
+opacity:.5;
+pointer-events:none
 }
 
 .carousel{
@@ -379,6 +409,18 @@ font-size:13px
 display:none
 }
 
+@media(max-width:600px){
+
+.user-info{
+gap:8px
+}
+
+.username{
+max-width:130px
+}
+
+}
+
 @media(max-width:380px){
 
 .app{
@@ -400,7 +442,13 @@ height:310px
 }
 
 .username{
-max-width:150px
+max-width:105px
+}
+
+.power{
+width:38px;
+height:38px;
+flex-basis:38px
 }
 
 }
@@ -478,6 +526,16 @@ Loading...
 </span>
 
 </div>
+
+<button
+class="power"
+id="powerBtn"
+type="button"
+aria-label="Logout"
+title="Logout"
+>
+⏻
+</button>
 
 </div>
 
@@ -605,13 +663,24 @@ Buka Settings →
 
 <div class="controls">
 
-<button class="control" id="prev" type="button">
+<button
+class="control"
+id="prev"
+type="button"
+>
 ←
 </button>
 
-<div class="dots" id="dots"></div>
+<div
+class="dots"
+id="dots"
+></div>
 
-<button class="control" id="next" type="button">
+<button
+class="control"
+id="next"
+type="button"
+>
 →
 </button>
 
@@ -634,6 +703,7 @@ const roleElement=document.getElementById("role")
 const avatarElement=document.getElementById("avatar")
 const clockElement=document.getElementById("clock")
 const dateElement=document.getElementById("date")
+const powerBtn=document.getElementById("powerBtn")
 
 let active=0
 let startX=0
@@ -660,9 +730,7 @@ cache:"no-store"
 )
 
 if(!response.ok){
-
 throw new Error("Session tidak valid.")
-
 }
 
 const data=await response.json()
@@ -673,9 +741,7 @@ if(
 !data.user.username||
 !data.user.role
 ){
-
 throw new Error("Data user tidak ditemukan.")
-
 }
 
 authenticatedUser=data.user
@@ -692,7 +758,7 @@ usernameElement.textContent=
 roleElement.textContent=
 role==="admin"
 ?"Admin"
-:"User"
+:role
 
 avatarElement.textContent=
 username.charAt(0).toUpperCase()
@@ -706,6 +772,58 @@ return true
 window.location.replace("/")
 
 return false
+
+}
+
+}
+
+async function logout(){
+
+if(powerBtn.classList.contains("loading")){
+return
+}
+
+const allowed=
+window.confirm(
+"Keluar dari ReyCloudShop?"
+)
+
+if(!allowed){
+return
+}
+
+powerBtn.classList.add("loading")
+powerBtn.textContent="..."
+
+try{
+
+const response=
+await fetch(
+"/api/auth/logout",
+{
+method:"POST",
+headers:{
+"Accept":"application/json"
+},
+credentials:"include",
+cache:"no-store"
+}
+)
+
+if(!response.ok){
+throw new Error("Logout gagal.")
+}
+
+window.location.replace("/")
+
+}catch(error){
+
+powerBtn.classList.remove("loading")
+powerBtn.textContent="⏻"
+
+alert(
+"Logout gagal. Silakan coba lagi."
+)
 
 }
 
@@ -740,7 +858,8 @@ year:"numeric"
 
 cards.forEach((_,index)=>{
 
-const dot=document.createElement("span")
+const dot=
+document.createElement("span")
 
 dot.className="dot"
 
@@ -756,7 +875,9 @@ dotsBox.appendChild(dot)
 
 })
 
-const dots=[...document.querySelectorAll(".dot")]
+const dots=[
+...document.querySelectorAll(".dot")
+]
 
 function getPosition(index){
 
@@ -778,44 +899,60 @@ function render(){
 
 cards.forEach((card,index)=>{
 
-const position=getPosition(index)
-const distance=Math.abs(position)
+const position=
+getPosition(index)
+
+const distance=
+Math.abs(position)
 
 if(distance>2){
 
 card.style.opacity="0"
+
 card.style.pointerEvents="none"
+
 card.style.transform=
 "translate3d(0,0,-500px) scale(.55)"
+
 card.style.filter="blur(10px)"
 
 return
 
 }
 
-const angle=position*38
+const angle=
+position*38
+
 const radius=115
 
 const x=
-Math.sin(angle*Math.PI/180)*radius
+Math.sin(
+angle*Math.PI/180
+)*radius
 
 const z=
-Math.cos(angle*Math.PI/180)*radius-radius
+Math.cos(
+angle*Math.PI/180
+)*radius-radius
 
 const scale=
 position===0
 ?1
 :.82-distance*.035
 
-const rotate=position*-5
+const rotate=
+position*-5
 
 const opacity=
 position===0
 ?1
 :.5-distance*.08
 
-card.style.zIndex=100-distance*10
-card.style.opacity=opacity
+card.style.zIndex=
+100-distance*10
+
+card.style.opacity=
+opacity
 
 card.style.pointerEvents=
 position===0
@@ -847,14 +984,18 @@ index===active
 
 function next(){
 
-active=(active+1)%total
+active=
+(active+1)%total
+
 render()
 
 }
 
 function prev(){
 
-active=(active-1+total)%total
+active=
+(active-1+total)%total
+
 render()
 
 }
@@ -871,18 +1012,32 @@ settings:"/dashboard/settings/"
 }
 
 if(routes[feature]){
-window.location.href=routes[feature]
+
+window.location.href=
+routes[feature]
+
 }
 
 }
 
 document
 .getElementById("next")
-.addEventListener("click",next)
+.addEventListener(
+"click",
+next
+)
 
 document
 .getElementById("prev")
-.addEventListener("click",prev)
+.addEventListener(
+"click",
+prev
+)
+
+powerBtn.addEventListener(
+"click",
+logout
+)
 
 carousel.addEventListener(
 "pointerdown",
@@ -893,13 +1048,22 @@ return
 }
 
 dragging=true
-startX=event.clientX
-dragX=startX
 
-cards[active].classList.add("dragging")
+startX=
+event.clientX
+
+dragX=
+startX
+
+cards[active]
+.classList.add("dragging")
 
 try{
-carousel.setPointerCapture(event.pointerId)
+
+carousel.setPointerCapture(
+event.pointerId
+)
+
 }catch{}
 
 }
@@ -913,11 +1077,17 @@ if(!dragging){
 return
 }
 
-dragX=event.clientX
+dragX=
+event.clientX
 
-const distance=dragX-startX
-const card=cards[active]
-const rotate=distance*.035
+const distance=
+dragX-startX
+
+const card=
+cards[active]
+
+const rotate=
+distance*.035
 
 card.style.transform=
 `translate3d(${distance}px,0,0)
@@ -936,11 +1106,13 @@ return
 
 dragging=false
 
-const card=cards[active]
+const card=
+cards[active]
 
 card.classList.remove("dragging")
 
-const distance=dragX-startX
+const distance=
+dragX-startX
 
 if(Math.abs(distance)>70){
 
@@ -958,8 +1130,15 @@ render()
 
 }
 
-carousel.addEventListener("pointerup",finishDrag)
-carousel.addEventListener("pointercancel",finishDrag)
+carousel.addEventListener(
+"pointerup",
+finishDrag
+)
+
+carousel.addEventListener(
+"pointercancel",
+finishDrag
+)
 
 document.addEventListener(
 "keydown",
@@ -971,6 +1150,12 @@ next()
 
 if(event.key==="ArrowLeft"){
 prev()
+}
+
+if(
+event.key==="Escape"
+){
+logout()
 }
 
 }
