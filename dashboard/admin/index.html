@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>ReyCloudShop - Admin</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+-webkit-tap-highlight-color:transparent
+}
+
+:root{
+--bg:#05070b;
+--card:#0c1119;
+--card2:#101722;
+--line:rgba(255,255,255,.08);
+--muted:#747d8d;
+--text:#f5f7fb;
+--cyan:#00d9ff;
+--purple:#9d5cff;
+--green:#22c55e;
+--red:#ff426d;
+--yellow:#f5c542
+}
+
+body{
+min-height:100vh;
+background:
+radial-gradient(circle at 10% 5%,rgba(0,217,255,.1),transparent 28%),
+radial-gradient(circle at 90% 90%,rgba(157,92,255,.1),transparent 30%),
+var(--bg);
+font-family:Arial,sans-serif;
+color:var(--text)
+}
+
+.app{
+width:100%;
+max-width:850px;
+margin:auto;
+padding:25px 18px 45px
+}
+
+.top{
+display:flex;
+align-items:center;
+justify-content:space-between;
+margin-bottom:25px
+}
+
+.brand small{
+font-size:10px;
+letter-spacing:3px;
+color:#687181
+}
+
+.brand h1{
+font-size:30px;
+margin-top:7px
+}
+
+.back{
+width:48px;
+height:48px;
+border-radius:16px;
+border:1px solid var(--line);
+background:rgba(255,255,255,.04);
+color:white;
+font-size:22px;
+cursor:pointer
+}
+
+.status{
+display:flex;
+align-items:center;
+gap:8px;
+font-size:11px;
+color:#7f8999;
+margin-bottom:18px
+}
+
+.dot{
+width:8px;
+height:8px;
+border-radius:50%;
+background:var(--green);
+box-shadow:0 0 12px rgba(34,197,94,.6)
+}
+
+.panel{
+border:1px solid var(--line);
+background:rgba(12,17,25,.9);
+border-radius:27px;
+padding:22px;
+box-shadow:0 25px 80px rgba(0,0,0,.4);
+margin-bottom:18px
+}
+
+.panelHead{
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:15px;
+margin-bottom:20px
+}
+
+.panelTitle{
+font-size:18px;
+font-weight:800
+}
+
+.panelSub{
+font-size:11px;
+color:var(--muted);
+margin-top:5px
+}
+
+.refresh{
+border:1px solid var(--line);
+background:rgba(255,255,255,.04);
+color:white;
+padding:10px 13px;
+border-radius:12px;
+cursor:pointer
+}
+
+.grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:15px
+}
+
+.field{
+margin-bottom:16px
+}
+
+.field.full{
+grid-column:1/-1
+}
+
+.label{
+display:block;
+font-size:10px;
+letter-spacing:1px;
+color:#858e9e;
+margin-bottom:8px;
+text-transform:uppercase
+}
+
+.input,
+.select,
+.textarea{
+width:100%;
+border:1px solid rgba(255,255,255,.1);
+border-radius:15px;
+background:rgba(255,255,255,.035);
+outline:none;
+padding:13px 15px;
+color:white;
+font-size:14px;
+transition:.2s
+}
+
+.input,
+.select{
+height:52px
+}
+
+.textarea{
+min-height:125px;
+resize:vertical;
+font-family:Arial,sans-serif;
+line-height:1.5
+}
+
+.select{
+appearance:none
+}
+
+.select option{
+background:#0c1119;
+color:white
+}
+
+.input:focus,
+.select:focus,
+.textarea:focus{
+border-color:var(--cyan);
+box-shadow:0 0 0 3px rgba(0,217,255,.07)
+}
+
+.publish{
+width:100%;
+height:55px;
+border:0;
+border-radius:16px;
+background:linear-gradient(135deg,#00d9ff,#6575ff);
+color:white;
+font-weight:800;
+font-size:15px;
+cursor:pointer;
+box-shadow:0 12px 35px rgba(0,217,255,.15);
+margin-top:3px
+}
+
+.publish:active{
+transform:scale(.98)
+}
+
+.publish:disabled{
+opacity:.5;
+cursor:not-allowed
+}
+
+.message{
+display:none;
+padding:13px 15px;
+border-radius:14px;
+font-size:12px;
+line-height:1.5;
+margin-bottom:16px
+}
+
+.message.show{
+display:block
+}
+
+.message.success{
+border:1px solid rgba(34,197,94,.2);
+background:rgba(34,197,94,.06);
+color:#6ee7a0
+}
+
+.message.error{
+border:1px solid rgba(255,66,109,.2);
+background:rgba(255,66,109,.06);
+color:#ff7895
+}
+
+.activity{
+display:flex;
+flex-direction:column;
+gap:12px
+}
+
+.item{
+padding:17px;
+border:1px solid rgba(255,255,255,.07);
+background:rgba(255,255,255,.025);
+border-radius:19px
+}
+
+.itemTop{
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:10px;
+margin-bottom:10px
+}
+
+.badge{
+font-size:9px;
+letter-spacing:1px;
+padding:6px 9px;
+border-radius:8px;
+background:rgba(0,217,255,.1);
+color:var(--cyan);
+text-transform:uppercase
+}
+
+.badge.maintenance{
+color:var(--yellow);
+background:rgba(245,197,66,.1)
+}
+
+.badge.request{
+color:var(--purple);
+background:rgba(157,92,255,.1)
+}
+
+.date{
+font-size:10px;
+color:#697384
+}
+
+.itemTitle{
+font-size:15px;
+font-weight:800;
+margin-bottom:6px
+}
+
+.itemDesc{
+font-size:12px;
+color:#929baa;
+line-height:1.55
+}
+
+.itemVersion{
+display:inline-block;
+margin-top:10px;
+font-size:9px;
+color:#9d5cff;
+letter-spacing:1px
+}
+
+.empty{
+text-align:center;
+padding:35px;
+font-size:12px;
+color:#697384;
+border:1px dashed rgba(255,255,255,.08);
+border-radius:18px
+}
+
+.login{
+position:fixed;
+inset:0;
+z-index:20;
+background:
+radial-gradient(circle at 50% 10%,rgba(0,217,255,.1),transparent 30%),
+#05070b;
+display:flex;
+align-items:center;
+justify-content:center;
+padding:20px
+}
+
+.loginBox{
+width:100%;
+max-width:400px;
+border:1px solid var(--line);
+background:rgba(12,17,25,.95);
+border-radius:28px;
+padding:25px;
+box-shadow:0 30px 100px rgba(0,0,0,.55)
+}
+
+.loginBrand{
+text-align:center;
+margin-bottom:25px
+}
+
+.loginBrand small{
+font-size:10px;
+letter-spacing:3px;
+color:#687181
+}
+
+.loginBrand h2{
+font-size:25px;
+margin-top:8px
+}
+
+.loginField{
+margin-bottom:14px
+}
+
+.loginBtn{
+width:100%;
+height:53px;
+border:0;
+border-radius:15px;
+background:linear-gradient(135deg,#00d9ff,#6575ff);
+color:white;
+font-weight:800;
+cursor:pointer;
+margin-top:4px
+}
+
+.loginError{
+display:none;
+font-size:12px;
+color:#ff7895;
+margin-bottom:13px;
+line-height:1.5
+}
+
+.loginError.show{
+display:block
+}
+
+.hidden{
+display:none!important
+}
+
+.footer{
+text-align:center;
+margin-top:20px;
+font-size:9px;
+letter-spacing:2px;
+color:#343b47
+}
+
+@media(max-width:600px){
+.grid{
+grid-template-columns:1fr
+}
+
+.field.full{
+grid-column:auto
+}
+
+.panel{
+padding:18px
+}
+
+.brand h1{
+font-size:27px
+}
+}
+</style>
+</head>
+
+<body>
+
+<div class="login" id="loginScreen">
+
+<div class="loginBox">
+
+<div class="loginBrand">
+<small>REYCLOUDSHOP</small>
+<h2>Admin Panel</h2>
+</div>
+
+<div class="loginError" id="loginError"></div>
+
+<div class="loginField">
+<label class="label">Username</label>
+<input
+class="input"
+id="adminUser"
+type="text"
+placeholder="Username"
+autocomplete="username"
+>
+</div>
+
+<div class="loginField">
+<label class="label">Password</label>
+<input
+class="input"
+id="adminPass"
+type="password"
+placeholder="Password"
+autocomplete="current-password"
+>
+</div>
+
+<button class="loginBtn" id="loginBtn">
+🔐 Masuk Admin
+</button>
+
+</div>
+
+</div>
+
+<div class="app hidden" id="adminApp">
+
+<div class="top">
+
+<div class="brand">
+<small>REYCLOUDSHOP ADMIN</small>
+<h1>Control Panel</h1>
+</div>
+
+<button class="back" onclick="history.back()">←</button>
+
+</div>
+
+<div class="status">
+<div class="dot"></div>
+Admin Control Online
+</div>
+
+<div class="panel">
+
+<div class="panelHead">
+
+<div>
+<div class="panelTitle">
+Publish Activity
+</div>
+
+<div class="panelSub">
+Update yang dibuat di sini akan tampil di halaman Activity user.
+</div>
+</div>
+
+</div>
+
+<div class="message" id="message"></div>
+
+<div class="grid">
+
+<div class="field">
+<label class="label">Kategori</label>
+
+<select class="select" id="type">
+
+<option value="update">
+Update
+</option>
+
+<option value="request">
+Request
+</option>
+
+<option value="maintenance">
+Maintenance
+</option>
+
+</select>
+</div>
+
+<div class="field">
+<label class="label">Version</label>
+
+<input
+class="input"
+id="version"
+type="text"
+placeholder="v1.2.0"
+>
+</div>
+
+<div class="field full">
+<label class="label">Judul</label>
+
+<input
+class="input"
+id="title"
+type="text"
+placeholder="Contoh: Dashboard UI diperbarui"
+maxlength="150"
+>
+</div>
+
+<div class="field full">
+<label class="label">Deskripsi</label>
+
+<textarea
+class="textarea"
+id="description"
+placeholder="Tulis informasi update untuk user..."
+maxlength="1000"
+></textarea>
+</div>
+
+<div class="field">
+<label class="label">Tanggal</label>
+
+<input
+class="input"
+id="date"
+type="date"
+>
+</div>
+
+<div class="field">
+<label class="label">Jam</label>
+
+<input
+class="input"
+id="time"
+type="time"
+>
+</div>
+
+</div>
+
+<button class="publish" id="publishBtn">
+🚀 Publish Activity
+</button>
+
+</div>
+
+<div class="panel">
+
+<div class="panelHead">
+
+<div>
+<div class="panelTitle">
+Activity Terbaru
+</div>
+
+<div class="panelSub">
+Daftar update yang sudah dipublish.
+</div>
+</div>
+
+<button class="refresh" id="refreshBtn">
+↻
+</button>
+
+</div>
+
+<div class="activity" id="activityList">
+
+<div class="empty">
+Memuat activity...
+</div>
+
+</div>
+
+</div>
+
+<div class="footer">
+REYCLOUDSHOP ADMIN CONTROL
+</div>
+
+</div>
+
+<script>
+const loginScreen=document.getElementById("loginScreen");
+const adminApp=document.getElementById("adminApp");
+
+const adminUser=document.getElementById("adminUser");
+const adminPass=document.getElementById("adminPass");
+const loginBtn=document.getElementById("loginBtn");
+const loginError=document.getElementById("loginError");
+
+const typeInput=document.getElementById("type");
+const versionInput=document.getElementById("version");
+const titleInput=document.getElementById("title");
+const descriptionInput=document.getElementById("description");
+const dateInput=document.getElementById("date");
+const timeInput=document.getElementById("time");
+
+const publishBtn=document.getElementById("publishBtn");
+const refreshBtn=document.getElementById("refreshBtn");
+const activityList=document.getElementById("activityList");
+const message=document.getElementById("message");
+
+let credentials=null;
+
+function today(){
+const now=new Date();
+
+const year=now.getFullYear();
+const month=String(now.getMonth()+1).padStart(2,"0");
+const day=String(now.getDate()).padStart(2,"0");
+
+return`${year}-${month}-${day}`;
+}
+
+function currentTime(){
+const now=new Date();
+
+return`${String(now.getHours()).padStart(2,"0")}:${String(now.getMinutes()).padStart(2,"0")}`;
+}
+
+dateInput.value=today();
+timeInput.value=currentTime();
+
+function escapeHTML(value){
+return String(value||"")
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;")
+.replace(/'/g,"&#039;");
+}
+
+function showMessage(text,type){
+message.textContent=text;
+message.className=`message show ${type}`;
+}
+
+function hideMessage(){
+message.className="message";
+message.textContent="";
+}
+
+function login(){
+
+const user=adminUser.value.trim();
+const pass=adminPass.value;
+
+if(!user||!pass){
+
+loginError.textContent=
+"Username dan password wajib diisi.";
+
+loginError.classList.add("show");
+
+return;
+}
+
+credentials={
+user,
+pass
+};
+
+loginError.classList.remove("show");
+
+loginScreen.classList.add("hidden");
+adminApp.classList.remove("hidden");
+
+loadActivity();
+}
+
+async function loadActivity(){
+
+activityList.innerHTML=`
+<div class="empty">
+Memuat activity...
+</div>
+`;
+
+try{
+
+const response=
+await fetch("/api/activity",{
+cache:"no-store"
+});
+
+const data=
+await response.json();
+
+if(!response.ok){
+throw new Error(data.error||"Gagal mengambil activity.");
+}
+
+if(!data.activities?.length){
+
+activityList.innerHTML=`
+<div class="empty">
+Belum ada activity.
+</div>
+`;
+
+return;
+}
+
+activityList.innerHTML=
+data.activities.map(item=>{
+
+const category=
+String(item.type||"update").toLowerCase();
+
+return`
+
+<div class="item">
+
+<div class="itemTop">
+
+<div class="badge ${category}">
+${escapeHTML(category)}
+</div>
+
+<div class="date">
+${escapeHTML(item.date||"")}
+${item.time?" · "+escapeHTML(item.time):""}
+</div>
+
+</div>
+
+<div class="itemTitle">
+${escapeHTML(item.title)}
+</div>
+
+<div class="itemDesc">
+${escapeHTML(item.description)}
+</div>
+
+${item.version?`
+<div class="itemVersion">
+VERSION ${escapeHTML(item.version)}
+</div>
+`:""}
+
+</div>
+
+`;
+
+}).join("");
+
+}catch(error){
+
+activityList.innerHTML=`
+<div class="empty">
+Gagal memuat activity.
+</div>
+`;
+
+console.error(error);
+}
+}
+
+async function publishActivity(){
+
+hideMessage();
+
+const title=titleInput.value.trim();
+const description=descriptionInput.value.trim();
+const version=versionInput.value.trim();
+
+if(!title){
+
+showMessage(
+"Judul activity wajib diisi.",
+"error"
+);
+
+return;
+}
+
+if(!description){
+
+showMessage(
+"Deskripsi activity wajib diisi.",
+"error"
+);
+
+return;
+}
+
+if(!credentials){
+
+showMessage(
+"Session admin tidak ditemukan.",
+"error"
+);
+
+return;
+}
+
+publishBtn.disabled=true;
+publishBtn.textContent="⏳ Publishing...";
+
+try{
+
+const response=
+await fetch("/api/admin/activity",{
+method:"POST",
+headers:{
+"Content-Type":"application/json",
+"X-Admin-User":credentials.user,
+"X-Admin-Pass":credentials.pass
+},
+body:JSON.stringify({
+type:typeInput.value,
+title,
+description,
+version,
+date:dateInput.value,
+time:timeInput.value
+})
+});
+
+const data=
+await response.json();
+
+if(!response.ok){
+
+throw new Error(
+data.error||
+"Activity gagal dipublish."
+);
+
+}
+
+showMessage(
+"✅ Activity berhasil dipublish.",
+"success"
+);
+
+titleInput.value="";
+descriptionInput.value="";
+versionInput.value="";
+
+dateInput.value=today();
+timeInput.value=currentTime();
+
+await loadActivity();
+
+}catch(error){
+
+showMessage(
+"❌ "+(
+error.message||
+"Activity gagal dipublish."
+),
+"error"
+);
+
+}finally{
+
+publishBtn.disabled=false;
+publishBtn.textContent="🚀 Publish Activity";
+
+}
+
+}
+
+loginBtn.addEventListener(
+"click",
+login
+);
+
+adminPass.addEventListener(
+"keydown",
+event=>{
+if(event.key==="Enter"){
+login();
+}
+}
+);
+
+adminUser.addEventListener(
+"keydown",
+event=>{
+if(event.key==="Enter"){
+login();
+}
+}
+);
+
+publishBtn.addEventListener(
+"click",
+publishActivity
+);
+
+refreshBtn.addEventListener(
+"click",
+loadActivity
+);
+</script>
+
+</body>
+</html>
