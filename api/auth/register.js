@@ -23,14 +23,14 @@ module.exports = async function(req, res) {
   }
 
   try {
-    await connectMongoDB()
-
     if (!process.env.JWT_SECRET) {
       return send(res, 500, {
         success: false,
         error: "JWT_SECRET belum dikonfigurasi."
       })
     }
+
+    await connectMongoDB()
 
     const username = String(
       req.body?.username || ""
@@ -74,8 +74,10 @@ module.exports = async function(req, res) {
       })
     }
 
-    const hashedPassword =
-      await bcrypt.hash(password, 12)
+    const hashedPassword = await bcrypt.hash(
+      password,
+      12
+    )
 
     const user = await User.create({
       username,
