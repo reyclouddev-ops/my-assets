@@ -10,8 +10,7 @@
 <style>
 :root{
 --bg:#05070b;
---card:rgba(12,17,25,.94);
---card2:#101722;
+--card:rgba(12,17,25,.95);
 --line:rgba(255,255,255,.08);
 --text:#f7f9fc;
 --muted:#7f8999;
@@ -33,7 +32,7 @@ min-height:100vh;
 display:flex;
 justify-content:center;
 align-items:center;
-padding:22px;
+padding:18px;
 font-family:Inter,Arial,sans-serif;
 color:var(--text);
 background:
@@ -91,7 +90,7 @@ border-radius:25px;
 overflow:hidden;
 margin-bottom:18px;
 position:relative;
-background:var(--card2);
+background:#101722;
 box-shadow:0 20px 55px rgba(0,0,0,.35)
 }
 
@@ -106,7 +105,7 @@ object-fit:cover
 content:"";
 position:absolute;
 inset:0;
-background:linear-gradient(180deg,transparent 35%,rgba(5,7,11,.65))
+background:linear-gradient(180deg,transparent 35%,rgba(5,7,11,.7))
 }
 
 .bannerText{
@@ -130,13 +129,13 @@ color:#c2c9d4
 
 .scene{
 width:100%;
-height:475px;
+height:470px;
 perspective:1500px
 }
 
 .card{
-height:100%;
 width:100%;
+height:100%;
 position:relative;
 transform-style:preserve-3d;
 transition:transform .8s cubic-bezier(.6,-.28,.735,.045)
@@ -213,7 +212,7 @@ padding:0 16px 0 45px;
 border:1px solid var(--line);
 border-radius:16px;
 background:rgba(255,255,255,.035);
-color:white;
+color:#fff;
 font-size:14px;
 outline:none;
 transition:.2s
@@ -323,6 +322,7 @@ border-radius:25px
 }
 </style>
 </head>
+
 <body>
 
 <div class="bg-orb"></div>
@@ -522,7 +522,7 @@ let result
 try{
 result=await response.json()
 }catch{
-throw new Error("Server mengirim response yang tidak valid.")
+throw new Error("Response server tidak valid.")
 }
 
 if(!response.ok||!result.success){
@@ -536,6 +536,23 @@ return result
 }
 
 function saveSession(result){
+
+if(!result.token){
+throw new Error("Token tidak diterima.")
+}
+
+if(!result.user){
+throw new Error("Data user tidak diterima.")
+}
+
+if(!result.user.username){
+throw new Error("Username tidak diterima.")
+}
+
+if(!result.user.role){
+throw new Error("Role tidak diterima dari MongoDB.")
+}
+
 localStorage.setItem(
 "reycloud_token",
 result.token
@@ -547,25 +564,38 @@ JSON.stringify(result.user)
 )
 }
 
-function redirectDashboard(result){
-const role=result.user?.role
+function redirectByRole(user){
+
+const role=String(
+user.role||""
+).toLowerCase()
 
 if(role==="admin"){
+window.location.replace("/dashboard/admin/")
+return
+}
+
+if(role==="user"){
 window.location.replace("/dashboard/")
 return
 }
 
-window.location.replace("/dashboard/")
+throw new Error(
+"Role akun tidak valid."
+)
 }
 
 async function login(){
+
 clearStatus()
 
-const username=loginUsername.value
+const username=
+loginUsername.value
 .trim()
 .toLowerCase()
 
-const password=loginPassword.value
+const password=
+loginPassword.value
 
 if(!username||!password){
 setStatus(
@@ -597,8 +627,8 @@ true
 )
 
 setTimeout(()=>{
-redirectDashboard(result)
-},300)
+redirectByRole(result.user)
+},400)
 
 }catch(error){
 
@@ -617,14 +647,19 @@ loginButton.textContent="LOGIN"
 }
 
 async function register(){
+
 clearStatus()
 
-const username=registerUsername.value
+const username=
+registerUsername.value
 .trim()
 .toLowerCase()
 
-const password=registerPassword.value
-const confirm=registerPasswordConfirm.value
+const password=
+registerPassword.value
+
+const confirm=
+registerPasswordConfirm.value
 
 if(!username||!password||!confirm){
 setStatus(
@@ -637,7 +672,7 @@ return
 if(!/^[a-z0-9_]{3,32}$/.test(username)){
 setStatus(
 registerStatus,
-"Username 3-32 karakter: huruf kecil, angka, atau underscore."
+"Username 3-32 karakter. Gunakan huruf kecil, angka, atau underscore."
 )
 return
 }
@@ -653,7 +688,7 @@ return
 if(password!==confirm){
 setStatus(
 registerStatus,
-"Konfirmasi password tidak sama."
+"Konfirmasi password tidak cocok."
 )
 return
 }
@@ -680,8 +715,8 @@ true
 )
 
 setTimeout(()=>{
-redirectDashboard(result)
-},300)
+redirectByRole(result.user)
+},400)
 
 }catch(error){
 
@@ -738,29 +773,7 @@ if(event.key==="Enter"){
 register()
 }
 })
-
-if(
-localStorage.getItem("reycloud_token")&&
-localStorage.getItem("reycloud_user")
-){
-try{
-
-const user=JSON.parse(
-localStorage.getItem("reycloud_user")
-)
-
-if(user?.role==="admin"){
-window.location.replace("/dashboard/admin/")
-}else{
-window.location.replace("/dashboard/")
-}
-
-}catch{
-localStorage.removeItem("reycloud_token")
-localStorage.removeItem("reycloud_user")
-}
-}
 </script>
 
 </body>
-  </html>
+</html>
