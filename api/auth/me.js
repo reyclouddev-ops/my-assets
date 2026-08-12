@@ -2,34 +2,48 @@ const jwt = require("jsonwebtoken")
 const User = require("../../models/User")
 const connectMongoDB = require("../../lib/mongodb")
 
+function send(res, status, data) {
+  return res.status(status).json(data)
+}
+
 function getCookie(req, name) {
   const cookies = String(
     req.headers.cookie || ""
   )
 
-  const found = cookies
-    .split(";")
-    .map(x => x.trim())
-    .find(x => x.startsWith(`${name}=`))
+  const parts = cookies.split(";")
 
-  if (!found) {
-    return null
+  for (const part of parts) {
+    const item = part.trim()
+
+    if (!item.startsWith(`${name}=`)) {
+      continue
+    }
+
+    return decodeURIComponent(
+      item.substring(name.length + 1)
+    )
   }
 
-  return decodeURIComponent(
-    found.substring(name.length + 1)
-  )
+  return null
 }
 
 module.exports = async function(req, res) {
   if (req.method !== "GET") {
-    return res.status(405).json({
+    return send(res, 405, {
       success: false,
       error: "Method tidak diizinkan."
     })
   }
 
   try {
+    if (!process.env.JWT_SECRET) {
+      return send(res, 500, {
+        success: false,
+        error: "JWT_SECRET belum dikonfigurasi."
+      })
+    }
+
     await connectMongoDB()
 
     const token =
@@ -39,44 +53,65 @@ module.exports = async function(req, res) {
       )
 
     if (!token) {
-      return res.status(401).json({
+      return send(res, 401, {
         success: false,
         error: "Session tidak ditemukan."
       })
     }
 
-    const decoded =
-      jwt.verify(
+    let payload
+
+    try {
+      payload = jwt.verify(
         token,
         process.env.JWT_SECRET
       )
+    } catch {
+      return send(res, 401, {
+        success: false,
+        error: "Session sudah tidak valid."
+      })
+    }
 
-    const user =
-      await User.findById(
-        decoded.userId
-      ).select("-password")
+    if (!payload?.userId) {
+      return send(res, 401, {
+        success: false,
+        error: "Session tidak valid."
+      })
+    }
+
+    const user = await User.findById(
+      payload.userId
+    ).select(
+      "username email role dnsUsed lastReset createdAt updatedAt"
+    )
 
     if (!user) {
-      return res.status(401).json({
+      return send(res, 401, {
         success: false,
         error: "User tidak ditemukan."
       })
     }
 
-    return res.status(200).json({
+    return send(res, 200, {
       success: true,
       user: {
         id: user._id.toString(),
         username: user.username,
-        email: user.email || "",
+        email: user.email,
         role: user.role,
-        dnsUsed: user.dnsUsed || 0
+        dnsUsed: user.dnsUsed,
+        lastReset: user.lastReset,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt
       }
     })
   } catch (error) {
-    return res.status(401).json({
+    console.error("[ME]", error)
+
+    return send(res, 500, {
       success: false,
-      error: "Session tidak valid."
+      error: "Terjadi kesalahan server."
     })
   }
 }
