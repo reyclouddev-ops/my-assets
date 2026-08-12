@@ -23,6 +23,13 @@ module.exports = async function(req, res) {
   }
 
   try {
+    if (!process.env.JWT_SECRET) {
+      return send(res, 500, {
+        success: false,
+        error: "JWT_SECRET belum dikonfigurasi."
+      })
+    }
+
     await connectMongoDB()
 
     const username = String(
